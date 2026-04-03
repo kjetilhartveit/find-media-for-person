@@ -1,6 +1,6 @@
 # Information
 
-{show description about the application}
+This repo contains tools/skill for finding media of a person.
 
 # The docs folder
 

@@ -1,6 +1,6 @@
-# {Project name}
+# Find media for person
 
-{Short description for humans}
+This repo contains tools/skill for finding media of a person.
 
 # For AI agents
 
