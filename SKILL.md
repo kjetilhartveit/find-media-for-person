@@ -7,12 +7,19 @@ description: Gather media for a celebrity/person for local storage to disk.
 
 The purpose of this skill is to gather media of a celebrity/person and store them to disk.
 
+## Destination directory for stored media
+
+- The media should be stored at the destination of the environment variable `MEDIA_DIR` in `.env`. If the environment variable is not set or if we don't have access to the directory, then we should store the media in a new folder in the root directory of the project.
+- Each "find and store media" attempt should store the media in a subfolder in the media folder mentioned above. The subfolder should be named after the person's name (e.g. `Caroline Nitter`, `Taylor Bow` and so on).
+- When we retrieve media from the sources, we should store the results for each source in yet another subfolder in the subfolder for that person's name. E.g. (`google searches`, `fapeza`, `pictoa` and so on).
+
 ## Guidelines
 
 - Fetch both pictures and videos.
   - Sometimes thumbnails or lower quality versions of media (particularly for pictures) are used in galleries etc. We should make an effort in fetching the highest quality of media whenever possible.
-  - Sometimes videos are serves in other ways than direct download links (e.g. m3u8 playlists), in which cases we might have to use alternative ways to download the video (e.g. using the `yt-dlp` tool).
+  - Sometimes videos are served in other ways than direct download links (e.g. m3u8 playlists), in which cases we might have to use alternative ways to download the video (e.g. using the `yt-dlp` tool).
 - Prefer to avoid duplicates, but if in doubt then fetch the media.
+- We should avoid naming collisions of media files. If a file with the same name already exists in the folder then add a suffix like ` (1)`, ` (2)` etc.
 
 ## Tools
 
@@ -65,7 +72,7 @@ If we would like to retrieve media from this page we might have to do a search.
 - Website URL: https://ultrathots.com
 - Example of URL to a model: https://ultrathots.com/models/caroline-nitter/
 
-### erome.com
+### erome
 
 - Website URL: https://www.erome.com
 - Example of URL to a model: https://www.erome.com/a/nvhtQ8C8
@@ -75,7 +82,7 @@ If we would like to retrieve media from this page we might have to do a search.
 - Website URL: https://fapello.com
 - Example of URL to a model: https://fapello.com/caroline-nitter/
 
-### ru.leakedmodels.com
+### leakedmodels
 
 - Website URL: https://ru.leakedmodels.com
 - Example of URL to a model: https://ru.leakedmodels.com/caroline-nitter/
@@ -85,12 +92,12 @@ If we would like to retrieve media from this page we might have to do a search.
 - Website URL: https://ua.nudogram.com
 - Example of URL to a model: https://ua.nudogram.com/models/caroline-nitter/
 
-### thefappeningblog.com
+### thefappeningblog
 
 - Website URL: https://thefappeningblog.com
 - Example of URL to a model: https://thefappeningblog.com/gallery/caroline-nitter/
 
-### fappeningbook.com
+### fappeningbook
 
 - Website URL: https://fappeningbook.com
 - Example of URL to a model: https://fappeningbook.com/caroline-nitter-nude/
@@ -105,7 +112,7 @@ If we would like to retrieve media from this page we might have to do a search.
 - Website URL: https://onlyfans.com
 - Example of URL to a model: https://onlyfans.com/notsoordinarycc
 
-### modelsearcher.com
+### modelsearcher
 
 - Website URL: https://modelsearcher.com
 - Example of URL to model: https://modelsearcher.com/profile/notsoordinarycc?tab=post
