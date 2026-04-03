@@ -7,13 +7,18 @@ description: Gather media for a celebrity/person for local storage to disk.
 
 The purpose of this skill is to gather media of a celebrity/person and store them to disk.
 
+## Output
+
+- Stored media of the person to disk.
+- A single markdown file named `SUMMARY.md` in the folder named after the person which gives a short summary of the person and the result of the search (and persistence) of media. It can also mention next steps for further research or add additional comments.
+
 ## Destination directory for stored media
 
 - The media should be stored at the destination of the environment variable `MEDIA_DIR` in `.env`. If the environment variable is not set or if we don't have access to the directory, then we should store the media in a new folder in the root directory of the project.
 - Each "find and store media" attempt should store the media in a subfolder in the media folder mentioned above. The subfolder should be named after the person's name (e.g. `Caroline Nitter`, `Taylor Bow` and so on).
 - When we retrieve media from the sources, we should store the results for each source in yet another subfolder in the subfolder for that person's name. E.g. (`google searches`, `fapeza`, `pictoa` and so on).
 
-## Guidelines
+## Guidelines for finding and storing media
 
 - Fetch both pictures and videos.
   - Sometimes thumbnails or lower quality versions of media (particularly for pictures) are used in galleries etc. We should make an effort in fetching the highest quality of media whenever possible.
