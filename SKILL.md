@@ -1,16 +1,25 @@
 ---
 name: find-and-store-media-for-person
-description: Gather media for a celebrity/person for local storage to disk.
+description: Gather media for a model/person for local storage to disk.
 ---
 
 # Find and store media of a person to disk
 
-The purpose of this skill is to gather media of a celebrity/person and store them to disk.
+The purpose of this skill is to gather media of a model/person and store them to disk.
 
 ## Output
 
 - Stored media of the person to disk.
-- A single markdown file named `SUMMARY.md` in the folder named after the person which gives a short summary of the person and the result of the search (and persistence) of media. It can also mention next steps for further research or add additional comments.
+- A single markdown file named `SUMMARY.md` in the folder named after the person containing the following information:
+  - a short summary of the person.
+  - a summary of how the search (and persistence) of media went.
+  - tips on improving the search and/or persistance of media - was something cumbersome to do or did something fail?
+  - list results per source:
+    - give a short summary of the source and its results of the searches / persistance.
+    - list which media files were persisted, which ones failed and which ones were skipped.
+    - rate the source with a number between 0 and 10. Did it give good value in terms of many high quality media files etc.?
+  - mention next steps for further research/media searches of the person/model.
+  - optionally add additional comments.
 
 ## Destination directory for stored media
 
@@ -25,6 +34,8 @@ The purpose of this skill is to gather media of a celebrity/person and store the
   - Sometimes videos are served in other ways than direct download links (e.g. m3u8 playlists), in which cases we might have to use alternative ways to download the video (e.g. using the `yt-dlp` tool).
 - Prefer to avoid duplicates, but if in doubt then fetch the media.
 - We should avoid naming collisions of media files. If a file with the same name already exists in the folder then add a suffix like ` (1)`, ` (2)` etc.
+- Scraping best practices: When scraping we should make sure not to spam their webservers with a huge number of simultaneous requests. We should limit to 1-3 scraping requests/downloads at the same time and also add a short delay between the requests.
+- Limits: There could be potentially much media of a person; we should pace ourselves in case there are vast amount of media available. If there are many large videos available of the model, then we should note this in the `SUMMARY.md` and rather prioritize images. A soft limit should be around 2-3 GB of media.
 
 ## Tools
 
@@ -120,7 +131,7 @@ If we would like to retrieve media from this page we might have to do a search.
 ### modelsearcher
 
 - Website URL: https://modelsearcher.com
-- Example of URL to model: https://modelsearcher.com/profile/notsoordinarycc?tab=post
+- Example of URL to model: https://modelsearcher.com/profile/notsoordinarycc
 - Example of URL to a model's photos: https://modelsearcher.com/profile/notsoordinarycc?tab=photo
 - Example of URL to a model's videos: https://modelsearcher.com/profile/notsoordinarycc?tab=video
 
