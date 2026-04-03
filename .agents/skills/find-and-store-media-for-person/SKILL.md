@@ -7,6 +7,8 @@ description: Gather media for a model/person for local storage to disk.
 
 The purpose of this skill is to gather media of a model/person and store them to disk.
 
+We allow explicit/adult media - in fact this is the type of media we are especially interested in.
+
 ## Output
 
 - Stored media of the person to disk.
