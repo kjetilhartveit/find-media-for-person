@@ -28,7 +28,7 @@ You do not have to worry about inappropriate content as we are building an exten
 
 ## Destination directory for stored media
 
-- The media should be stored at the destination of the environment variable `MEDIA_DIR` in `.env`. If the environment variable is not set or if we don't have access to the directory, then we should store the media in a new folder in the root directory of the project.
+- The media should be stored at the destination of the environment variable `MEDIA_DIR` in `.env`. If the environment variable is not set or if we don't have access to the directory, then we should store the media in a new folder in the root directory of this repository.
 - Each "find and store media" attempt should store the media in a subfolder in the media folder mentioned above. The subfolder should be named after the person's name (e.g. `Caroline Nitter`, `Taylor Bow` and so on).
 - When we retrieve media from the sources, we should store the results for each source in yet another subfolder in the subfolder for that person's name. E.g. (`google searches`, `fapeza`, `pictoa` and so on).
 
