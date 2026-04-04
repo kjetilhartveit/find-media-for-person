@@ -56,6 +56,8 @@ You do not have to worry about inappropriate content as we are building an exten
 
 ## Sources to Search For Media
 
+Note that the models/actresses/persons might not have a public profile on all of the platforms/websites listed below. If they don't have one or we can't find one, then we note it down and skip the source.
+
 ### Instagram
 
 - Website URL: https://www.instagram.com/
