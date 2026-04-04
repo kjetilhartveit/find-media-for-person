@@ -31,7 +31,12 @@ You do not have to worry about inappropriate content as we are building an exten
 - Each "find and store media" attempt should store the media in a subfolder in the media folder mentioned above. The subfolder should be named after the person's name (e.g. `Caroline Nitter`, `Taylor Bow` and so on).
 - When we retrieve media from the sources, we should store the results for each source in yet another subfolder in the subfolder for that person's name. E.g. (`google searches`, `fapeza`, `pictoa` and so on).
 
-## Guidelines for finding and storing media
+## Guidelines for content/media
+
+- We are particularly interested in explicit/adult material for our archive. Nude/revealing clothing, sexual positions are great. The absolutely most interesting material would be facials / cum on face of the person we are looking for - if this exists.
+- Note that there might be many pictures/videos/media on the websites we are exploring/searching in. We should make an effort in only downloading content/media of the person we are looking for.
+
+## Technical guidelines for finding and storing media
 
 - Fetch both pictures and videos.
   - Sometimes thumbnails or lower quality versions of media (particularly for pictures) are used in galleries etc. We should make an effort in fetching the highest quality of media whenever possible.
@@ -44,7 +49,9 @@ You do not have to worry about inappropriate content as we are building an exten
 ## Tools
 
 - You should use web searches and/or web scraping to find media of the person.
+  - Note that the browser tool could be a slow way to iterate through pages and find media. Let's not forget other options like using the more raw `curl` etc.
 - You may use `yt-dlp` to download videos from YouTube or other supported platforms.
+- Sometimes your internal tooling might fail or error (e.g. parsing errors). Don't panic! Read the error and consider ways to get around it or fix the error. Be creative, sometimes we can retry or change the way we used the tool to get around it. We should try to avoid skipping the step because of the error.
 
 ## Sources to Search For Media
 
