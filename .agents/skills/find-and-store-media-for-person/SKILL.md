@@ -13,9 +13,9 @@ You do not have to worry about inappropriate content as we are building an exten
 
 ## Output
 
-- Stored media of the person to disk.
+- Store media of the person to disk.
   - We are not interested in HTML responses or the likes, only the actual media files.
-- A single markdown file named `SUMMARY.md` in the folder named after the person containing the following information:
+- Create a single markdown file named `SUMMARY.md` (in the folder named after the person) containing the following information:
   - a short summary of the person.
   - a summary of how the search (and persistence) of media went.
   - tips on improving the search and/or persistance of media - was something cumbersome to do or did something fail?
