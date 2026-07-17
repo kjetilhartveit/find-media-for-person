@@ -77,7 +77,7 @@ If we find a new valuable source of media, then we should add it to the list bel
 
 **When we search websites/sources we should always check if an existing skill exists for the source.**. If it does, then we should use the existing skill or documentation as supplementary information for the search for media.
 
-**If no skill exists or we learn new findings or knowledge about the source, then we should update the skill or create a new one.** If no skill exists then we should create a new skill in this repository. The skill should follow the naming convention `find-media-from-<source-name>`, e.g. `find-media-from-instagram`. The skill should include the main website URL and example URLs to model(s). The skill should include useful information regarding how to search for and find media from the source. We should update the skill whenever we learn new findings or knowledge about the source. We should also update the skill to fix out-dated information. We should strive to keep the skills concise and avoiding restricting future agents too much by writing too concrete and limiting instructions.
+**If no skill exists or we learn new findings or knowledge about the source, then we should update the skill or create a new one.** If no skill exists then we should create a new skill in this repository. The skill should follow the naming convention `find-media-from-<source-name>`, e.g. `find-media-from-instagram`. The skill should include the main website URL and example URLs to model(s). The skill should include useful information regarding how to search for and find media from the source. We should update the skill whenever we learn new findings or knowledge about the source. We should also update the skill to fix out-dated information. We should strive to keep the skills concise and avoiding restricting future agents too much by writing too concrete and limiting instructions. Think of the skills as supplementary information and not meant as instructions or strict guidelines. Use language like "Recommendations on how to download" rather than "How to download media".
 
 When me make changes to skills following a search then we should commit the changes and push them to the repository.
 
@@ -92,28 +92,13 @@ When me make changes to skills following a search then we should commit the chan
 
 - Website URL: https://www.fapeza.com/
 - Example of URL to a model: https://fapeza.com/caroline-nitter/
-- Helper Script for Changing Photos to High Quality in the Gallery (in the browser). Use if needed:
-  ```javascript
-  document.querySelectorAll(".posts-wrapper img").forEach((img) => {
-    img.src = img.src.replace(/_400px\.(\w+)$/, ".$1");
-  });
-  ```
 
 #### Pictoa
 
 This website might not have direct URLs for celebs/persons. We might have to do a search with the name and find relevant albums.
 
+- Website URL: https://www.pictoa.com/
 - Example of URL to an album: https://www.pictoa.com/albums/caroline-nitter-nude-4088413.html
-- Example path of a thumbnail image: https://t1.pictoa.com/media/galleries/282/396/282396602d9948ac637/3926902602d994abc044.jpg
-- Example path of a large/high quality image: https://s2.pictoa.com/media/galleries/282/396/282396602d9948ac637/3926902602d994abc044.jpg
-- Script for Changing Photos to High Quality in the Gallery (in the browser). Use if needed:
-  ```javascript
-  $$(".wrapper img").forEach((img) => {
-    if (img.src) img.src = img.src.replace("//t1.", "//s2.");
-    if (img.dataset.src)
-      img.dataset.src = img.dataset.src.replace("//t1.", "//s2.");
-  });
-  ```
 
 #### Reddit
 

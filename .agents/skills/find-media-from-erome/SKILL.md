@@ -13,7 +13,7 @@ Download images and videos from Erome (https://www.erome.com), a user-hosted adu
 - Album pages: `https://www.erome.com/{album_id}` (e.g., `erome.com/fer6Kjy4`)
 - Search for celebrity name to find relevant albums
 
-## How to Download
+## Recommendations on how to download
 
 1. Search for the celebrity name on the site to find relevant albums.
 2. Open each album page to extract media.
@@ -24,12 +24,12 @@ Download images and videos from Erome (https://www.erome.com), a user-hosted adu
 ## Quality
 
 - Images range from ~29KB to ~196KB.
-- 3/10 — good content exists but download method is unreliable. Many albums fail due to the URL pattern mismatch.
+- Download method is currently unreliable. Many albums fail due to the URL pattern mismatch.
 - Albums have engagement metrics (likes, views) to gauge popularity.
 
 ## Pitfalls
 
-- **Full-size URL pattern fails.** The `/thumbs/` removal trick doesn't work for most albums. Always parse the album page for the actual full-size URL.
+- **Full-size URL pattern fails.** The `/thumbs/` removal trick doesn't work for most albums. It's recommended to always parse the album page for the actual full-size URL.
 - Album pages may be behind Cloudflare protection.
 - Many URLs return HTML (not images) when the URL pattern is guessed incorrectly.
 - Content quality varies by album uploader.

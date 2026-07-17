@@ -13,8 +13,10 @@ Download images from Pictoa (https://www.pictoa.com), a gallery site with albums
 - Albums found via search for celebrity name
 - Thumbnail CDN: `t1.pictoa.com`
 - High-quality CDN: `s2.pictoa.com`
+- Example path of a thumbnail image: https://t1.pictoa.com/media/galleries/282/396/282396602d9948ac637/3926902602d994abc044.jpg
+- Example path of a large/high quality image: https://s2.pictoa.com/media/galleries/282/396/282396602d9948ac637/3926902602d994abc044.jpg
 
-## How to Download
+## Recommendations on how to download
 
 1. Search for the celebrity name to find relevant albums.
 2. Fetch each album/gallery page to extract image URLs.
@@ -25,7 +27,7 @@ Download images from Pictoa (https://www.pictoa.com), a gallery site with albums
 ## Quality
 
 - Images range from ~15KB to ~35KB (smaller than other sources).
-- 6/10 — good quality images but labor-intensive. Requires scraping each album page.
+- Good quality images but labor-intensive. Requires scraping each album page.
 
 ## Pitfalls
 
@@ -33,3 +35,14 @@ Download images from Pictoa (https://www.pictoa.com), a gallery site with albums
 - Labor-intensive: one page fetch per album to extract all image URLs.
 - Multiple albums may exist per celebrity — search results need to be paginated.
 - File sizes are smaller than other aggregator sources.
+
+## Tips on changing photos to high quality in the browser
+
+- Script for Changing Photos to High Quality in the Gallery (in the browser). Use if needed:
+  ```javascript
+  $$(".wrapper img").forEach((img) => {
+    if (img.src) img.src = img.src.replace("//t1.", "//s2.");
+    if (img.dataset.src)
+      img.dataset.src = img.dataset.src.replace("//t1.", "//s2.");
+  });
+  ```

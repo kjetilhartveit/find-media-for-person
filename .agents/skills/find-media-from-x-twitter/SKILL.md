@@ -21,16 +21,19 @@ Download images and videos from X (Twitter) posts using the official API v2 with
 
 X uses the official API v2 with a bearer token (standard API key, no cookies or browser sessions). Store as env var `X_API_BEARER_TOKEN`.
 
-## How to Download
+## Recommendations on how to download
 
 1. Extract tweet ID from URL (regex: `/status/(\d+)`)
 
 2. Call X API v2:
+
 ```
 GET https://api.x.com/2/tweets/{id}
 Authorization: Bearer $X_API_BEARER_TOKEN
 ```
+
 Query params:
+
 ```
 expansions=author_id,attachments.media_keys
 media.fields=url,variants,type,preview_image_url,width,height,alt_text
@@ -38,15 +41,37 @@ tweet.fields=attachments,entities,note_tweet,created_at,lang
 ```
 
 Full request payload:
+
 ```json
 {
   "expansions": ["author_id", "attachments.media_keys", "referenced_tweets.id"],
-  "media.fields": ["alt_text", "height", "media_key", "preview_image_url", "type", "url", "variants", "width"],
-  "tweet.fields": ["article", "attachments", "author_id", "conversation_id", "created_at", "entities", "in_reply_to_user_id", "lang", "note_tweet", "referenced_tweets"]
+  "media.fields": [
+    "alt_text",
+    "height",
+    "media_key",
+    "preview_image_url",
+    "type",
+    "url",
+    "variants",
+    "width"
+  ],
+  "tweet.fields": [
+    "article",
+    "attachments",
+    "author_id",
+    "conversation_id",
+    "created_at",
+    "entities",
+    "in_reply_to_user_id",
+    "lang",
+    "note_tweet",
+    "referenced_tweets"
+  ]
 }
 ```
 
 3. Parse response:
+
    - **Photos** (`type: "photo"`): direct URL in `includes.media[].url`
    - **Videos** (`type: "video"`): multiple `variants[]` with different bitrates — filter to `video/mp4`, sort by `bitRate` descending, pick highest
    - **GIFs** (`type: "animated_gif"`): same variants structure as video
@@ -54,8 +79,9 @@ Full request payload:
 4. Download each media URL to the output directory.
 
 ### Video quality selection
+
 ```js
-const mp4s = variants.filter(v => v.contentType === "video/mp4" && v.url);
+const mp4s = variants.filter((v) => v.contentType === "video/mp4" && v.url);
 mp4s.sort((a, b) => (b.bitRate ?? 0) - (a.bitRate ?? 0));
 return mp4s[0]?.url;
 ```

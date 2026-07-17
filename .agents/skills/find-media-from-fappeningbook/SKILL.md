@@ -12,7 +12,7 @@ Download images from Fappeningbook (https://fappeningbook.com), a large aggregat
 - Profile: `https://fappeningbook.com/{slug}-nude/` (e.g., `fappeningbook.com/emily-ratajkowski-nude/`)
 - 156+ pages with thousands of photos per celebrity
 
-## How to Download
+## Recommendations on how to download
 
 - Thumbnails end with `t.jpg` suffix. Remove the `t` to get full-size image URLs.
 - Pagination across many pages (150+). IDs are sequential.
@@ -22,7 +22,7 @@ Download images from Fappeningbook (https://fappeningbook.com), a large aggregat
 ## Quality
 
 - Images range from ~42KB to ~922KB (largest of the aggregator sites).
-- 8/10 — good variety, large images, but many placeholder gaps.
+- Good variety, large images, but many placeholder gaps.
 
 ## Pitfalls
 

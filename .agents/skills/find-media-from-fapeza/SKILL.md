@@ -12,7 +12,7 @@ Download images from Fapeza (https://fapeza.com), an aggregator site of leaked/n
 - Profile: `https://fapeza.com/{slug}/` (e.g., `fapeza.com/emily-ratajkowski/`)
 - Media items follow sequential ID pattern
 
-## How to Download
+## Recommendations on how to download
 
 - Fapeza has sequential post IDs. URLs are predictable: base URL + ID-based paths.
 - Full-size HQ images are available directly.
@@ -24,9 +24,18 @@ Download images from Fapeza (https://fapeza.com), an aggregator site of leaked/n
 
 - Images range from ~42KB to ~520KB per image.
 - All verified downloads are JPEG format.
-- 8/10 — good quality HQ images, consistent URL pattern.
+- Good quality HQ images, consistent URL pattern.
 
 ## Pitfalls
 
 - Not all IDs exist — gaps in the lower ranges (below 5000). Only certain ID ranges have content.
 - The Referer header is mandatory; omitting it will cause all image requests to fail.
+
+## Tips on changing photos to high quality in the browser
+
+- Helper Script for Changing Photos to High Quality in the Gallery (in the browser). Use if needed:
+  ```javascript
+  document.querySelectorAll(".posts-wrapper img").forEach((img) => {
+    img.src = img.src.replace(/_400px\.(\w+)$/, ".$1");
+  });
+  ```

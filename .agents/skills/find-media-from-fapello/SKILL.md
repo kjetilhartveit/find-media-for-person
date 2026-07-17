@@ -12,7 +12,7 @@ Download images from Fapello (https://fapello.com), a massive aggregator of leak
 - Profile: `https://fapello.com/{slug}/` (e.g., `fapello.com/emily-ratajkowski/`)
 - Media items follow sequential ID pattern with predictable URLs
 
-## How to Download
+## Recommendations on how to download
 
 - Fapello has sequential post IDs with highly consistent URL patterns.
 - No authentication required.
@@ -25,7 +25,7 @@ Download images from Fapello (https://fapello.com), a massive aggregator of leak
 
 - Images range from ~31KB to ~420KB per image.
 - 100% success rate in tested ranges.
-- 9/10 — largest source, consistent quality, very reliable. No auth needed.
+- Lots of content, consistent quality, very reliable. No auth needed.
 
 ## Pitfalls
 

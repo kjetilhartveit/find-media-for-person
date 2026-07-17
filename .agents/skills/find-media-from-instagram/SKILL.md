@@ -42,11 +42,12 @@ Convert expiry from ISO date: `Math.round(new Date("2027-05-17T00:00:00Z").getTi
 
 Session cookies typically last about a year but can be invalidated earlier by password changes or suspicious activity.
 
-## How to Download
+## Recommendations on how to download
 
 1. Ensure `.data/cookies.txt` exists with a valid session cookie.
 
 2. Write a temporary config file (e.g., `/tmp/gallery-dl-config.json`):
+
 ```json
 {
   "extractor": {
@@ -60,6 +61,7 @@ Session cookies typically last about a year but can be invalidated earlier by pa
 ```
 
 3. Run:
+
 ```bash
 gallery-dl \
   --config /tmp/gallery-dl-config.json \
