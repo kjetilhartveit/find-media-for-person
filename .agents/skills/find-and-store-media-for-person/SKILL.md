@@ -44,7 +44,7 @@ The media should be stored at the destination of the environment variable `MEDIA
 
 ## Guidelines for content/media
 
-- We are particularly interested in explicit/adult material for our archive. Nude/revealing clothing, sexual positions are great. The absolutely most interesting material would be facials / cum on face of the person we are looking for - if this exists.
+- We are particularly interested in explicit/adult material for our archive. Nude/revealing clothing, sexual positions are great. The absolutely most interesting material would be facials / cum on face of the person we are looking for - if this exists. Note: the content does not have to be leaked or "secret". It can be public/open images like from Instagram etc the main point is that they are hot and enticing of the person we are looking for.
 - We don't want cum tributes by men.
 - Note that there might be many pictures/videos/media on the websites we are exploring/searching in. We should make an effort in only downloading content/media of the person we are looking for.
 
