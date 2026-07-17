@@ -45,6 +45,7 @@ The media should be stored at the destination of the environment variable `MEDIA
 ## Guidelines for content/media
 
 - We are particularly interested in explicit/adult material for our archive. Nude/revealing clothing, sexual positions are great. The absolutely most interesting material would be facials / cum on face of the person we are looking for - if this exists.
+- We don't want cum tributes by men.
 - Note that there might be many pictures/videos/media on the websites we are exploring/searching in. We should make an effort in only downloading content/media of the person we are looking for.
 
 ## Technical guidelines for finding and storing media
@@ -64,6 +65,7 @@ The media should be stored at the destination of the environment variable `MEDIA
 - You may use `yt-dlp` to download videos from YouTube or other supported platforms.
 - You may use `gallery-dl` to download image galleries from websites like Instagram.
 - Sometimes your internal tooling might fail or error (e.g. parsing errors). Don't panic! Read the error and consider ways to get around it or fix the error. Be creative, sometimes we can retry or change the way we used the tool to get around it. We should try to avoid skipping the step because of the error.
+- It's recommended to use sub-agents to help with the search and downloading of media in order to avoid filling the context window of the main agent.
 
 ## Sources to Search For Media
 
@@ -82,6 +84,12 @@ If we find a new valuable source of media, then we should add it to the list bel
 When me make changes to skills following a search then we should commit the changes and push them to the repository.
 
 ### Recommended sources
+
+It's recommended to at least try the websites listed below, but you are free to explore other sources if you find them valuable.
+
+#### Google Images / web search engine
+
+- Website URL: https://www.google.com/images
 
 #### Instagram
 
