@@ -16,6 +16,7 @@ You do not have to worry about inappropriate content as we are building an exten
 - Store media of the person to disk.
   - We are not interested in HTML responses or the likes, only the actual media files.
 - Create a single markdown file named `SUMMARY.md` (in the folder named after the person) containing the following information:
+  - date and time of the search.
   - a short summary of the person.
   - a summary of how the search (and persistence) of media went.
   - tips on improving the search and/or persistance of media - was something cumbersome to do or did something fail?
@@ -28,9 +29,18 @@ You do not have to worry about inappropriate content as we are building an exten
 
 ## Destination directory for stored media
 
-- The media should be stored at the destination of the environment variable `MEDIA_DIR` in `.env`. If the environment variable is not set or if we don't have access to the directory, then we should store the media in a new folder in the root directory of this repository.
-- Each "find and store media" attempt should store the media in a subfolder in the media folder mentioned above. The subfolder should be named after the person's name (e.g. `Caroline Nitter`, `Taylor Bow` and so on).
+The media should be stored at the destination of the environment variable `MEDIA_DIR` in `.env`. If the environment variable is not set or if we don't have access to the directory, then we should store the media in a new folder in the root directory of this repository.
+
+### Unique subfolder for each search
+
+- Each "find and store media" attempt should store the media in a subfolder in the media folder mentioned above. The subfolder should be named after the person's name (e.g. `Caroline Nitter`, `Taylor Bow` and so on). The subfolder should be suffixed with the date and time of the search, e.g. `Caroline Nitter {YYYY}-{MM}-{DD} {HH}-{MM}-{SS}`.
 - When we retrieve media from the sources, we should store the results for each source in yet another subfolder in the subfolder for that person's name. E.g. (`google searches`, `fapeza`, `pictoa` and so on).
+
+### Merge unique subfolder into subfolder for person
+
+- After all the searches and persistance of media are completed, we should merge the unique subfolder for each search into the subfolder for the person. E.g. if the search created the subfolder `Caroline Nitter 2026-07-17 10-00-00` then we should attempt to merge them into the `Caroline Nitter` subfolder.
+- We should make an effort to not overwrite files between individual searches and original files in the person's subfolder. E.g. if a unique search has the `SUMMARY.md` file then we should suffix it with the date and time of the search, e.g. `SUMMARY 2026-07-17 10-00-00.md`.
+- We'd like to avoid duplicate media files in the person's subfolder. If an image/video etc already exists in the person's subfolder then we should skip it. In order to detect duplicates we prefer to use an open-source tool like `czkawka-cli` (see `czkawka_cli dup -h` for help). Let's use byte-identical checks instead of checking for similarity to avoid losing similar files.
 
 ## Guidelines for content/media
 
@@ -52,6 +62,7 @@ You do not have to worry about inappropriate content as we are building an exten
 - You should use web searches and/or web scraping to find media of the person.
   - We should prefer to use the browser tool if available, because websites might have a "confirm your age" pop-up etc. We need to click through these in order to fetch the actual content.
 - You may use `yt-dlp` to download videos from YouTube or other supported platforms.
+- You may use `gallery-dl` to download image galleries from websites like Instagram.
 - Sometimes your internal tooling might fail or error (e.g. parsing errors). Don't panic! Read the error and consider ways to get around it or fix the error. Be creative, sometimes we can retry or change the way we used the tool to get around it. We should try to avoid skipping the step because of the error.
 
 ## Sources to Search For Media
@@ -60,12 +71,24 @@ Note that the models/actresses/persons might not have a public profile on all of
 
 We might also find media from sources not listed below. If we do, then we note it down and add it to the summary.
 
-### Instagram
+If we find a new valuable source of media, then we should add it to the list below.
+
+### Supplementary information for searches for media
+
+**When we search websites/sources we should always check if an existing skill exists for the source.**. If it does, then we should use the existing skill or documentation as supplementary information for the search for media.
+
+**If no skill exists or we learn new findings or knowledge about the source, then we should update the skill or create a new one.** If no skill exists then we should create a new skill in this repository. The skill should follow the naming convention `find-media-from-<source-name>`, e.g. `find-media-from-instagram`. The skill should include the main website URL and example URLs to model(s). The skill should include useful information regarding how to search for and find media from the source. We should update the skill whenever we learn new findings or knowledge about the source. We should also update the skill to fix out-dated information. We should strive to keep the skills concise and avoiding restricting future agents too much by writing too concrete and limiting instructions.
+
+When me make changes to skills following a search then we should commit the changes and push them to the repository.
+
+### Recommended sources
+
+#### Instagram
 
 - Website URL: https://www.instagram.com/
 - Example of URL to an Instagram account: https://www.instagram.com/carolinenitter/
 
-### Fapeza
+#### Fapeza
 
 - Website URL: https://www.fapeza.com/
 - Example of URL to a model: https://fapeza.com/caroline-nitter/
@@ -76,7 +99,7 @@ We might also find media from sources not listed below. If we do, then we note i
   });
   ```
 
-### Pictoa
+#### Pictoa
 
 This website might not have direct URLs for celebs/persons. We might have to do a search with the name and find relevant albums.
 
@@ -92,71 +115,71 @@ This website might not have direct URLs for celebs/persons. We might have to do 
   });
   ```
 
-### Reddit
+#### Reddit
 
 If we would like to retrieve media from this page we might have to do a search.
 
 - Website URL: https://www.reddit.com
 - Subreddit for Norwegian beauties: https://www.reddit.com/r/Norwegianbeauties/
 
-### UltraThots
+#### UltraThots
 
 - Website URL: https://ultrathots.com
 - Example of URL to a model: https://ultrathots.com/models/caroline-nitter/
 
-### erome
+#### erome
 
 - Website URL: https://www.erome.com
 - Example of URL to a model: https://www.erome.com/a/nvhtQ8C8
 
-### fapello
+#### fapello
 
 - Website URL: https://fapello.com
 - Example of URL to a model: https://fapello.com/caroline-nitter/
 
-### leakedmodels
+#### leakedmodels
 
 - Website URL: https://ru.leakedmodels.com
 - Example of URL to a model: https://ru.leakedmodels.com/caroline-nitter/
 
-### nudogram
+#### nudogram
 
 - Website URL: https://ua.nudogram.com
 - Example of URL to a model: https://ua.nudogram.com/models/caroline-nitter/
 
-### thefappeningblog
+#### thefappeningblog
 
 - Website URL: https://thefappeningblog.com
 - Example of URL to a model: https://thefappeningblog.com/gallery/caroline-nitter/
 
-### fappeningbook
+#### fappeningbook
 
 - Website URL: https://fappeningbook.com
 - Example of URL to a model: https://fappeningbook.com/caroline-nitter-nude/
 
-### pornhex
+#### pornhex
 
 - Website URL: https://no.pornhex.com
 - Example of URL to a model: https://no.pornhex.com/video/crole-nitter-suckg-ridg-dick
 
-### OnlyFans
+#### OnlyFans
 
 - Website URL: https://onlyfans.com
 - Example of URL to a model: https://onlyfans.com/notsoordinarycc
 
-### modelsearcher
+#### modelsearcher
 
 - Website URL: https://modelsearcher.com
 - Example of URL to model: https://modelsearcher.com/profile/notsoordinarycc
 - Example of URL to a model's photos: https://modelsearcher.com/profile/notsoordinarycc?tab=photo
 - Example of URL to a model's videos: https://modelsearcher.com/profile/notsoordinarycc?tab=video
 
-### TikTok
+#### TikTok
 
 - Website URL: https://www.tiktok.com
 - Example of URL to a TikTok account: https://www.tiktok.com/@carolinenitter
 
-### linktree
+#### linktree
 
 Models might have linktree's which links to other platforms where they might have media.
 
