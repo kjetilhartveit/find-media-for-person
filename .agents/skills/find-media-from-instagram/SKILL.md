@@ -9,6 +9,7 @@ Download images and videos from Instagram using `gallery-dl` with cookie-based a
 
 ## URL Patterns
 
+- **Profile**: `instagram.com/{username}/` — all posts on a profile
 - **Posts**: `instagram.com/p/{shortcode}` — images, carousels, or video posts
 - **Reels**: `instagram.com/reel/{shortcode}` — short-form video
 - **Stories**: `instagram.com/stories/{username}/{id}` — ephemeral content (24h only, must be active)
@@ -60,28 +61,73 @@ Session cookies typically last about a year but can be invalidated earlier by pa
 }
 ```
 
-3. Run:
+3. Run with appropriate timeout (full profiles can take 10+ minutes):
 
 ```bash
+# Profile with posts, reels, and highlights (up to 1000 posts total), timeout 10 min
+gallery-dl \
+  --config /tmp/gallery-dl-config.json \
+  --no-mtime \
+  --cookies .data/cookies.txt \
+  --range 1-1000 \
+  -o "include=posts,reels,highlights" \
+  "${timeout: 600000}" \
+  "https://www.instagram.com/{username}/"
+
+# Single post
 gallery-dl \
   --config /tmp/gallery-dl-config.json \
   --no-mtime \
   --cookies .data/cookies.txt \
   "https://www.instagram.com/p/ABC123/"
+
+# Specific reel
+gallery-dl \
+  --config /tmp/gallery-dl-config.json \
+  --no-mtime \
+  --cookies .data/cookies.txt \
+  "https://www.instagram.com/reel/ABC123/"
 ```
 
-4. Scan the output directory for new `.jpg`/`.png`/`.webp`/`.mp4` etc.
+4. Verify results:
+
+```bash
+# Quick count of downloaded media
+ls -1 <output-dir> | grep -cE '\.(jpg|png|mp4)$'
+ls -1 <output-dir>/*.jpg | wc -l
+ls -1 <output-dir>/*.mp4 | wc -l
+```
 
 5. Clean up the temporary config file.
 
 `gallery-dl` uses Instagram's internal API — not HTML scraping. It handles carousel posts (multiple images/videos) automatically.
 
+## Include Options
+
+Use `-o "include=..."` to control what content types are downloaded from a profile:
+
+- `posts` (default) — regular feed posts only
+- `reels` — short-form video clips
+- `highlights` — story highlights (permanent saved stories)
+- `tagged` — posts where the user is tagged
+- `photos` — photo posts only (excludes video-only posts)
+- `stories` — active 24h stories
+- `all` — everything available
+
+```bash
+# Examples
+-o "include=posts,reels,highlights"
+-o "include=all"
+```
+
 ## Config Settings
 
+- `--range 1-1000` — limit to the first 1000 files. Use to bound long-running downloads.
 - `sleep-request: [8, 16]` — wait 8–16 seconds (random) between requests. **Do not reduce** — Instagram will 429 or invalidate the cookie.
 - `sleep-429: 120` — wait 120 seconds on rate limit response.
 - `directory: []` — download directly into base directory, no subdirectory nesting.
 - `--no-mtime` — don't set file modification time to the post's publish date.
+- `max-posts: N` — limit to N posts (gallery-dl extractor config, use `-o "max-posts=100"`)
 
 ## Pitfalls
 
@@ -91,3 +137,5 @@ gallery-dl \
 - **Private accounts** require the session cookie to belong to an account that follows the target profile.
 - **Keep gallery-dl updated.** `pip install -U gallery-dl` — fixes for Instagram API changes usually ship within days.
 - **Output classification by extension.** Images: `.jpg`, `.png`, `.webp`, `.gif`. Videos: `.mp4`, `.webm`, `.mkv`, `.avi`, `.mov`.
+- **"Trying fallback URL #1" is normal.** Videos often use fallback URLs; gallery-dl handles this automatically. These are informational, not errors.
+- **Long downloads need long timeouts.** A full profile download can take 10+ minutes. Set bash timeout to at least `600000`ms (10 min), or `900000`ms (15 min) for profiles with hundreds of posts.
