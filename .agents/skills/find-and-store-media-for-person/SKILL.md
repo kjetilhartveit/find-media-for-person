@@ -89,7 +89,7 @@ It's recommended to at least try the websites listed below, but you are free to 
 
 #### Google Images / web search engine
 
-- Website URL: https://www.google.com/images
+- See skill `find-media-from-web-search` for tips on doing the search.
 
 #### Instagram
 
