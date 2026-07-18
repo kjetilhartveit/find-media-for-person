@@ -5,27 +5,26 @@ description: Download media from Fappeningbook, a large aggregator with full-siz
 
 # Find media from Fappeningbook
 
-Download images from Fappeningbook (https://fappeningbook.com), a large aggregator with paginated galleries.
+Download images from Fappeningbook (https://fappeningbook.com), a large aggregator with galleries.
 
 ## URL Patterns
 
-- Profile: `https://fappeningbook.com/{slug}-nude/` (e.g., `fappeningbook.com/emily-ratajkowski-nude/`)
-- 156+ pages with thousands of photos per celebrity
+- Profile: `https://fappeningbook.com/{slug}-nude/` — try the person's name first (e.g. `caroline-nitter-nude/`), then their Instagram username if that 404s (e.g. `jessicah-o-nude/` for @jessicah_o). The `us.fappeningbook.com` subdomain also exists but mirrors the same content.
+- Image URLs: `https://fappeningbook.com/photos/{l1}/{l2}/{slug}/{resolution}/{id}t.jpg` (thumbnail) → remove `t` for full-size (e.g. `1t.jpg` → `1.jpg`)
 
 ## Recommendations on how to download
 
-- Thumbnails end with `t.jpg` suffix. Remove the `t` to get full-size image URLs.
-- Pagination across many pages (150+). IDs are sequential.
+- Extract thumbnail URLs from the page HTML (`src="..*.jpg"`), remove the `t` suffix for full-size.
+- IDs are sequential per page. Check for pagination links; smaller profiles may have all images on a single page.
 - Rate limiting: sleep 0.3–0.5s between requests.
-- Skip the 4th thumbnail in each row — it is often a placeholder ad that does not exist.
+- Download all thumbnails' full-size counterparts — don't skip any based on position. Validate by checking file size > 10KB after download.
 
 ## Quality
 
-- Images range from ~42KB to ~922KB (largest of the aggregator sites).
-- Good variety, large images, but many placeholder gaps.
+- Images range from ~42KB to ~922KB. Generally good quality for an aggregator site.
 
 ## Pitfalls
 
-- Placeholder thumbnails (ads) cause intermittent gaps — the 4th in each row is typically missing.
-- 156+ pages to scrape — be patient and pace yourself.
-- Some thumbnails may not resolve to valid full-size images even after removing the `t` suffix.
+- Site search (`/?s=query`) returns 200 but might not yield any useful results — prefer direct profile URLs instead.
+- Some profiles may not exist under a person's real name; try their social media handle as fallback.
+- Some thumbnails may not resolve to valid full-size images even after removing the `t` suffix — check response code and file size.
