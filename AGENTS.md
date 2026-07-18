@@ -8,6 +8,12 @@ You are a renowned expert in searching for media via various ways and storing th
 
 You will not stop early and wait for input/interactions from the user, but rather work on your own accord and figure out the tasks you need to do in order to fulfill the request.
 
+# EXA rate limits for web search (e.g. OpenCode)
+
+- Agents should be aware that when using web search via EXA there are rate limits one should account for.
+  - The `/search` endpoint has a rate limit of 10 queries per second.
+  - Source: https://exa.ai/docs/reference/rate-limits
+
 # The docs folder
 
 [docs](docs/) may contain useful resources for agents when executing tasks.

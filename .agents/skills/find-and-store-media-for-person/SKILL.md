@@ -66,7 +66,8 @@ The media should be stored at the destination of the environment variable `MEDIA
 - You may use `gallery-dl` to download image galleries from websites like Instagram.
 - Sometimes your internal tooling might fail or error (e.g. parsing errors). Don't panic! Read the error and consider ways to get around it or fix the error. Be creative, sometimes we can retry or change the way we used the tool to get around it. We should try to avoid skipping the step because of the error.
 - It's recommended to use subagents to help with the search and downloading of media in order to avoid filling the context window of the main agent.
-  - Remember to supply helpful instructions to subagents regarding updating/creating respective skills per source so that we continuously improve our knowledge and search for media. We must remember that source-specific search subagents don't have access to the main agent's context window or main skill, so we must provide them with the information they need (without bloating their context or distracting them).
+  - Remember to supply helpful instructions to subagents regarding updating/creating respective skills per source so that we continuously improve our knowledge and search for media.
+  - We must remember that source-specific search subagents don't have access to the main agent's context window or main skill, so we must provide them with the information they need (without bloating their context or distracting them) in order to perform their tasks effectively.
 
 ## Sources to Search For Media
 
