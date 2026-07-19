@@ -147,11 +147,13 @@ If we would like to retrieve media from this page we might have to do a search.
 
 - Website URL: https://ru.leakedmodels.com
 - Example of URL to a model: https://ru.leakedmodels.com/caroline-nitter/
+- **NOTE:** Cloudflare anti-bot protection. Returns 404 after initial HEAD probes; full-size images are blocked. May skip this source.
 
 #### nudogram
 
 - Website URL: https://ua.nudogram.com
 - Example of URL to a model: https://ua.nudogram.com/models/caroline-nitter/
+- **NOTE:** Cloudflare anti-bot protection. Returns 146-byte HTML challenge pages that block all downloads. May skip this source.
 
 #### thefappeningblog
 
@@ -163,6 +165,18 @@ If we would like to retrieve media from this page we might have to do a search.
 - Website URL: https://fappeningbook.com
 - Example of URL to a model: https://fappeningbook.com/caroline-nitter-nude/
 - See skill `find-media-from-fappeningbook` for tips on downloading media from Fappeningbook.
+
+#### scandalplanet
+
+- Website URL: https://scandalplanet.com
+- Example of URL to a celebrity: https://scandalplanet.com/charithra-chandran/
+- See skill `find-media-from-scandal-planet` for tips on downloading media from Scandal Planet.
+
+#### aznude
+
+- Website URL: https://www.aznude.com
+- Example of URL to a celebrity: https://www.aznude.com/view/celeb/c/charithrachandran.html
+- See skill `find-media-from-aznude` for tips on downloading media from AZNude.
 
 #### pornhex
 
