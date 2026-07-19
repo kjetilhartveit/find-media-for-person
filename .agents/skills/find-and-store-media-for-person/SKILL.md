@@ -143,18 +143,6 @@ If we would like to retrieve media from this page we might have to do a search.
 - Example of URL to a model: https://fapello.com/caroline-nitter/
 - See skill `find-media-from-fapello` for tips on downloading media from Fapello.
 
-#### leakedmodels
-
-- Website URL: https://ru.leakedmodels.com
-- Example of URL to a model: https://ru.leakedmodels.com/caroline-nitter/
-- **NOTE:** Cloudflare anti-bot protection. Returns 404 after initial HEAD probes; full-size images are blocked. May skip this source.
-
-#### nudogram
-
-- Website URL: https://ua.nudogram.com
-- Example of URL to a model: https://ua.nudogram.com/models/caroline-nitter/
-- **NOTE:** Cloudflare anti-bot protection. Returns 146-byte HTML challenge pages that block all downloads. May skip this source.
-
 #### thefappeningblog
 
 - Website URL: https://thefappeningblog.com
@@ -207,7 +195,9 @@ Models might have linktree's which links to other platforms where they might hav
 - Website URL: https://linktr.ee
 - Example of URL to a linktree for a model: https://linktr.ee/carolinenitter
 
-### Secondary sources with special topics
+### Secondary sources
+
+Secondary sources are worth mentioning but might not be applicable in all cases (perhaos only relevant for certain models/persons). Sources which have proved anti-bot protection is also moved here but kept in case the anti-bot protection is bypassed.
 
 #### kpopidolfap
 
@@ -215,3 +205,15 @@ Models might have linktree's which links to other platforms where they might hav
 - Example of URL to a model: https://kpopidolfap.com/post/tag/jessi/
 - See skill `find-media-from-kpopidolfap` for tips on downloading media from KpopIdolFap.
 - **NOTE:** This source is a WordPress-based aggregator of K-pop idol content. It's a good source for finding (mostly fake) media of K-pop idols.
+
+#### leakedmodels
+
+- Website URL: https://ru.leakedmodels.com
+- Example of URL to a model: https://ru.leakedmodels.com/caroline-nitter/
+- **NOTE:** Cloudflare anti-bot protection. Returns 404 after initial HEAD probes; full-size images are blocked. May skip this source.
+
+#### nudogram
+
+- Website URL: https://ua.nudogram.com
+- Example of URL to a model: https://ua.nudogram.com/models/caroline-nitter/
+- **NOTE:** Cloudflare anti-bot protection. Returns 146-byte HTML challenge pages that block all downloads. May skip this source.
