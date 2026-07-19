@@ -217,3 +217,15 @@ Secondary sources are worth mentioning but might not be applicable in all cases 
 - Website URL: https://ua.nudogram.com
 - Example of URL to a model: https://ua.nudogram.com/models/caroline-nitter/
 - **NOTE:** Cloudflare anti-bot protection. Returns 146-byte HTML challenge pages that block all downloads. May skip this source.
+
+#### CelebMafia (celebrity/public figures)
+
+- Website URL: https://celebmafia.com
+- Example of URL to a celebrity article: https://celebmafia.com/charithra-chandran-in-lilac-bikini-at-pool-in-los-angeles-april-2026-4673246/
+- **NOTE:** Celebrity gossip site with photoshoot and event coverage. Images in `wp-content/uploads/`, served as webp. Works well with `curl | grep` extraction. Pick URLs without dimension suffixes (e.g. `-171x256`) for full-size.
+
+#### Gethu Cinema (celebrity/public figures)
+
+- Website URL: https://www.gethucinema.com
+- Example of URL to a gallery: https://www.gethucinema.com/2025/09/actress-charithra-chandran-hd-photos-and-wallpapers-september-2025.html
+- **NOTE:** WordPress celebrity photo gallery site. Images in `wp-content/uploads/` with hash-based filenames (e.g. `Charithra-Chandran-26-nw5n3I3824.jpg`). Prefer URLs without dimension suffixes for full-size. Good for celebrity/public figure searches.

@@ -97,4 +97,5 @@ Large JS-heavy websites (typical news sites) are 50-300KB of HTML full of ad scr
 - **Ads masquerade as images** — filter out URLs containing `ad`, `banner`, `placeholder`, `logo`, `pixel`, or third-party ad domains.
 - **Google Images redirects** — going directly to `google.com/imagesearch` may hit a redirect or CAPTCHA. Use `web_search` for text results, then follow to source sites.
 - **Context exhaustion** — a single `web_fetch` of a news article HTML can be 50-300KB. Budget accordingly to avoid premature sub-agent termination.
-- **Some sites don't work with `curl | grep`** — CelebMafia and Yahoo articles use lazy-loaded/JavaScript-rendered images that don't appear in the raw HTML. When `curl | grep` returns zero URLs, try `web_fetch` with markdown format instead, or skip the article.
+- **Yahoo articles fail with `curl | grep`** — Yahoo (and other AOL-media sites) return zero image URLs via regex extraction, likely due to JavaScript-rendered images or external CDNs. When `curl | grep` returns nothing, fall back to `web_fetch` with markdown format or og:image extraction.
+- **Avoid complex download loops** — when downloading many images, prefer simple batch scripts with known URLs over inline URL construction with nested `curl` calls, which can create duplicate/badly-named files.
