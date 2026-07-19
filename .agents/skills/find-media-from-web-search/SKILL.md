@@ -11,6 +11,8 @@ Use web search engines and Google Images to find articles, news posts, and galle
 
 Web search generally returns **article URLs**, not image URLs. The actual images are embedded in the HTML of those articles. The challenge is extracting image URLs efficiently without drowning in ad-heavy HTML bloat.
 
+It's very important to only make a maximum of 5 full web searches per agent. If we search for more than 5 times, the agent will likely crash because it will fill up the context window.
+
 ## General Workflow
 
 1. **Search**: Use `web_search` to find articles mentioning the person + target query (e.g. name + "bikini", "photos", "vacation", "leaks" etc.). Try name variations (English, local language, handle, full name).
@@ -37,6 +39,7 @@ If markdown doesn't yield images, try `format: "text"` to get plain text. Some p
 ### Strategy 3: `web_fetch` with HTML — extract only `<head>` meta tags
 
 When you need to fetch HTML, first extract the `<head>` section only (or the first ~100 lines) to get og/twitter meta tags:
+
 - `<meta property="og:image" content="URL">` — cover image
 - `<meta name="twitter:image" content="URL">` — cover image
 - `<meta property="og:image:width">` / `og:image:height` — dimensions
