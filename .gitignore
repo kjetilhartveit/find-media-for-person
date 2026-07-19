@@ -3,5 +3,8 @@
 
 .data
 
+# Python
+__pycache__
+
 # Claude
 /.claude/settings.local.json
