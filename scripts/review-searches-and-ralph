@@ -20,12 +20,13 @@ import yaml
 
 # ── Edit this template ──────────────────────────────────────────────
 # Placeholders:
+#   {person}             — person being searched for (global, asked once)
 #   {search_description} — what's being reviewed, injected after
 #                          "We are now reviewing a search"
 #   {skill_clause}       — " (skill-name)" when provided, empty otherwise
 #   {file_path}          — path to the agent conversation file
 PROMPT_TEMPLATE = """\
-Earlier we did a run for finding media of Charithra Chandran using the skill @.agents/skills/find-and-store-media-for-person/. Now we are reviewing searches for specific sources and see if we can improve existing skills {skill_clause} or should create skills for new sources (you may see the section "Supplementary information for searches for media" in the skill @.agents/skills/find-and-store-media-for-person/SKILL.md).
+Earlier we did a run for finding media of {person} using the skill @.agents/skills/find-and-store-media-for-person/. Now we are reviewing searches for specific sources and see if we can improve existing skills {skill_clause} or should create skills for new sources (you may see the section "Supplementary information for searches for media" in the skill @.agents/skills/find-and-store-media-for-person/SKILL.md).
 
 We are now reviewing a search {search_description}. Please see the agent conversation at @{file_path} and see whether we learned new interesting insight from the search.
 """
@@ -55,9 +56,10 @@ def header(msg):
     print(f"\n{BOLD}{CYAN}═══ {msg} ═══{RESET}\n")
 
 
-def render_prompt(entry):
+def render_prompt(entry, person):
     skill_clause = f" ({entry['skill']})" if entry.get("skill") else ""
     return PROMPT_TEMPLATE.format(
+        person=person,
         search_description=entry["search"],
         skill_clause=skill_clause,
         file_path=entry["file"],
@@ -100,14 +102,15 @@ def prompt_field(label, required=True):
         print(f"  {RED}This field is required.{RESET}\n")
 
 
-def show_prompt_card(entry, idx, total):
+def show_prompt_card(entry, idx, total, person):
     skill_display = entry["skill"] if entry["skill"] else f"{DIM}—{RESET}"
+    print(f"  {DIM}Person:{RESET}  {person}")
     print(f"  {DIM}Search:{RESET}  {entry['search']}")
     print(f"  {DIM}File:{RESET}    {entry['file']}")
     print(f"  {DIM}Skill:{RESET}   {skill_display}")
     print()
     print(f"  {DIM}── Full prompt ──{RESET}")
-    for line in render_prompt(entry).split("\n"):
+    for line in render_prompt(entry, person).split("\n"):
         print(f"  {DIM}│{RESET} {line}")
     print()
 
@@ -120,7 +123,10 @@ def add_prompt(index):
         f'  {DIM}e.g. "for the web search source" or "made by the main orchestrating agent"{RESET}'
     )
     print()
-    file_path = prompt_field("Path to agent conversation file")
+    file_path = prompt_field(
+        'Path to agent conversation file\n'
+        f' {DIM} e.g. "search.md" {RESET}'
+    )
     if file_path and not Path(file_path).expanduser().exists():
         print(f"  {YELLOW}Warning: file does not exist (yet){RESET}")
     print()
@@ -129,10 +135,10 @@ def add_prompt(index):
     return {"search": search, "file": file_path, "skill": skill}
 
 
-def edit_prompt(entry, idx):
+def edit_prompt(entry, idx, person):
     clear_screen()
     header(f"Edit Prompt #{idx + 1}")
-    show_prompt_card(entry, idx, 1)
+    show_prompt_card(entry, idx, 1, person)
 
     print(f"  Press Enter to keep current value. Type {DIM}-{RESET} to clear skill.\n")
 
@@ -169,13 +175,13 @@ def edit_prompt(entry, idx):
     return entry
 
 
-def review_mode(prompts, start_idx=0):
+def review_mode(prompts, person, start_idx=0):
     idx = start_idx
     while True:
         clear_screen()
         total = len(prompts)
         header(f"Review Prompts ({idx + 1}/{total})")
-        show_prompt_card(prompts[idx], idx, total)
+        show_prompt_card(prompts[idx], idx, total, person)
 
         nav = []
         if idx > 0:
@@ -200,7 +206,7 @@ def review_mode(prompts, start_idx=0):
         elif key == "right" and idx < total - 1:
             idx += 1
         elif key in ("e", "E"):
-            prompts[idx] = edit_prompt(prompts[idx], idx)
+            prompts[idx] = edit_prompt(prompts[idx], idx, person)
         elif key in ("a", "A"):
             return "add"
         elif key in ("d", "D"):
@@ -235,10 +241,10 @@ def multiline_str_representer(dumper, data):
     return dumper.represent_scalar("tag:yaml.org,2002:str", data)
 
 
-def generate_config(prompts, output_path, name, cwd):
+def generate_config(prompts, person, output_path, name, cwd):
     yaml.add_representer(str, multiline_str_representer)
 
-    tasks = [{"prompt": render_prompt(e)} for e in prompts]
+    tasks = [{"prompt": render_prompt(e, person)} for e in prompts]
     config = {"name": name, "cwd": cwd, "tasks": tasks}
 
     with open(output_path, "w") as f:
@@ -260,6 +266,10 @@ def main():
         print()
         sys.exit(0)
 
+    clear_screen()
+    person = prompt_field("Person to find media for")
+    print()
+
     while True:
         clear_screen()
         entry = add_prompt(len(prompts) + 1)
@@ -267,7 +277,7 @@ def main():
 
         clear_screen()
         header(f"Prompt #{len(prompts)} Added")
-        show_prompt_card(entry, len(prompts) - 1, len(prompts))
+        show_prompt_card(entry, len(prompts) - 1, len(prompts), person)
 
         print(
             f"  {GREEN}[A]{RESET}dd another prompt  "
@@ -279,7 +289,7 @@ def main():
         print()
 
         if key in ("r", "R"):
-            action = review_mode(prompts)
+            action = review_mode(prompts, person)
             if action == "add":
                 continue
             elif action == "submit":
@@ -293,7 +303,7 @@ def main():
         # default: add another
 
     output_path = next_available_path(DEFAULT_QUEUE_NAME)
-    generate_config(prompts, str(output_path), DEFAULT_QUEUE_NAME, DEFAULT_CWD)
+    generate_config(prompts, person, str(output_path), DEFAULT_QUEUE_NAME, DEFAULT_CWD)
 
     clear_screen()
     header("Done")
