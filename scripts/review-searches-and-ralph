@@ -1,0 +1,305 @@
+#!/usr/bin/env python3
+"""review-searches-and-ralph — interactive prompt builder for search review tasks.
+
+Builds a series of search-review prompts interactively, then generates
+a ralph queue YAML to run them serially.
+
+Edit PROMPT_TEMPLATE below to customize the review prompt.
+"""
+
+import os
+import readline  # noqa: F401 — enables arrow-key editing in input()
+import sys
+import termios
+import tty
+from datetime import datetime
+from pathlib import Path
+
+import yaml
+
+
+# ── Edit this template ──────────────────────────────────────────────
+# Placeholders:
+#   {search_description} — what's being reviewed, injected after
+#                          "We are now reviewing a search"
+#   {skill_clause}       — " (skill-name)" when provided, empty otherwise
+#   {file_path}          — path to the agent conversation file
+PROMPT_TEMPLATE = """\
+Earlier we did a run for finding media of Charithra Chandran using the skill @.agents/skills/find-and-store-media-for-person/. Now we are reviewing searches for specific sources and see if we can improve existing skills {skill_clause} or should create skills for new sources (you may see the section "Supplementary information for searches for media" in the skill @.agents/skills/find-and-store-media-for-person/SKILL.md).
+
+We are now reviewing a search {search_description}. Please see the agent conversation at @{file_path} and see whether we learned new interesting insight from the search.
+"""
+# ────────────────────────────────────────────────────────────────────
+
+# ── Defaults (edit these) ───────────────────────────────────────────
+DEFAULT_QUEUE_NAME = "search-review"
+DEFAULT_CWD = "/home/kjetil/_index/git/find-media-for-person"
+# ────────────────────────────────────────────────────────────────────
+
+
+BOLD = "\033[1m"
+DIM = "\033[2m"
+RED = "\033[31m"
+GREEN = "\033[32m"
+YELLOW = "\033[33m"
+CYAN = "\033[36m"
+RESET = "\033[0m"
+CLEAR = "\033[2J\033[H"
+
+
+def clear_screen():
+    print(CLEAR, end="", flush=True)
+
+
+def header(msg):
+    print(f"\n{BOLD}{CYAN}═══ {msg} ═══{RESET}\n")
+
+
+def render_prompt(entry):
+    skill_clause = f" ({entry['skill']})" if entry.get("skill") else ""
+    return PROMPT_TEMPLATE.format(
+        search_description=entry["search"],
+        skill_clause=skill_clause,
+        file_path=entry["file"],
+    )
+
+
+def read_key():
+    fd = sys.stdin.fileno()
+    old = termios.tcgetattr(fd)
+    try:
+        tty.setraw(fd)
+        ch = sys.stdin.read(1)
+        if ch == "\x1b":
+            seq = sys.stdin.read(2)
+            if seq == "[D":
+                return "left"
+            if seq == "[C":
+                return "right"
+            return "escape"
+        if ch in ("\r", "\n"):
+            return "enter"
+        if ch == "\x03":
+            raise KeyboardInterrupt
+        return ch
+    finally:
+        termios.tcsetattr(fd, termios.TCSADRAIN, old)
+
+
+def prompt_field(label, required=True):
+    while True:
+        suffix = "" if required else f" {DIM}(optional, Enter to skip){RESET}"
+        print(f"  {label}{suffix}")
+        try:
+            value = input(f"  {GREEN}>{RESET} ").strip()
+        except (EOFError, KeyboardInterrupt):
+            print()
+            sys.exit(0)
+        if value or not required:
+            return value
+        print(f"  {RED}This field is required.{RESET}\n")
+
+
+def show_prompt_card(entry, idx, total):
+    skill_display = entry["skill"] if entry["skill"] else f"{DIM}—{RESET}"
+    print(f"  {DIM}Search:{RESET}  {entry['search']}")
+    print(f"  {DIM}File:{RESET}    {entry['file']}")
+    print(f"  {DIM}Skill:{RESET}   {skill_display}")
+    print()
+    print(f"  {DIM}── Full prompt ──{RESET}")
+    for line in render_prompt(entry).split("\n"):
+        print(f"  {DIM}│{RESET} {line}")
+    print()
+
+
+def add_prompt(index):
+    header(f"Add Prompt #{index}")
+
+    search = prompt_field(
+        'Search description (injected after "We are now reviewing a search")\n'
+        f'  {DIM}e.g. "for the web search source" or "made by the main orchestrating agent"{RESET}'
+    )
+    print()
+    file_path = prompt_field("Path to agent conversation file")
+    if file_path and not Path(file_path).expanduser().exists():
+        print(f"  {YELLOW}Warning: file does not exist (yet){RESET}")
+    print()
+    skill = prompt_field("Skill name", required=False) or ""
+
+    return {"search": search, "file": file_path, "skill": skill}
+
+
+def edit_prompt(entry, idx):
+    clear_screen()
+    header(f"Edit Prompt #{idx + 1}")
+    show_prompt_card(entry, idx, 1)
+
+    print(f"  Press Enter to keep current value. Type {DIM}-{RESET} to clear skill.\n")
+
+    print(f"  Search description {DIM}[{entry['search']}]{RESET}")
+    try:
+        v = input(f"  {GREEN}>{RESET} ").strip()
+    except (EOFError, KeyboardInterrupt):
+        print()
+        return entry
+    if v:
+        entry["search"] = v
+
+    print(f"\n  File path {DIM}[{entry['file']}]{RESET}")
+    try:
+        v = input(f"  {GREEN}>{RESET} ").strip()
+    except (EOFError, KeyboardInterrupt):
+        print()
+        return entry
+    if v:
+        entry["file"] = v
+
+    current_skill = entry["skill"] or "(none)"
+    print(f"\n  Skill name {DIM}[{current_skill}]{RESET}")
+    try:
+        v = input(f"  {GREEN}>{RESET} ").strip()
+    except (EOFError, KeyboardInterrupt):
+        print()
+        return entry
+    if v == "-":
+        entry["skill"] = ""
+    elif v:
+        entry["skill"] = v
+
+    return entry
+
+
+def review_mode(prompts, start_idx=0):
+    idx = start_idx
+    while True:
+        clear_screen()
+        total = len(prompts)
+        header(f"Review Prompts ({idx + 1}/{total})")
+        show_prompt_card(prompts[idx], idx, total)
+
+        nav = []
+        if idx > 0:
+            nav.append("← Prev")
+        if idx < total - 1:
+            nav.append("→ Next")
+        print(f"  {' │ '.join(nav)}" if nav else "")
+        print(
+            f"  {YELLOW}[E]{RESET}dit  "
+            f"{GREEN}[A]{RESET}dd  "
+            f"{RED}[D]{RESET}elete  "
+            f"{CYAN}[S]{RESET}ubmit  "
+            f"{DIM}[Q]uit{RESET}"
+        )
+        print(f"\n  {DIM}Press a key...{RESET}", end="", flush=True)
+
+        key = read_key()
+        print()
+
+        if key == "left" and idx > 0:
+            idx -= 1
+        elif key == "right" and idx < total - 1:
+            idx += 1
+        elif key in ("e", "E"):
+            prompts[idx] = edit_prompt(prompts[idx], idx)
+        elif key in ("a", "A"):
+            return "add"
+        elif key in ("d", "D"):
+            if total == 1:
+                print(f"\r  {RED}Cannot delete the only prompt.{RESET}  ", flush=True)
+                read_key()
+            else:
+                prompts.pop(idx)
+                if idx >= len(prompts):
+                    idx = len(prompts) - 1
+        elif key in ("s", "S"):
+            return "submit"
+        elif key in ("q", "Q"):
+            return "quit"
+
+
+def next_available_path(name):
+    path = Path(f"{name}.yaml")
+    if not path.exists():
+        return path
+    i = 1
+    while True:
+        path = Path(f"{name}-({i}).yaml")
+        if not path.exists():
+            return path
+        i += 1
+
+
+def multiline_str_representer(dumper, data):
+    if "\n" in data:
+        return dumper.represent_scalar("tag:yaml.org,2002:str", data, style="|")
+    return dumper.represent_scalar("tag:yaml.org,2002:str", data)
+
+
+def generate_config(prompts, output_path, name, cwd):
+    yaml.add_representer(str, multiline_str_representer)
+
+    tasks = [{"prompt": render_prompt(e)} for e in prompts]
+    config = {"name": name, "cwd": cwd, "tasks": tasks}
+
+    with open(output_path, "w") as f:
+        yaml.dump(config, f, default_flow_style=False, sort_keys=False, allow_unicode=True)
+
+
+def main():
+    sys.stdout.reconfigure(line_buffering=True)
+    prompts = []
+
+    clear_screen()
+    header("Review Searches & Ralph")
+    print(f"  Build search-review prompts interactively, then generate a ralph config.\n")
+    print(f"  {DIM}Ctrl+C to quit at any time.{RESET}\n")
+
+    try:
+        input(f"  Press Enter to start...")
+    except (EOFError, KeyboardInterrupt):
+        print()
+        sys.exit(0)
+
+    while True:
+        clear_screen()
+        entry = add_prompt(len(prompts) + 1)
+        prompts.append(entry)
+
+        clear_screen()
+        header(f"Prompt #{len(prompts)} Added")
+        show_prompt_card(entry, len(prompts) - 1, len(prompts))
+
+        print(
+            f"  {GREEN}[A]{RESET}dd another prompt  "
+            f"{CYAN}[R]{RESET}eview all prompts ({len(prompts)} total)"
+        )
+        print(f"\n  {DIM}Press a key...{RESET}", end="", flush=True)
+
+        key = read_key()
+        print()
+
+        if key in ("r", "R"):
+            action = review_mode(prompts)
+            if action == "add":
+                continue
+            elif action == "submit":
+                break
+            elif action == "quit":
+                print(f"\n  {YELLOW}Cancelled.{RESET}")
+                sys.exit(0)
+        elif key in ("q", "Q"):
+            print(f"\n  {YELLOW}Cancelled.{RESET}")
+            sys.exit(0)
+        # default: add another
+
+    output_path = next_available_path(DEFAULT_QUEUE_NAME)
+    generate_config(prompts, str(output_path), DEFAULT_QUEUE_NAME, DEFAULT_CWD)
+
+    clear_screen()
+    header("Done")
+    print(f"  {GREEN}●{RESET} Ralph config written to: {BOLD}{output_path}{RESET}")
+    print(f"  {DIM}Run with: ralph {output_path}{RESET}\n")
+
+
+if __name__ == "__main__":
+    main()
