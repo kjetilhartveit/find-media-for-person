@@ -206,3 +206,12 @@ Models might have linktree's which links to other platforms where they might hav
 
 - Website URL: https://linktr.ee
 - Example of URL to a linktree for a model: https://linktr.ee/carolinenitter
+
+### Secondary sources with special topics
+
+#### kpopidolfap
+
+- Website URL: https://kpopidolfap.com
+- Example of URL to a model: https://kpopidolfap.com/post/tag/jessi/
+- See skill `find-media-from-kpopidolfap` for tips on downloading media from KpopIdolFap.
+- **NOTE:** This source is a WordPress-based aggregator of K-pop idol content. It's a good source for finding (mostly fake) media of K-pop idols.
