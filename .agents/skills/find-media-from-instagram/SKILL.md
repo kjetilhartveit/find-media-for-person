@@ -5,7 +5,7 @@ description: Download media from Instagram posts, reels, and stories using galle
 
 # Find media from Instagram
 
-Download images and videos from Instagram using `gallery-dl` with cookie-based authentication.
+Download images and videos from Instagram using `gallery-dl` (see respective skill if exists).
 
 ## URL Patterns
 
@@ -13,12 +13,6 @@ Download images and videos from Instagram using `gallery-dl` with cookie-based a
 - **Posts**: `instagram.com/p/{shortcode}` — images, carousels, or video posts
 - **Reels**: `instagram.com/reel/{shortcode}` — short-form video
 - **Stories**: `instagram.com/stories/{username}/{id}` — ephemeral content (24h only, must be active)
-
-## Prerequisites
-
-- `gallery-dl` installed (`pip install gallery-dl` or `pipx install gallery-dl`)
-- Valid Instagram session cookie in `.data/cookies.txt` (Netscape format)
-- Python installation
 
 ## Authentication
 
@@ -92,8 +86,6 @@ gallery-dl \
 4. Verify results:
 
 ```bash
-# Quick count of downloaded media
-ls -1 <output-dir> | grep -cE '\.(jpg|png|mp4)$'
 ls -1 <output-dir>/*.jpg | wc -l
 ls -1 <output-dir>/*.mp4 | wc -l
 ```
@@ -115,19 +107,14 @@ Use `-o "include=..."` to control what content types are downloaded from a profi
 - `all` — everything available
 
 ```bash
-# Examples
 -o "include=posts,reels,highlights"
 -o "include=all"
 ```
 
-## Config Settings
+## Instagram-Specific Settings
 
-- `--range 1-1000` — limit to the first 1000 files. Use to bound long-running downloads.
-- `sleep-request: [8, 16]` — wait 8–16 seconds (random) between requests. **Do not reduce** — Instagram will 429 or invalidate the cookie.
+- `sleep-request: [8, 16]` — wait 8–16 seconds between requests. **Do not reduce** — Instagram will 429 or invalidate the cookie.
 - `sleep-429: 120` — wait 120 seconds on rate limit response.
-- `directory: []` — download directly into base directory, no subdirectory nesting.
-- `--no-mtime` — don't set file modification time to the post's publish date.
-- `max-posts: N` — limit to N posts (gallery-dl extractor config, use `-o "max-posts=100"`)
 
 ## Pitfalls
 
@@ -135,7 +122,5 @@ Use `-o "include=..."` to control what content types are downloaded from a profi
 - **Do not scrape HTML.** Instagram changes their frontend constantly. `gallery-dl` uses internal API and is actively maintained.
 - **Stories are ephemeral.** Only fetchable while active (24h). Must be authenticated to view them.
 - **Private accounts** require the session cookie to belong to an account that follows the target profile.
-- **Keep gallery-dl updated.** `pip install -U gallery-dl` — fixes for Instagram API changes usually ship within days.
 - **Output classification by extension.** Images: `.jpg`, `.png`, `.webp`, `.gif`. Videos: `.mp4`, `.webm`, `.mkv`, `.avi`, `.mov`.
-- **"Trying fallback URL #1" is normal.** Videos often use fallback URLs; gallery-dl handles this automatically. These are informational, not errors.
 - **Long downloads need long timeouts.** A full profile download can take 10+ minutes. Set bash timeout to at least `600000`ms (10 min), or `900000`ms (15 min) for profiles with hundreds of posts.

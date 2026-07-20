@@ -16,14 +16,19 @@ Download images and videos from Erome (https://www.erome.com), a user-hosted adu
 
 ## How to find and download media
 
-1. **Search** for the person's name on `https://www.erome.com/search?q={name}` — results include album cards with titles and engagement metrics.
-2. **Parse album links** from the search results HTML. Look for `class="album-link"` attributes containing `href` with the album URL (e.g., `/a/fwBHXEGc`).
-3. **Fetch each album page** and extract media URLs:
+1. **Search** for the person's name on `https://www.erome.com/search?q={name}` — results include album cards with titles and engagement metrics. Look for album links matching `/a/{album_id}`.
+2. **Download via gallery-dl** (recommended — see respective skill if exists):
+   ```bash
+   gallery-dl -d "/output/dir/" "https://www.erome.com/a/{album_id}"
+   ```
+   gallery-dl handles downloading all media in an album automatically.
+3. **Or manually parse** album pages:
+
    - Extract `data-src` and `src` attributes from `<img>` tags — these point directly to full-size media on `s{number}.erome.com`.
-   - Filter out any URLs containing `/thumbs/` — those are thumbnails.
-   - No URL pattern guessing needed; the `data-src`/`src` attributes provide the actual full-size URLs directly.
-4. **Download media** with `Referer: https://www.erome.com/` header and rate-limit to 0.3–0.5s between requests.
-5. Prefix filenames with the album ID to avoid collisions (Erome files have random IDs).
+    - Filter out any URLs containing `/thumbs/` — those are thumbnails.
+    - No URL pattern guessing needed; the `data-src`/`src` attributes provide the actual full-size URLs directly.
+ 4. **Download media** with `Referer: https://www.erome.com/` header and rate-limit to 0.3–0.5s between requests.
+ 5. Prefix filenames with the album ID to avoid collisions (Erome files have random IDs).
 
 ## Quality
 

@@ -12,6 +12,7 @@ Download images from Fapello (https://fapello.com), a massive aggregator of leak
 - Profile: `https://fapello.com/{slug}/` (e.g., `fapello.com/emily-ratajkowski/`)
 - Pagination: `https://fapello.com/{slug}/page-{N}/` (32 items per page, newest first)
 - Item page: `https://fapello.com/{slug}/{id}/`
+- Post page: `https://fapello.com/post/{post_id}/{slug}/` — standalone posts surfaced by web search. Note: a post may exist even when the profile URL returns 404.
 
 ### Direct image download
 
@@ -51,5 +52,7 @@ Thumbnails on profile pages use a similar pattern with `_300px.jpg` suffix (e.g.
 
 - Some sequential IDs may be missing (404). Handle gracefully.
 - The `{l1}/{l2}` path segments are derived from the slug's first two letters — verify with one known image first.
+- Profile URLs may return 404 even when posts exist for the same person (found via web search at `fapello.com/post/{id}/{slug}/`).
+- The `gallery-dl` fapello extractor has returned 404 in recent tests.
 - Thousands of images possible — pace downloads and use rate limiting.
 - Prioritize undownloaded ID ranges in follow-up sessions.
