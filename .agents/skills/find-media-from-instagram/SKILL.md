@@ -46,8 +46,6 @@ Session cookies typically last about a year but can be invalidated earlier by pa
 ```json
 {
   "extractor": {
-    "base-directory": "<output-dir>",
-    "directory": [],
     "sleep-request": [8, 16],
     "sleep-429": 120,
     "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) ..."
@@ -55,17 +53,22 @@ Session cookies typically last about a year but can be invalidated earlier by pa
 }
 ```
 
-3. Run with appropriate timeout (full profiles can take 10+ minutes):
+3. Run with appropriate timeout (profile downloads can take 10+ minutes):
 
 ```bash
-# Profile with posts, reels, and highlights (up to 1000 posts total), timeout 10 min
+# Create output directory first
+mkdir -p <output-dir>/instagram
+
+# Profile — download recent posts, reels, and highlights
+# --range 1-250 limits to ~250 posts (carousels expand to multiple files)
 gallery-dl \
   --config /tmp/gallery-dl-config.json \
   --no-mtime \
   --cookies .data/cookies.txt \
-  --range 1-1000 \
+  --range 1-250 \
+  -d <output-dir>/instagram \
   -o "include=posts,reels,highlights" \
-  "${timeout: 600000}" \
+  "${timeout: 900000}" \
   "https://www.instagram.com/{username}/"
 
 # Single post
@@ -73,6 +76,7 @@ gallery-dl \
   --config /tmp/gallery-dl-config.json \
   --no-mtime \
   --cookies .data/cookies.txt \
+  -d <output-dir> \
   "https://www.instagram.com/p/ABC123/"
 
 # Specific reel
@@ -80,14 +84,17 @@ gallery-dl \
   --config /tmp/gallery-dl-config.json \
   --no-mtime \
   --cookies .data/cookies.txt \
+  -d <output-dir> \
   "https://www.instagram.com/reel/ABC123/"
 ```
+
+**Important:** Use `-d <path>` to set the output directory. Do NOT use `-o "directory=..."` or `"directory": [...]` in the config — gallery-dl creates nested folders per site/user by default, and `-d` is the reliable way to override this. If you need a subfolder per source, create it first (`mkdir -p <output-dir>/instagram`) and point `-d` there.
 
 4. Verify results:
 
 ```bash
-ls -1 <output-dir>/*.jpg | wc -l
-ls -1 <output-dir>/*.mp4 | wc -l
+find <output-dir>/instagram -type f | wc -l
+du -sh <output-dir>/instagram
 ```
 
 5. Clean up the temporary config file.
@@ -123,4 +130,6 @@ Use `-o "include=..."` to control what content types are downloaded from a profi
 - **Stories are ephemeral.** Only fetchable while active (24h). Must be authenticated to view them.
 - **Private accounts** require the session cookie to belong to an account that follows the target profile.
 - **Output classification by extension.** Images: `.jpg`, `.png`, `.webp`, `.gif`. Videos: `.mp4`, `.webm`, `.mkv`, `.avi`, `.mov`.
-- **Long downloads need long timeouts.** A full profile download can take 10+ minutes. Set bash timeout to at least `600000`ms (10 min), or `900000`ms (15 min) for profiles with hundreds of posts.
+- **Long downloads need long timeouts.** A full profile download can take 10+ minutes. Set bash timeout to at least `900000`ms (15 min).
+- **`--range` counts individual media, not posts.** A carousel with 3–10 images counts each image separately. `--range 1-1000` on a profile with many carousels can yield 2000–2500+ files. Use `--range 1-250` for a reasonable number of posts. Avoid exceeding 2–3 GB total.
+- **`-o "directory=..."` bug.** Setting `-o "directory=[instagram]"` splits each character of "instagram" into a separate nested folder (`[/i/n/s/t/a/g/r/a/m/]`). Always use `-d <path>` to set the output directory instead.

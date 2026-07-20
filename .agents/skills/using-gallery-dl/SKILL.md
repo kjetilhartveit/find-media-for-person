@@ -61,15 +61,16 @@ Create a temporary config file for downloads (reusable across sources):
 | `--config FILE` | Use external config file |
 | `--cookies FILE` | Use Netscape-format cookies file (`.data/cookies.txt`) |
 | `--no-mtime` | Don't set file modification time to upload date |
-| `--range 1-1000` | Limit to first 1000 files |
+| `--range 1-250` | Limit to first 250 **posts** (not individual files — carousels expand to multiple files) |
 | `--restrict-filenames underscore` | Replace special chars in filenames with `_` |
 | `--download-archive DB_FILE` | Skip already-downloaded files (SQLite archive) |
 
 ## Pitfalls
 
-- **Nested output dirs.** By default gallery-dl creates `base/<site>/<user>/`. Use `"directory": []` in config to flatten.
+- **`-d` is the reliable way to set output dir.** Do NOT use `-o "directory=[<name>]"` — it splits each character of `<name>` into a separate nested folder (e.g. `[instagram]` becomes `[/i/n/s/t/a/g/r/a/m/]`). Create the output folder first (`mkdir -p <output-dir>`) and use `-d <output-dir>`.
+- **`--range` counts posts, not files.** A carousel post with 5 images counts as 5 separate files. `--range 1-1000` can yield 2000–2500+ files for profiles with many carousels. Use `--range 1-250` to stay reasonable.
 - **"Trying fallback URL #1" messages are normal.** Videos often use fallback URLs; gallery-dl handles this automatically. These are informational, not errors.
-- **Long downloads need long bash timeouts.** Profile downloads can take 10+ minutes. Set bash timeout to at least `600000`ms.
+- **Long downloads need long bash timeouts.** Profile downloads can take 10+ minutes. Set bash timeout to at least `900000`ms.
 - **Cookies may be needed.** Some sites (Instagram, private accounts) require authentication. Pass `--cookies .data/cookies.txt`.
 
 ## Supported Sites
