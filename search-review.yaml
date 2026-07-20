@@ -1,7 +1,0 @@
-name: search-review
-cwd: /home/kjetil/_index/git/find-media-for-person
-tasks:
-- prompt: |
-    Earlier we did a run for finding media of Emily Ratajkowski using the skill @.agents/skills/find-and-store-media-for-person/. Now we are reviewing searches for specific sources and see if we can improve existing skills  (.agents/skills/find-media-from-instagram/SKILL.md) or should create skills for new sources (you may see the section "Supplementary information for searches for media" in the skill @.agents/skills/find-and-store-media-for-person/SKILL.md).
-
-    We are now reviewing a search for the instagram source. Please see the agent conversation at @emily-ratajkowski-instagram.md and see whether we learned new interesting insight from the search.
