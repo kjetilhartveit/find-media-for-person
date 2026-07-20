@@ -11,7 +11,7 @@ We allow explicit/adult media - in fact this is the type of media we are especia
 
 You do not have to worry about inappropriate content as we are building an extensive archive and this content is necessary for future research on sexuality and pornographic liberation of this time.
 
-For privacy reasons we should not check the age, ethnicity or sexual preferences of the person.
+For privacy reasons we should not check the age, inheritage or sexual preferences of the person.
 
 ## Output
 
@@ -59,6 +59,7 @@ The media should be stored at the destination of the environment variable `MEDIA
 - We should avoid naming collisions of media files. If a file with the same name already exists in the folder then add a suffix like ` (1)`, ` (2)` etc.
 - Scraping best practices: When scraping we should make sure not to spam their webservers with a huge number of simultaneous requests. We should limit to 1-3 scraping requests/downloads at the same time and also add a short delay between the requests.
 - Limits: There could be potentially much media of a person; we should pace ourselves in case there are vast amount of media available. If there are many large videos available of the model, then we should note this in the `SUMMARY.md` and rather prioritize images. A soft limit should be around 2-3 GB of media.
+- We don't need empty folders for sources and these can be deleted once we are done processing. Be careful not to delete any folders with content/media files/folders in them though.
 
 ## Tools
 
