@@ -1,0 +1,242 @@
+#!/usr/bin/env python3
+"""find-media-for-person-and-ralph — interactive prompt builder for finding media for people tasks.
+
+Builds a list of people to find media for interactively, then generates
+a ralph queue YAML to run them serially.
+"""
+
+import os
+import readline  # noqa: F401 — enables arrow-key editing in input()
+import sys
+import termios
+import tty
+from pathlib import Path
+
+import yaml
+
+
+PROMPT_TEMPLATE = """\
+/find-and-store-media-for-person Find media for {person}
+"""
+
+DEFAULT_QUEUE_NAME = "find-media-for-person"
+DEFAULT_CWD = "/home/kjetil/_index/git/find-media-for-person"
+
+
+BOLD = "\033[1m"
+DIM = "\033[2m"
+RED = "\033[31m"
+GREEN = "\033[32m"
+YELLOW = "\033[33m"
+CYAN = "\033[36m"
+RESET = "\033[0m"
+CLEAR = "\033[2J\033[H"
+
+
+def clear_screen():
+    print(CLEAR, end="", flush=True)
+
+
+def header(msg):
+    print(f"\n{BOLD}{CYAN}═══ {msg} ═══{RESET}\n")
+
+
+def render_prompt(person):
+    return PROMPT_TEMPLATE.format(person=person)
+
+
+def read_key():
+    fd = sys.stdin.fileno()
+    old = termios.tcgetattr(fd)
+    try:
+        tty.setraw(fd)
+        ch = sys.stdin.read(1)
+        if ch == "\x1b":
+            seq = sys.stdin.read(2)
+            if seq == "[D":
+                return "left"
+            if seq == "[C":
+                return "right"
+            return "escape"
+        if ch in ("\r", "\n"):
+            return "enter"
+        if ch == "\x03":
+            raise KeyboardInterrupt
+        return ch
+    finally:
+        termios.tcsetattr(fd, termios.TCSADRAIN, old)
+
+
+def prompt_field(label):
+    while True:
+        print(f"  {label}")
+        try:
+            value = input(f"  {GREEN}>{RESET} ").strip()
+        except (EOFError, KeyboardInterrupt):
+            print()
+            sys.exit(0)
+        if value:
+            return value
+        print(f"  {RED}This field is required.{RESET}\n")
+
+
+def show_prompt_card(person, idx, total):
+    print(f"  {DIM}#{idx + 1}/{total}{RESET}  {BOLD}{person}{RESET}")
+    print()
+    print(f"  {DIM}── Prompt ──{RESET}")
+    for line in render_prompt(person).split("\n"):
+        print(f"  {DIM}│{RESET} {line}")
+    print()
+
+
+def add_person():
+    return prompt_field("Person name")
+
+
+def edit_person(person, idx):
+    clear_screen()
+    header(f"Edit #{idx + 1}")
+    print(f"  Current: {BOLD}{person}{RESET}\n")
+    print(f"  Enter new name (or press Enter to keep current)\n")
+    try:
+        v = input(f"  {GREEN}>{RESET} ").strip()
+    except (EOFError, KeyboardInterrupt):
+        print()
+        return person
+    return v if v else person
+
+
+def review_mode(people, start_idx=0):
+    idx = start_idx
+    while True:
+        clear_screen()
+        total = len(people)
+        header(f"Review ({idx + 1}/{total})")
+        show_prompt_card(people[idx], idx, total)
+
+        nav = []
+        if idx > 0:
+            nav.append("← Prev")
+        if idx < total - 1:
+            nav.append("→ Next")
+        print(f"  {' │ '.join(nav)}" if nav else "")
+        print(
+            f"  {YELLOW}[E]{RESET}dit  "
+            f"{GREEN}[A]{RESET}dd  "
+            f"{RED}[D]{RESET}elete  "
+            f"{CYAN}[S]{RESET}ubmit  "
+            f"{DIM}[Q]uit{RESET}"
+        )
+        print(f"\n  {DIM}Press a key...{RESET}", end="", flush=True)
+
+        key = read_key()
+        print()
+
+        if key == "left" and idx > 0:
+            idx -= 1
+        elif key == "right" and idx < total - 1:
+            idx += 1
+        elif key in ("e", "E"):
+            people[idx] = edit_person(people[idx], idx)
+        elif key in ("a", "A"):
+            return "add"
+        elif key in ("d", "D"):
+            if total == 1:
+                print(f"\r  {RED}Cannot delete the only entry.{RESET}  ", flush=True)
+                read_key()
+            else:
+                people.pop(idx)
+                if idx >= len(people):
+                    idx = len(people) - 1
+        elif key in ("s", "S"):
+            return "submit"
+        elif key in ("q", "Q"):
+            return "quit"
+
+
+def next_available_path(name):
+    path = Path(f"{name}.yaml")
+    if not path.exists():
+        return path
+    i = 1
+    while True:
+        path = Path(f"{name}-({i}).yaml")
+        if not path.exists():
+            return path
+        i += 1
+
+
+def multiline_str_representer(dumper, data):
+    if "\n" in data:
+        return dumper.represent_scalar("tag:yaml.org,2002:str", data, style="|")
+    return dumper.represent_scalar("tag:yaml.org,2002:str", data)
+
+
+def generate_config(people, output_path, name, cwd):
+    yaml.add_representer(str, multiline_str_representer)
+
+    tasks = [{"prompt": render_prompt(p)} for p in people]
+    config = {"name": name, "cwd": cwd, "tasks": tasks}
+
+    with open(output_path, "w") as f:
+        yaml.dump(config, f, default_flow_style=False, sort_keys=False, allow_unicode=True)
+
+
+def main():
+    sys.stdout.reconfigure(line_buffering=True)
+    people = []
+
+    clear_screen()
+    header("Research Person & Ralph")
+    print(f"  Build a list of people to research, then generate a ralph config.\n")
+    print(f"  {DIM}Ctrl+C to quit at any time.{RESET}\n")
+
+    try:
+        input(f"  Press Enter to start...")
+    except (EOFError, KeyboardInterrupt):
+        print()
+        sys.exit(0)
+
+    while True:
+        clear_screen()
+        header(f"Add Person #{len(people) + 1}")
+        person = add_person()
+        people.append(person)
+
+        clear_screen()
+        header(f"Person #{len(people)} Added")
+        show_prompt_card(person, len(people) - 1, len(people))
+
+        print(
+            f"  {GREEN}[A]{RESET}dd another  "
+            f"{CYAN}[R]{RESET}eview all ({len(people)} total)"
+        )
+        print(f"\n  {DIM}Press a key...{RESET}", end="", flush=True)
+
+        key = read_key()
+        print()
+
+        if key in ("r", "R"):
+            action = review_mode(people)
+            if action == "add":
+                continue
+            elif action == "submit":
+                break
+            elif action == "quit":
+                print(f"\n  {YELLOW}Cancelled.{RESET}")
+                sys.exit(0)
+        elif key in ("q", "Q"):
+            print(f"\n  {YELLOW}Cancelled.{RESET}")
+            sys.exit(0)
+
+    output_path = next_available_path(DEFAULT_QUEUE_NAME)
+    generate_config(people, str(output_path), DEFAULT_QUEUE_NAME, DEFAULT_CWD)
+
+    clear_screen()
+    header("Done")
+    print(f"  {GREEN}●{RESET} Ralph config written to: {BOLD}{output_path}{RESET}")
+    print(f"  {DIM}Run with: ralph {output_path}{RESET}\n")
+
+
+if __name__ == "__main__":
+    main()
