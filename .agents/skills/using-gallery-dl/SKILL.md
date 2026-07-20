@@ -1,5 +1,5 @@
 ---
-name: gallery-dl-common
+name: using-gallery-dl
 description: Supplementary information for using gallery-dl to download media from websites like Instagram, TikTok, Erome, and more.
 ---
 
@@ -11,6 +11,7 @@ description: Supplementary information for using gallery-dl to download media fr
 
 - Install: `pip install gallery-dl` or `pipx install gallery-dl`
 - Keep updated: `pip install -U gallery-dl` — fixes for site API changes usually ship within days.
+- Remember to use `gallery-dl --help` before using it to get a better understanding of available options.
 
 ## The `-o` Flag Is NOT Output Directory
 
