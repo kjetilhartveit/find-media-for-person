@@ -1,6 +1,6 @@
 ---
 name: using-gallery-dl
-description: Supplementary information for using gallery-dl to download media from websites like Instagram, TikTok, Erome, and more.
+description: Guidance around using gallery-dl to download media from websites like Instagram, TikTok, Erome, and more.
 ---
 
 # gallery-dl — Common Guidance
@@ -55,15 +55,15 @@ Create a temporary config file for downloads (reusable across sources):
 
 ## Common Flags
 
-| Flag | Purpose |
-|------|---------|
-| `-d PATH` | Set output destination directory |
-| `--config FILE` | Use external config file |
-| `--cookies FILE` | Use Netscape-format cookies file (`.data/cookies.txt`) |
-| `--no-mtime` | Don't set file modification time to upload date |
-| `--range 1-250` | Limit to first 250 **posts** (not individual files — carousels expand to multiple files) |
-| `--restrict-filenames underscore` | Replace special chars in filenames with `_` |
-| `--download-archive DB_FILE` | Skip already-downloaded files (SQLite archive) |
+| Flag                              | Purpose                                                                                  |
+| --------------------------------- | ---------------------------------------------------------------------------------------- |
+| `-d PATH`                         | Set output destination directory                                                         |
+| `--config FILE`                   | Use external config file                                                                 |
+| `--cookies FILE`                  | Use Netscape-format cookies file (`.data/cookies.txt`)                                   |
+| `--no-mtime`                      | Don't set file modification time to upload date                                          |
+| `--range 1-250`                   | Limit to first 250 **posts** (not individual files — carousels expand to multiple files) |
+| `--restrict-filenames underscore` | Replace special chars in filenames with `_`                                              |
+| `--download-archive DB_FILE`      | Skip already-downloaded files (SQLite archive)                                           |
 
 ## Pitfalls
 
