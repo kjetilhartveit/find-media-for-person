@@ -23,6 +23,7 @@ Images can be downloaded directly without visiting item pages. The URL pattern i
 Where:
 - `{l1}` and `{l2}` are the first two letters of the slug (e.g., `c/h` for `charithra-chandran`)
 - `{ID}` is the sequential item ID, zero-padded to 4 digits (e.g., `0161`)
+- **The resolution segment changes at ID 1000:** IDs 1–999 use `1000/` in the path; IDs 1000+ use `2000/` (e.g., `content/t/y/tyla/2000/tyla_1001.jpg`).
 
 Example: `https://fapello.com/content/c/h/charithra-chandran/1000/charithra-chandran_0161.jpg`
 
@@ -51,6 +52,7 @@ Thumbnails on profile pages use a similar pattern with `_300px.jpg` suffix (e.g.
 ## Pitfalls
 
 - Some sequential IDs may be missing (404). Handle gracefully.
+- **URL path segment changes at ID 1000:** IDs 1–999 use `1000/` in the content path; IDs 1000+ use `2000/`. Not accounting for this will cause 404 failures on the second half of downloads.
 - The `{l1}/{l2}` path segments are derived from the slug's first two letters — verify with one known image first.
 - Profile URLs may return 404 even when posts exist for the same person (found via web search at `fapello.com/post/{id}/{slug}/`).
 - The `gallery-dl` fapello extractor has returned 404 in recent tests.
