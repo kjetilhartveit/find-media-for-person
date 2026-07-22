@@ -37,6 +37,7 @@ The media should be stored at the destination of the environment variable `MEDIA
 
 - Each "find and store media" attempt should store the media in a subfolder in the media folder mentioned above. The subfolder should be named after the person's name (e.g. `Caroline Nitter`, `Taylor Bow` and so on). The subfolder should be suffixed with the date and time of the search, e.g. `Caroline Nitter {YYYY}-{MM}-{DD} {HH}-{MM}-{SS}`.
 - When we retrieve media from the sources, we should store the results for each source in yet another subfolder in the subfolder for that person's name. E.g. (`google searches`, `fapeza`, `pictoa` and so on).
+  - Tip for creating multiple directories in one command: `mkdir -p "{path to folder for search}"/{"{dirname 1}","{dirname 2}","{dirname 3}"}`.
 
 ### Merge unique subfolder into subfolder for person
 
