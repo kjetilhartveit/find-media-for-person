@@ -53,14 +53,13 @@ Session cookies typically last about a year but can be invalidated earlier by pa
 }
 ```
 
-3. Run with appropriate timeout (profile downloads can take 10+ minutes):
+3. Always use `--range 1-250` to limit downloads (see pitfall about carousels). Run with appropriate timeout (profile downloads can take 10+ minutes):
 
 ```bash
 # Create output directory first
 mkdir -p <output-dir>/instagram
 
 # Profile — download recent posts, reels, and highlights
-# --range 1-250 limits to ~250 posts (carousels expand to multiple files)
 gallery-dl \
   --config /tmp/gallery-dl-config.json \
   --no-mtime \
