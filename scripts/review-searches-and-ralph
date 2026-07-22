@@ -34,7 +34,8 @@ We are now reviewing a search {search_description}. Please see the agent convers
 
 # ── Defaults (edit these) ───────────────────────────────────────────
 DEFAULT_QUEUE_NAME = "search-review"
-DEFAULT_CWD = "/home/kjetil/_index/git/find-media-for-person"
+DEFAULT_AGENT_CWD = "/home/kjetil/_index/git/find-media-for-person"
+DEFAULT_RALPH_RUNS_DIR = "/mnt/laptop-mediaperson/ralph-runs"
 # ────────────────────────────────────────────────────────────────────
 
 
@@ -241,11 +242,16 @@ def multiline_str_representer(dumper, data):
     return dumper.represent_scalar("tag:yaml.org,2002:str", data)
 
 
-def generate_config(prompts, person, output_path, name, cwd):
+def generate_config(prompts, person, output_path, name, agent_cwd, ralph_runs_dir):
     yaml.add_representer(str, multiline_str_representer)
 
     tasks = [{"prompt": render_prompt(e, person)} for e in prompts]
-    config = {"name": name, "cwd": cwd, "tasks": tasks}
+    config = {
+        "name": name,
+        "ralph_runs_dir": ralph_runs_dir,
+        "agent_cwd": agent_cwd,
+        "tasks": tasks,
+    }
 
     with open(output_path, "w") as f:
         yaml.dump(config, f, default_flow_style=False, sort_keys=False, allow_unicode=True)
@@ -303,7 +309,7 @@ def main():
         # default: add another
 
     output_path = next_available_path(DEFAULT_QUEUE_NAME)
-    generate_config(prompts, person, str(output_path), DEFAULT_QUEUE_NAME, DEFAULT_CWD)
+    generate_config(prompts, person, str(output_path), DEFAULT_QUEUE_NAME, DEFAULT_AGENT_CWD, DEFAULT_RALPH_RUNS_DIR)
 
     clear_screen()
     header("Done")
