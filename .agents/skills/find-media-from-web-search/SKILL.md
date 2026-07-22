@@ -11,7 +11,7 @@ Use web search engines and Google Images to find articles, news posts, and galle
 
 Web search generally returns **article URLs**, not image URLs. The actual images are embedded in the HTML of those articles. The challenge is extracting image URLs efficiently without drowning in ad-heavy HTML bloat.
 
-It's very important to only make a maximum of 5 full web searches per agent. If we search for more than 5 times, the agent will likely crash because it will fill up the context window.
+It's very important to only make a maximum of 10 web searches per agent. We want to avoid crashing the agent by filling up the context window. It's preferred to rather return quickly with a few results and encouraging further results than making too many and/or large searches in one go.
 
 ## General Workflow
 

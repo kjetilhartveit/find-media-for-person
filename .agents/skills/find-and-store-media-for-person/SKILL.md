@@ -76,6 +76,7 @@ The media should be stored at the destination of the environment variable `MEDIA
   - **Remember to forward instructions to subagents regarding updating/creating respective skills if they gather new valuable insight or findings about the source. This way we continuously improve our knowledge and search for media.**
   - We must remember that source-specific search subagents don't have access to the main agent's context window or main skill, so we must provide them with the information they need (without bloating their context or distracting them) in order to perform their tasks effectively.
   - Do note that agents/subagents that are tasked with performing web searches often crashes because they make too many requests which fills up the context window. It's better to give explicit instructions to web searching subagents that they should only do a maximum of 5 searches. One may spawn multiple subagents which searches on different search terms to even out the maximum searches limitation.
+  - Avoid giving subagents too broad searches / too many sources to search for at once.
 
 ## Sources to Search For Media
 
