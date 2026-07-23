@@ -14,18 +14,24 @@ Download images from Pictoa (https://www.pictoa.com), a gallery site with albums
 - Search form (alternative): POST to `https://www.pictoa.com/search-by-form` with body `_token=<csrf>&q=<query>`. The CSRF token is found in `<meta name="csrf-token" content="...">` on the homepage. This returns a redirect to `/s/<query>/`.
 - Old URL formats like `/search/<query>.html` or `/search?query=<query>` return 404 — do not use.
 - Album URL pattern: `https://www.pictoa.com/albums/<title>-<id>.html`
-- Image CDN: `t1.pictoa.com` — serves actual images (~15-35KB JPEG). Use these URLs as-is.
+- Album URL pattern (with internal image ID): `https://www.pictoa.com/albums/<title>-<id>.html/<img-id>.html` — both forms appear in search results and point to the same album.
+- Album pagination: `https://www.pictoa.com/albums/<title>-<id>-p2.html`, `https://www.pictoa.com/albums/<title>-<id>-p3.html`, etc.
+- Category URL pattern: `https://www.pictoa.com/c/<name>-<category-id>/` — category pages list multiple albums.
+- Search pagination: `https://www.pictoa.com/s/<query>/p2/` — NOTE: p2 pagination was observed NOT to work (returns 404). Only use first page of search results.
+- Image CDN: `t1.pictoa.com` — serves actual images (~15-35KB JPEG, up to ~48KB). Use these URLs as-is.
 - NOTE: `s2.pictoa.com` previously served high-quality versions by swapping `t1` → `s2` in URLs. As of 2026-07-18 this CDN returns 404. Only `t1.pictoa.com` works.
 - Example image URL: https://t1.pictoa.com/media/galleries/164/015/164015593e5b1db71d5/2919079593e5b1dba2c5.jpg
 
 ## Recommendations on how to download
 
 1. Search using the `/s/<query>/` URL pattern. Try multiple query variations (celebrity name, handle, real full name, performer name, foreign names - like Korean and Chinese - if applicable).
-2. Parse search results for album links matching `https://www.pictoa.com/albums/...html`. Filter for relevance — generic name searches may return unrelated adult performers with similar names.
-3. Fetch each album page to extract image URLs from `src` attributes pointing to `t1.pictoa.com`.
-4. Extract actual album images (not related gallery thumbnails) by filtering for URLs containing the album ID.
-5. Rate limiting: sleep 0.3–0.5s between requests.
-6. Use a user-agent header like `"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"`.
+2. Also try category URLs like `/c/<celebrity-name>-<category-id>/`.
+3. Parse search results for album links matching `https://www.pictoa.com/albums/...html`. Filter for relevance — generic name searches may return unrelated adult performers with similar names (e.g., "Anissa Kate" mixed in with "Kate Hudson").
+4. Fetch each album page to extract image URLs from `data-lazy-src` attributes pointing to `t1.pictoa.com`.
+5. Extract actual album images (not related gallery thumbnails) by filtering for URLs containing the album ID.
+6. For pagination, check album page URLs for `-p2.html`, `-p3.html` patterns and include those.
+7. Rate limiting: sleep 0.3–0.5s between requests.
+8. Use a user-agent header like `"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"`.
 
 ## Quality
 
@@ -40,3 +46,6 @@ Download images from Pictoa (https://www.pictoa.com), a gallery site with albums
 - **The `s2` CDN is broken.** The former advice to swap `//t1.` → `//s2.` for higher quality no longer works and returns 404 — use `t1` URLs as-is.
 - Labor-intensive: one page fetch per album to extract all image URLs.
 - **No "No Results" indicator on empty search.** A search returning no albums shows `No Results` in the page body but still returns a 200 status code — check the HTML for `<p id="noResults">`.
+- **Gallery ID regex challenge.** Album names contain dashes, so `[^-]+` pattern won't work. Use regex like `albums/.*?-(\d{7})` to extract the 7-digit gallery ID, or `albums/.*?-(\d{7})/\d+\.html` for nested paths.
+- **Two album URL formats.** Some album links have a trailing `/image-id.html` (e.g., `/albums/kate-hudson-booty-3228997/75141781.html`). Extract the first 7-digit number after `-` as the gallery ID.
+- **Image filtering by gallery ID.** The gallery ID (7 digits before `.html`) must be in the image URL path on the album page to filter out related gallery thumbnails.

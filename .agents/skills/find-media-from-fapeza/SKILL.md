@@ -26,10 +26,33 @@ Download images from Fapeza (https://fapeza.com), an aggregator site of leaked/n
 - All verified downloads are JPEG format.
 - Good quality HQ images, consistent URL pattern.
 
+## Pagination
+
+- Profile pages use `https://fapeza.com/{slug}/page-N/` for pagination (confirmed working up to page 30+).
+- Page 1 (no `/page-N/`) shows the 20 most recent posts.
+- Each pagination page shows ~20 images.
+- Use cloudscraper to fetch each page sequentially until a page returns no new images or 404.
+
+## Individual post URLs
+
+- Individual post pages: `https://fapeza.com/{slug}/{post_id}/`
+- Post IDs are sequential (e.g., `kate-hudson/1002/`, `kate-hudson/1001/`, `kate-hudson/1000/`, etc.)
+- Individual POST pages may NOT contain image links — images are only on profile/gallery pages.
+
 ## Pitfalls
 
 - Not all IDs exist — gaps in the lower ranges (below 5000). Only certain ID ranges have content.
 - The Referer header is mandatory; omitting it will cause all image requests to fail.
+- Image URLs in the page source are thumbnail URLs with `_400px.` suffix — remove `_400px.` to get the full-size image.
+- Some posts (e.g., id 22) may live in a different folder (e.g., `1000`) than the recent ones (`2000`). Always use the direct URL from the page source.
+- cloudscraper works reliably; no bot protection issues encountered.
+
+## Typical stats
+
+- Profile pages contain ~20 images per page.
+- Total images per profile varies (e.g., Kate Hudson: 72 images, ~12MB total).
+- Image files range from ~16KB to ~520KB.
+- All verified downloads are JPEG format.
 
 ## Tips on changing photos to high quality in the browser
 

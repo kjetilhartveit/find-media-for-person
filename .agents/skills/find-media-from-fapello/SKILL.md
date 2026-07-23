@@ -40,13 +40,17 @@ Thumbnails on profile pages use a similar pattern with `_300px.jpg` suffix (e.g.
 
 ## Media types
 
-- Most items are JPG images. Item pages may show "video" text, but this is typically navigation/related content, not actual video.
-- To check if an item is truly a video, look for `.mp4` or `.m3u8` URLs in the item page HTML. If only `.jpg` is present, it's an image.
+- Most items are JPG images. A small fraction are MP4 videos.
+- To check if an item is a video, visit the item page and look for `.mp4` URLs or `<video>` tags.
+- Video URLs use pattern: `https://cdn[-n1].fapello.com/content/{l1}/{l2}/{slug}/{version}/{slug}_{ID}.mp4`
+  (e.g., `https://cdn.fapello.com/content/k/a/kate-hudson/2000/kate-hudson_1716.mp4`)
+- The same ID may have both a `.jpg` thumbnail and an `.mp4` video — download both.
 
 ## Quality
 
-- Images range from ~74KB to ~280KB per image, at 600x800 resolution.
-- 100% success rate in tested ranges.
+- Images range from ~240KB to ~900KB per image (most ~100-400KB), at 600x800 resolution.
+- Videos are typically 600KB - 12MB MP4 files.
+- Success rate is >99% — most sequential IDs resolve (9/1716 missing on Kate Hudson profile).
 - Lots of content, consistent quality, very reliable. No auth needed.
 
 ## Pitfalls

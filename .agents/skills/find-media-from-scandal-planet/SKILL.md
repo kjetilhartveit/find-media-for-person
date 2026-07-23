@@ -11,6 +11,8 @@ Download media from Scandal Planet (https://scandalplanet.com), a WordPress-base
 
 - Site: `https://scandalplanet.com`
 - Celebrity page: `https://scandalplanet.com/{name-slug}/` — e.g. `scandalplanet.com/charithra-chandran/`
+  - Alternate patterns: `scandalplanet.com/{name}-nude/`, `scandalplanet.com/{name}-nude1/` (e.g. `kate-hudson-nude1/`)
+  - Search via `?s={name}` or Google (`"{name} scandalplanet"`) if direct URL 404s
 - og:image meta tag: provides a high-quality cover image (~830x850)
 - Images: `scandalplanet.com/wp-content/uploads/{year}/{month}/{filename}-optimized.jpg`
   - Full-size: `-optimized.jpg` or `{filename}-scaled-optimized.jpg`
