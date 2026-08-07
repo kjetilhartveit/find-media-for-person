@@ -2,6 +2,7 @@
 name: find-and-store-media-for-person
 description: Gather media for a model/person for local storage to disk.
 disable-model-invocation: true
+opencode/autoinvoke: false
 ---
 
 # Before using this skill
