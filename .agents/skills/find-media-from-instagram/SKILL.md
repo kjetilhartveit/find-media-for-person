@@ -3,6 +3,10 @@ name: find-media-from-instagram
 description: Download media from Instagram posts, reels, and stories using gallery-dl with cookie authentication.
 ---
 
+# Before using this skill
+
+Make sure to read the `shared-find-media-guidelines` skill before using this skill.
+
 # Find media from Instagram
 
 Download images and videos from Instagram using `gallery-dl` (see respective skill if exists).

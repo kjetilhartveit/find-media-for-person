@@ -3,15 +3,13 @@ name: find-media-from-web-search
 description: Find media via Google Images and web search by discovering article URLs, then extracting image URLs efficiently.
 ---
 
+# Before using this skill
+
+Make sure to read the `shared-find-media-guidelines` skill before using this skill.
+
 # Find media via web search / Google Images
 
 Use web search engines and Google Images to find articles, news posts, and galleries that contain photos of a person, then extract and download the actual images.
-
-## Key Insight
-
-Web search generally returns **article URLs**, not image URLs. The actual images are embedded in the HTML of those articles. The challenge is extracting image URLs efficiently without drowning in ad-heavy HTML bloat.
-
-It's very important to only make a maximum of 10 web searches per agent. We want to avoid crashing the agent by filling up the context window. It's preferred to rather return quickly with a few results and encouraging further results than making too many and/or large searches in one go.
 
 ## General Workflow
 

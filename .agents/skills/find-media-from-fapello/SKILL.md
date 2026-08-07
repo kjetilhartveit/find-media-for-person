@@ -3,6 +3,10 @@ name: find-media-from-fapello
 description: Download media from Fapello, a large aggregator of celebrity content with consistent download patterns.
 ---
 
+# Before using this skill
+
+Make sure to read the `shared-find-media-guidelines` skill before using this skill.
+
 # Find media from Fapello
 
 Download images from Fapello (https://fapello.com), a massive aggregator of leaked/nude celebrity content.
@@ -21,6 +25,7 @@ Images can be downloaded directly without visiting item pages. The URL pattern i
 `https://fapello.com/content/{l1}/{l2}/{slug}/1000/{slug}_{ID}.jpg`
 
 Where:
+
 - `{l1}` and `{l2}` are the first two letters of the slug (e.g., `c/h` for `charithra-chandran`)
 - `{ID}` is the sequential item ID, zero-padded to 4 digits (e.g., `0161`)
 - **The resolution segment changes at ID 1000:** IDs 1–999 use `1000/` in the path; IDs 1000+ use `2000/` (e.g., `content/t/y/tyla/2000/tyla_1001.jpg`).

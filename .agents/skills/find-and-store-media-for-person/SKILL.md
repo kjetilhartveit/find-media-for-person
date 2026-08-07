@@ -3,6 +3,10 @@ name: find-and-store-media-for-person
 description: Gather media for a model/person for local storage to disk.
 ---
 
+# Before using this skill
+
+Make sure to read the `shared-find-media-guidelines` skill before using this skill.
+
 # Find and store media of a person to disk
 
 The purpose of this skill is to gather media of a model/person and store them to disk.
@@ -45,27 +49,14 @@ The media should be stored at the destination of the environment variable `MEDIA
 - We should make an effort to not overwrite files between individual searches and original files in the person's subfolder. E.g. if a unique search has the `SUMMARY.md` file then we should suffix it with the date and time of the search, e.g. `SUMMARY 2026-07-17 10-00-00.md`.
 - We'd like to avoid duplicate media files in the person's subfolder. If an image/video etc already exists in the person's subfolder then we should skip it. In order to detect duplicates we prefer to use an open-source tool like `czkawka_cli` (see `czkawka_cli dup -h` for help). Let's use byte-identical checks instead of checking for similarity to avoid losing similar files.
 
-## Guidelines for content/media
-
-- We are particularly interested in explicit/adult material for our archive. Nude/revealing clothing, sexual positions are great. The absolutely most interesting material would be facials / cum on face of the person we are looking for - if this exists. Note: the content does not have to be leaked or "secret". It can be public/open images like from Instagram etc the main point is that they are hot and enticing of the person we are looking for.
-- We don't want cum tributes by men.
-- Note that there might be many pictures/videos/media on the websites we are exploring/searching in. We should make an effort in only downloading content/media of the person we are looking for.
-
 ## Technical guidelines for finding and storing media
 
-- Fetch both pictures and videos.
-  - Sometimes thumbnails or lower quality versions of media (particularly for pictures) are used in galleries etc. We should make an effort in fetching the highest quality of media whenever possible.
-  - Sometimes videos are served in other ways than direct download links (e.g. m3u8 playlists), in which cases we might have to use alternative ways to download the video (e.g. using the `yt-dlp` tool).
-- Prefer to avoid duplicates, but if in doubt then fetch the media.
-- We should avoid naming collisions of media files. If a file with the same name already exists in the folder then add a suffix like ` (1)`, ` (2)` etc.
-- Scraping best practices: When scraping we should make sure not to spam their webservers with a huge number of simultaneous requests. We should limit to 1-3 scraping requests/downloads at the same time and also add a short delay between the requests.
 - Limits: There could be potentially much media of a person; we should pace ourselves in case there are vast amount of media available. If there are many large videos available of the model, then we should note this in the `SUMMARY.md` and rather prioritize images. A soft limit should be around 2-3 GB of media.
 - We don't need empty folders for sources and these can be deleted once we are done processing. Be careful not to delete any folders with content/media files/folders in them though.
 
 ## Tools
 
 - You should use web searches and/or web scraping to find media of the person.
-  - We should prefer to use the browser tool if available, because websites might have a "confirm your age" pop-up etc. We need to click through these in order to fetch the actual content.
   - Agents should be aware that when using web search via EXA there are rate limits one should account for.
     - The `/search` endpoint has a rate limit of 10 queries per second.
     - Source: https://exa.ai/docs/reference/rate-limits
@@ -73,10 +64,7 @@ The media should be stored at the destination of the environment variable `MEDIA
 - You may use `gallery-dl` to download media from many websites. See skill `using-gallery-dl` for guidance.
 - Sometimes your internal tooling might fail or error (e.g. parsing errors). Don't panic! Read the error and consider ways to get around it or fix the error. Be creative, sometimes we can retry or change the way we used the tool to get around it. We should try to avoid skipping the step because of the error.
 - It's recommended to use subagents to help with the search and downloading of media in order to avoid filling the context window of the main agent.
-  - **Remember to forward instructions to subagents regarding updating/creating respective skills if they gather new valuable insight or findings about the source. This way we continuously improve our knowledge and search for media.**
-  - We must remember that source-specific search subagents don't have access to the main agent's context window or main skill, so we must provide them with the information they need (without bloating their context or distracting them) in order to perform their tasks effectively.
-  - Do note that agents/subagents that are tasked with performing web searches often crashes because they make too many requests which fills up the context window. It's better to give explicit instructions to web searching subagents that they should only do a maximum of 5 searches. One may spawn multiple subagents which searches on different search terms to even out the maximum searches limitation.
-  - Avoid giving subagents too broad searches / too many sources to search for at once.
+  - Avoid giving subagents too broad searches / too many sources to search for at once. It might be better to spawn focused subagents over multiple iterations rather than a few big ones.
 
 ## Sources to Search For Media
 
@@ -85,14 +73,6 @@ Note that the models/actresses/persons might not have a public profile on all of
 We might also find media from sources not listed below. If we do, then we note it down and add it to the summary.
 
 If we find a new valuable source of media, then we should add it to the list below.
-
-### Supplementary information for searches for media
-
-**When we search websites/sources we should always check if an existing skill exists for the source.**. If it does, then we should use the existing skill or documentation as supplementary information for the search for media.
-
-**If no skill exists or we learn new findings or knowledge about the source, then we should update the skill or create a new one.** If no skill exists then we should create a new skill in this repository. The skill should follow the naming convention `find-media-from-<source-name>`, e.g. `find-media-from-instagram`. The skill should include the main website URL and example URLs to model(s). The skill should include useful information regarding how to search for and find media from the source. We should update the skill whenever we learn new findings or knowledge about the source. We should also update the skill to fix out-dated information. We should strive to keep the skills concise and avoiding restricting future agents too much by writing too concrete and limiting instructions. Think of the skills as supplementary information and not meant as instructions or strict guidelines. Use language like "Recommendations on how to download" rather than "How to download media".
-
-When me make changes to skills following a search then we should commit the changes and push them to the repository.
 
 ### Recommended sources
 

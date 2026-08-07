@@ -3,6 +3,10 @@ name: find-media-from-scandal-planet
 description: Download media from Scandal Planet, a celebrity scandal/leak aggregation site with hosted images and videos.
 ---
 
+# Before using this skill
+
+Make sure to read the `shared-find-media-guidelines` skill before using this skill.
+
 # Find media from Scandal Planet
 
 Download media from Scandal Planet (https://scandalplanet.com), a WordPress-based celebrity scandal and leak aggregation site.
@@ -43,6 +47,6 @@ Download media from Scandal Planet (https://scandalplanet.com), a WordPress-base
 ## Pitfalls
 
 - **WordPress galleries:** Full-size images are at `{filename}-optimized.jpg`. Thumbnail links use `-180x240-optimized` — you can either filter these out (they resolve correctly), or extract the `<a href>` targets which point to full-size.
-- **Truncated videos:** Some videos have a paywall overlay (JavaScript pauses video at 5s). The direct MP4 download *may* contain only the short clip. Check file size/duration after download.
+- **Truncated videos:** Some videos have a paywall overlay (JavaScript pauses video at 5s). The direct MP4 download _may_ contain only the short clip. Check file size/duration after download.
 - **Related celebs sidebar:** The page includes thumbnails (`-145x145-optimized.jpg`) of other celebs in a sidebar. Filter by checking if the URL contains the target celeb's name.
 - **Single page per celebrity** — no pagination. All content is on one article post.

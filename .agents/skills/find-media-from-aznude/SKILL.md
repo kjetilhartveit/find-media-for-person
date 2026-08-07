@@ -3,6 +3,10 @@ name: find-media-from-aznude
 description: Download media from AZNude, a celebrity nude content aggregator with hosted images and embedded videos.
 ---
 
+# Before using this skill
+
+Make sure to read the `shared-find-media-guidelines` skill before using this skill.
+
 # Find media from AZNude
 
 Download media from AZNude (https://www.aznude.com), a celebrity nude content site with dedicated pages per celebrity.
@@ -35,5 +39,5 @@ Download media from AZNude (https://www.aznude.com), a celebrity nude content si
 
 - **Many URL patterns** — images come from multiple CDN paths. Must filter carefully.
 - **Thumbnails** use different paths (`/thumbs/`, `/antibandit/`) — don't confuse with full-size.
-- **Biopic images** on the page may include thumbnails for *other* celebs (sidebar/related). Download only images whose URL path contains the target celeb's slug.
+- **Biopic images** on the page may include thumbnails for _other_ celebs (sidebar/related). Download only images whose URL path contains the target celeb's slug.
 - **No pagination** — single page per celeb.

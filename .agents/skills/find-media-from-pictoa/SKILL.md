@@ -3,6 +3,10 @@ name: find-media-from-pictoa
 description: Download high-quality media from Pictoa by scraping album pages for image URLs.
 ---
 
+# Before using this skill
+
+Make sure to read the `shared-find-media-guidelines` skill before using this skill.
+
 # Find media from Pictoa
 
 Download images from Pictoa (https://www.pictoa.com), a gallery site with albums of celebrity content.

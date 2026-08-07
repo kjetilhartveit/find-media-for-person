@@ -75,5 +75,20 @@ Create a temporary config file for downloads (reusable across sources):
 
 ## Supported Sites
 
-Some commonly useful extractors: `instagram`, `tiktok`, `erome`, `fapello`, `reddit`, `twitter`, `pinterest`, `flickr`, `deviantart`, `pixiv`, `9gag`, `danbooru`.
+Some commonly useful extractors:
+
+- instagram
+- tiktok
+- erome
+- fapello
+- reddit
+- twitter
+- pinterest
+- flickr
+- deviantart
+
 A full list is at https://github.com/morfius/gallery-dl#supported-services.
+
+### Checking Supported Sources
+
+To verify that `gallery-dl` supports the target source(s), use the command `gallery-dl --list-extractors` with `grep`.

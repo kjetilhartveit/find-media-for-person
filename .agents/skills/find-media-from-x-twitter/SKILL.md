@@ -3,6 +3,10 @@ name: find-media-from-x-twitter
 description: Download media from X/Twitter posts using the official API v2 with a bearer token.
 ---
 
+# Before using this skill
+
+Make sure to read the `shared-find-media-guidelines` skill before using this skill.
+
 # Find media from X / Twitter
 
 Download images and videos from X (Twitter) posts using the official API v2 with bearer token authentication.

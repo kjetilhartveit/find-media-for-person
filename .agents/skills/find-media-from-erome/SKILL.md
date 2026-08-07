@@ -3,6 +3,10 @@ name: find-media-from-erome
 description: Download media from Erome, a user-hosted adult content sharing site with albums.
 ---
 
+# Before using this skill
+
+Make sure to read the `shared-find-media-guidelines` skill before using this skill.
+
 # Find media from Erome
 
 Download images and videos from Erome (https://www.erome.com), a user-hosted adult content sharing platform.
@@ -25,10 +29,11 @@ Download images and videos from Erome (https://www.erome.com), a user-hosted adu
 3. **Or manually parse** album pages:
 
    - Extract `data-src` and `src` attributes from `<img>` tags — these point directly to full-size media on `s{number}.erome.com`.
-    - Filter out any URLs containing `/thumbs/` — those are thumbnails.
-    - No URL pattern guessing needed; the `data-src`/`src` attributes provide the actual full-size URLs directly.
- 4. **Download media** with `Referer: https://www.erome.com/` header and rate-limit to 0.3–0.5s between requests.
- 5. Prefix filenames with the album ID to avoid collisions (Erome files have random IDs).
+   - Filter out any URLs containing `/thumbs/` — those are thumbnails.
+   - No URL pattern guessing needed; the `data-src`/`src` attributes provide the actual full-size URLs directly.
+
+4. **Download media** with `Referer: https://www.erome.com/` header and rate-limit to 0.3–0.5s between requests.
+5. Prefix filenames with the album ID to avoid collisions (Erome files have random IDs).
 
 ## Quality
 

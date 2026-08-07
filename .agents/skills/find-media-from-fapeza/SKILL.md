@@ -3,6 +3,10 @@ name: find-media-from-fapeza
 description: Download media from Fapeza, an aggregator of leaked celebrity content with HQ images.
 ---
 
+# Before using this skill
+
+Make sure to read the `shared-find-media-guidelines` skill before using this skill.
+
 # Find media from Fapeza
 
 Download images from Fapeza (https://fapeza.com), an aggregator site of leaked/nude celebrity content.
