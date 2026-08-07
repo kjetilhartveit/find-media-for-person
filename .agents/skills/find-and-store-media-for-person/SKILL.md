@@ -63,7 +63,7 @@ The media should be stored at the destination of the environment variable `MEDIA
 - You may use `yt-dlp` to download videos from YouTube or other supported platforms.
 - You may use `gallery-dl` to download media from many websites. See skill `using-gallery-dl` for guidance.
 - Sometimes your internal tooling might fail or error (e.g. parsing errors). Don't panic! Read the error and consider ways to get around it or fix the error. Be creative, sometimes we can retry or change the way we used the tool to get around it. We should try to avoid skipping the step because of the error.
-- It's recommended to use subagents to help with the search and downloading of media in order to avoid filling the context window of the main agent.
+- We should use subagents to help with the search and downloading of media in order to avoid filling the context window of the main agent.
   - Avoid giving subagents too broad searches / too many sources to search for at once. It might be better to spawn focused subagents over multiple iterations rather than a few big ones.
 
 ## Sources to Search For Media
