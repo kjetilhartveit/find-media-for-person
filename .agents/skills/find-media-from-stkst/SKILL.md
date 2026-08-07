@@ -17,8 +17,6 @@ Make sure to read the `shared-find-media-guidelines` skill before using this ski
 
 Download aggregated media from stk.st (https://stk.st), a site that aggregates images from Reddit (i.redd.it) and X/Twitter media into a single feed.
 
-**`gallery-dl` and `yt-dlp` do NOT have built-in extractors for stk.st.** Use manual scraping with curl/wget and Python requests.
-
 ## URL Patterns
 
 - Site: `https://stk.st`
@@ -48,7 +46,6 @@ Download aggregated media from stk.st (https://stk.st), a site that aggregates i
 
 ## Pitfalls
 
-- No gallery-dl extractor available — requires custom scraping
 - Some image URLs may be expired or removed from source platforms (404s)
 - SSL errors may occur on some URLs — handle gracefully and skip
 - Query may need URL-encoding adjustments (e.g., spaces as `+` or `%20`)

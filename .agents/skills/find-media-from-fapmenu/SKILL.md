@@ -17,8 +17,6 @@ Make sure to read the `shared-find-media-guidelines` skill before using this ski
 
 Download images and videos from FapMenu (https://fapmenu.com), a large aggregator hosting leaked content with paginated galleries.
 
-**`gallery-dl` and `yt-dlp` do NOT have built-in extractors for FapMenu.** Use manual scraping with curl/wget and Python requests.
-
 ## URL Patterns
 
 - Site: `https://fapmenu.com`
@@ -41,6 +39,7 @@ Download images and videos from FapMenu (https://fapmenu.com), a large aggregato
 ## Fallback — Direct ID scanning
 
 If scraping page URLs fails, scan sequential IDs:
+
 1. Start at ID 1 and increment
 2. For each ID, try fetching `https://fapmenu.com/media/{id}`
 3. Stop when you get consistent 404s (end of content)
@@ -55,7 +54,6 @@ If scraping page URLs fails, scan sequential IDs:
 
 ## Pitfalls
 
-- No gallery-dl extractor available — requires custom scraping
 - Multiple alias slugs may exist for the same person — try all if the primary slug yields no results
 - Profile may return 200 with no media items — this means the profile either doesn't exist for that person or is private
 - Some sequential IDs may not exist (gaps) — handle gracefully

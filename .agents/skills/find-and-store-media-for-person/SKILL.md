@@ -182,16 +182,12 @@ Models might have linktree's which links to other platforms where they might hav
 #### stk.st (Reddit + X image aggregator)
 
 - Website URL: https://stk.st
-- Example of URL: `https://stk.st/{query}` (e.g., `stk.st/halle+ahyes`)
 - See skill `find-media-from-stkst` for tips on downloading aggregated media.
-- **NOTE:** Aggregates images from Reddit (i.redd.it), X/Twitter, Imgur, and other platforms. No gallery-dl extractor — requires manual scraping. Content behind infinite scroll.
 
 #### FapMenu
 
 - Website URL: https://fapmenu.com
-- Example of URL to a profile: `https://fapmenu.com/{slug}/`
 - See skill `find-media-from-fapmenu` for tips on downloading media.
-- **NOTE:** Large aggregator with 100+ paginated items per profile. WEBP format images. No gallery-dl extractor — requires manual scraping. Multiple alias slugs may exist for the same person (try alternatives if primary yields no results).
 
 ### Secondary sources
 
