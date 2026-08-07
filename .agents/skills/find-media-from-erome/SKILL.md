@@ -21,11 +21,11 @@ Download images and videos from Erome (https://www.erome.com), a user-hosted adu
 - User pages: `https://www.erome.com/USER`
 - Media served from: `https://s{number}.erome.com/{user_id}/{album_id}/{file_id}.jpg`
 
-## PRIMARY — Download via gallery-dl
+## Primary download method — Download via gallery-dl
 
 `gallery-dl` handles Erome natively with 3 extractors: `EromeAlbumExtractor`, `EromeUserExtractor`, `EromeSearchExtractor`. It resolves all media URLs, filters thumbnails, and downloads files with no auth required.
 
-## FALLBACK — Manual parsing and download
+## Fallback download method — Manual parsing and download
 
 When gallery-dl is unavailable or fails:
 

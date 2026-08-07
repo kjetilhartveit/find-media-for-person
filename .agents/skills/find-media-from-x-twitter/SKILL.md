@@ -11,12 +11,6 @@ Make sure to read the `shared-find-media-guidelines` skill before using this ski
 
 Download images and videos from X (Twitter) posts, user profiles, and timelines.
 
-**Primary method: gallery-dl.** gallery-dl has 24+ Twitter extractors (`TwitterTweetExtractor`, `TwitterUserExtractor`, `TwitterMediaExtractor`, `TwitterTimelineExtractor`, etc.) — supports single posts, user profiles, timelines, searches, and more. No API key needed.
-
-**Fallback method: X API v2 with bearer token.** Use this when gallery-dl fails or when you need tweet metadata (thread resolution, reply chains) that gallery-dl doesn't provide.
-
-**Alternative: yt-dlp.** `yt-dlp` also supports Twitter URLs as a quick single-post fallback with no auth.
-
 ## URL Patterns
 
 - **Posts**: `x.com/{user}/status/{id}` or `twitter.com/{user}/status/{id}`
@@ -25,13 +19,17 @@ Download images and videos from X (Twitter) posts, user profiles, and timelines.
 - **Search**: `x.com/search?q={query}`
 - **Hashtags**: `x.com/hashtag/{tag}`
 
-## PRIMARY — Download via gallery-dl
+## Primary download method — Download via gallery-dl
 
 `gallery-dl` is the **preferred** method — no API key or bearer token required. Extractors: `TwitterTweetExtractor`, `TwitterUserExtractor`, `TwitterMediaExtractor`, `TwitterTimelineExtractor`, `TwitterHashtagExtractor`, `TwitterSearchExtractor`, `TwitterListExtractor`, and more.
 
-## FALLBACK — X API v2 with bearer token
+## Fallback download method — X API v2 with bearer token
 
 Use this when `gallery-dl` fails or when tweet metadata is needed. API access tiers matter — free tier has very limited rate limits.
+
+## Alternative download method - yt-dlp
+
+`yt-dlp` also supports Twitter URLs as a quick single-post fallback with no auth.
 
 ### Prerequisites
 

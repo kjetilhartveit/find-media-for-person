@@ -13,11 +13,11 @@ Download images from Pictoa (https://www.pictoa.com), a gallery site with albums
 
 gallery-dl has `PictoaAlbumExtractor` and `PictoaImageExtractor` — use as **primary** method. Fall back to manual album page parsing below.
 
-## PRIMARY — Download via gallery-dl
+## Primary download method — Download via gallery-dl
 
 `gallery-dl` supports Pictoa albums natively.
 
-## FALLBACK — Manual album page parsing
+## Fallback download method — Manual album page parsing
 
 When `gallery-dl` is unavailable or fails:
 
