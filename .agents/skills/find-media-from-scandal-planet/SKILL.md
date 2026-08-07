@@ -1,11 +1,17 @@
 ---
 name: find-media-from-scandal-planet
-description: Download media from Scandal Planet, a celebrity scandal/leak aggregation site with hosted images and videos.
+description: Use when you need to find and download media from Scandal Planet, a celebrity scandal/leak aggregation site with hosted images and videos.
 ---
 
 # Before using this skill
 
 Make sure to read the `shared-find-media-guidelines` skill before using this skill.
+
+# When to use this skill
+
+- Looking for media of a specific celebrity on Scandal Planet
+- Downloading leaked content, bikini photos, or media from their galleries
+- Scraping images and videos from a celebrity article page on Scandal Planet
 
 # Find media from Scandal Planet
 

@@ -1,11 +1,19 @@
 ---
 name: find-media-from-x-twitter
-description: Download media from X/Twitter posts using gallery-dl (primary) with API v2 as fallback, or API v2 as primary if auth unavailable for gallery-dl.
+description: Use when you need to find and download media from X/Twitter posts using gallery-dl (primary) with API v2 as fallback, or API v2 as primary if auth unavailable for gallery-dl.
 ---
 
 # Before using this skill
 
 Make sure to read the `shared-find-media-guidelines` skill before using this skill.
+
+# When to use this skill
+
+- Downloading images or videos from specific X/Twitter posts
+- Scraping all media from a user profile (X/Twitter media timeline)
+- Searching X/Twitter by query for media
+- Extracting media from X/Twitter hashtags or timelines
+- Need to fetch X/Twitter articles with embedded media
 
 # Find media from X / Twitter
 

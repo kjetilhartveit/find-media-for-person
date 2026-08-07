@@ -1,11 +1,18 @@
 ---
 name: find-media-from-erome
-description: Download media from Erome, a user-hosted adult content sharing site with albums.
+description: Use when you need to find and download media from Erome, a user-hosted adult content sharing site with albums.
 ---
 
 # Before using this skill
 
 Make sure to read the `shared-find-media-guidelines` skill before using this skill.
+
+# When to use this skill
+
+- Looking for albums of a specific person on Erome
+- Searching Erome user pages for media
+- Searching Erome by query to find albums matching a person
+- Downloading images and videos from Erome albums or user pages
 
 # Find media from Erome
 

@@ -1,11 +1,17 @@
 ---
 name: find-media-from-fappeningbook
-description: Download media from Fappeningbook, a large aggregator with full-size images available from thumbnails.
+description: Use when you need to find and download media from Fappeningbook, a large aggregator with full-size images available from thumbnails.
 ---
 
 # Before using this skill
 
 Make sure to read the `shared-find-media-guidelines` skill before using this skill.
+
+# When to use this skill
+
+- Looking for media of a specific person on Fappeningbook
+- Extracting full-size images from thumbnail URLs on Fappeningbook gallery pages
+- Downloading image galleries from Fappeningbook
 
 # Find media from Fappeningbook
 

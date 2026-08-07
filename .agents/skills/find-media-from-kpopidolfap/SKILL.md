@@ -1,11 +1,16 @@
 ---
 name: find-media-from-kpopidolfap
-description: Find K-pop idol media from KpopIdolFap, a niche aggregator with tag-based browsing.
+description: Use when you need to find K-pop idol media from KpopIdolFap, a niche aggregator with tag-based browsing.
 ---
 
 # Before using this skill
 
 Make sure to read the `shared-find-media-guidelines` skill before using this skill.
+
+# When to use this skill
+
+- Looking for images of a K-pop idol on KpopIdolFap
+- Using tag pages (`/post/tag/<name>/`) to discover posts about a person
 
 # Find media from KpopIdolFap
 

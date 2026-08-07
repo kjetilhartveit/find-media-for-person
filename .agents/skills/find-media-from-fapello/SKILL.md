@@ -1,11 +1,16 @@
 ---
 name: find-media-from-fapello
-description: Download media from Fapello, a large aggregator of celebrity content with consistent download patterns.
+description: Use when you need to find and download media from Fapello, a large aggregator of celebrity content with consistent download patterns.
 ---
 
 # Before using this skill
 
 Make sure to read the `shared-find-media-guidelines` skill before using this skill.
+
+# When to use this skill
+
+- Looking for media of a specific celebrity/person on Fapello
+- Downloading images or videos from a Fapello profile
 
 # Find media from Fapello
 

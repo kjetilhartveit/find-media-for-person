@@ -1,7 +1,14 @@
 ---
 name: using-gallery-dl
-description: Guidance around using gallery-dl to download media from websites like Instagram, TikTok, Erome, and more.
+description: Use when you need to download media from websites using gallery-dl, a CLI tool supporting 100+ sites including Instagram, TikTok, Erome, Reddit, Fapello, and more.
 ---
+
+# When to use this skill
+
+- Downloading media from a site that gallery-dl supports (check with `gallery-dl --list-extractors`)
+- You need guidance on gallery-dl configuration, flags, output settings, or cookies
+- Setting up gallery-dl with proper destination directories, sleep settings, and filters
+- Troubleshooting gallery-dl pitfalls (range counting, output directory bugs, cookie requirements)
 
 # gallery-dl — Common Guidance
 

@@ -1,7 +1,13 @@
 ---
 name: shared-find-media-guidelines
-description: Use when searching for/finding media from a source.
+description: Use when searching for or finding media from any source, and need general guidelines for content, quality, and technical best practices.
 ---
+
+# When to use this skill
+
+- Before searching for or downloading media from any source
+- You need guidelines for content selection, quality, and scraping best practices
+- You need to know when and how to update or create new source-specific skills
 
 # Shared Find Media Guidelines
 
@@ -38,10 +44,10 @@ When doing web searches (either via the main orchestrator or subagents):
 
 ## Important: Update Skills When You Learn New Information when doing searches
 
-**If no skill exists for a source you found, or you learn new findings or knowledge about a source, then you should update the skill or create a new one.**
+**If no skill exists for a source you found, or you learn new findings or knowledge about finding media in a source, then you should update the skill or create a new one.**
 
-- Skills should follow the naming convention `find-media-from-<source-name>` (e.g. `find-media-from-instagram`).
-- A skill should include the main website URL, example URLs, and useful information about how to search for and find media from the source.
-- Update the skill whenever you learn new findings or knowledge about the source. We should also update the skill if it has out-dated information. Keep skills concise — treat them as supplementary information and not strict guidelines. Use language like "Recommendations" rather than "How to".
+- Update the skill whenever you learn new findings or knowledge about finding media in a source. We should also update the skill if it has out-dated information. Keep skills concise — treat them as supplementary information and not strict guidelines. Use language like "Recommendations" rather than "How to".
+- Note for skill creation: skills should follow the naming convention `find-media-from-<source-name>` (e.g. `find-media-from-instagram`).
+  - A skill should include the main website URL, example URLs, and useful information about how to search for and find media from the source.
 
 When we make changes to skill(s) following a search then we should commit the changes and push them to the repository.

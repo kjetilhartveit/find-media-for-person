@@ -1,11 +1,17 @@
 ---
 name: find-media-from-pictoa
-description: Download high-quality media from Pictoa via gallery-dl (primary) with manual album parsing as fallback.
+description: Use when you need to find and download high-quality media from Pictoa via gallery-dl (primary) with manual album parsing as fallback.
 ---
 
 # Before using this skill
 
 Make sure to read the `shared-find-media-guidelines` skill before using this skill.
+
+# When to use this skill
+
+- Looking for albums of a specific person on Pictoa
+- Searching Pictoa by query to find albums matching a person
+- Scraping gallery pages from Pictoa
 
 # Find media from Pictoa
 

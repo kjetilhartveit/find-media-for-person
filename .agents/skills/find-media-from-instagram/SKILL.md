@@ -1,11 +1,18 @@
 ---
 name: find-media-from-instagram
-description: Download media from Instagram posts, reels, stories, and profile using gallery-dl (primary) with yt-dlp as fallback, both requiring cookie authentication.
+description: Use when you need to find and download media from Instagram posts, reels, stories, and profiles using gallery-dl (primary) with yt-dlp as fallback, both requiring cookie authentication.
 ---
 
 # Before using this skill
 
 Make sure to read the `shared-find-media-guidelines` skill before using this skill.
+
+# When to use this skill
+
+- Downloading posts, reels, or stories from a specific Instagram account
+- Scraping all media from an Instagram profile
+- Extracting media from a single Instagram post or reel URL
+- Need to support carousel posts (multiple images/videos)
 
 # Find media from Instagram
 

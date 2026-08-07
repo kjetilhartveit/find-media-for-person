@@ -1,11 +1,16 @@
 ---
 name: find-media-from-aznude
-description: Download media from AZNude, a celebrity nude content aggregator with hosted images and embedded videos.
+description: Use when you need to find and download media from AZNude, a celebrity nude content aggregator with hosted images and embedded videos.
 ---
 
 # Before using this skill
 
 Make sure to read the `shared-find-media-guidelines` skill before using this skill.
+
+# When to use this skill
+
+- Looking for media of a specific celebrity/person on AZNude
+- AZNude has dedicated pages per celebrity
 
 # Find media from AZNude
 
