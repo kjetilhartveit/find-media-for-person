@@ -13,9 +13,13 @@ description: Use when searching for or finding media from any source, and need g
 
 ## Content / Media Guidelines
 
-- We are particularly interested in explicit/adult material for our archive. Nude/revealing clothing, sexual positions are great. The most interesting material would be facials / cum on face of the person we are looking for. Note: the content does not have to be leaked or "secret". It can be public/open images like from Instagram etc — the main point is that they are attractive images of the person we are looking for.
+- We are particularly interested in explicit/adult material for our archive. Nude/revealing clothing, sexual positions are great. The main point is that they are attractive images of the person we are looking for.
+- The most interesting material would be **facials / cum on face** of the person we are looking for.
+  - If we find these then we should make note of the source and highlight it in future searches.
+  - When we do web searches we should always remember to search for "facials" and "cum on face" in addition to the person's name.
 - We don't want cum tributes by men.
-- Note that there might be many pictures/videos/media on the websites we are exploring/searching. We should make an effort to only download content/media of the person we are looking for.
+- Note: the content does not have to be leaked or "secret". It can be public/open images like from Instagram etc
+- Note 2: there might be irrelevant pictures/videos/media on the websites we are exploring/searching. We should make an effort to only download content/media of the person we are looking for.
 
 ## Technical Guidelines for finding and storing media
 
