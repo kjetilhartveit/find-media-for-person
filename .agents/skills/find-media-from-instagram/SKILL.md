@@ -1,6 +1,6 @@
 ---
 name: find-media-from-instagram
-description: Download media from Instagram posts, reels, and stories using gallery-dl with cookie authentication.
+description: Download media from Instagram posts, reels, stories, and profile using gallery-dl (primary) with yt-dlp as fallback, both requiring cookie authentication.
 ---
 
 # Before using this skill
@@ -42,6 +42,10 @@ Convert expiry from ISO date: `Math.round(new Date("2027-05-17T00:00:00Z").getTi
 Session cookies typically last about a year but can be invalidated earlier by password changes or suspicious activity.
 
 ## Recommendations on how to download
+
+**Primary method: gallery-dl**. gallery-dl is the preferred tool — it has 18+ Instagram extractors (posts, reels, stories, user profile, tags, etc.) and uses Instagram's internal API. gallery-dl handles carousel posts automatically.
+
+**Fallback: yt-dlp**. If gallery-dl fails, `yt-dlp` can also download individual posts/reels. It does not support profile scraping or stories, only single media URLs.
 
 1. Ensure `.data/cookies.txt` exists with a valid session cookie.
 

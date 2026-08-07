@@ -11,29 +11,31 @@ Make sure to read the `shared-find-media-guidelines` skill before using this ski
 
 Download images and videos from Erome (https://www.erome.com), a user-hosted adult content sharing platform.
 
+`gallery-dl` has a built-in `EromeAlbumExtractor`, `EromeUserExtractor`, and `EromeSearchExtractor` — use this as the **primary** download method. Fall back to manual parsing only when `gallery-dl` fails.
+
 ## URL Patterns
 
 - Site: `https://www.erome.com`
 - Search: `https://www.erome.com/search?q={name}`
 - Album pages: `https://www.erome.com/a/{album_id}` (e.g., `erome.com/a/fwBHXEGc`)
+- User pages: `https://www.erome.com/USER`
 - Media served from: `https://s{number}.erome.com/{user_id}/{album_id}/{file_id}.jpg`
 
-## How to find and download media
+## PRIMARY — Download via gallery-dl
+
+`gallery-dl` handles Erome natively with 3 extractors: `EromeAlbumExtractor`, `EromeUserExtractor`, `EromeSearchExtractor`. It resolves all media URLs, filters thumbnails, and downloads files with no auth required.
+
+## FALLBACK — Manual parsing and download
+
+When gallery-dl is unavailable or fails:
 
 1. **Search** for the person's name on `https://www.erome.com/search?q={name}` — results include album cards with titles and engagement metrics. Look for album links matching `/a/{album_id}`.
-2. **Download via gallery-dl** (recommended — see respective skill if exists):
-   ```bash
-   gallery-dl -d "/output/dir/" "https://www.erome.com/a/{album_id}"
-   ```
-   gallery-dl handles downloading all media in an album automatically.
-3. **Or manually parse** album pages:
-
+2. **Parse album pages**
    - Extract `data-src` and `src` attributes from `<img>` tags — these point directly to full-size media on `s{number}.erome.com`.
    - Filter out any URLs containing `/thumbs/` — those are thumbnails.
    - No URL pattern guessing needed; the `data-src`/`src` attributes provide the actual full-size URLs directly.
-
-4. **Download media** with `Referer: https://www.erome.com/` header and rate-limit to 0.3–0.5s between requests.
-5. Prefix filenames with the album ID to avoid collisions (Erome files have random IDs).
+3. **Download media** with `Referer: https://www.erome.com/` header and rate-limit to 0.3–0.5s between requests.
+4. Prefix filenames with the album ID to avoid collisions (Erome files have random IDs).
 
 ## Quality
 

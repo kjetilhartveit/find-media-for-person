@@ -1,6 +1,6 @@
 ---
 name: find-media-from-x-twitter
-description: Download media from X/Twitter posts using the official API v2 with a bearer token.
+description: Download media from X/Twitter posts using gallery-dl (primary) with API v2 as fallback, or API v2 as primary if auth unavailable for gallery-dl.
 ---
 
 # Before using this skill
@@ -9,19 +9,36 @@ Make sure to read the `shared-find-media-guidelines` skill before using this ski
 
 # Find media from X / Twitter
 
-Download images and videos from X (Twitter) posts using the official API v2 with bearer token authentication.
+Download images and videos from X (Twitter) posts, user profiles, and timelines.
+
+**Primary method: gallery-dl.** gallery-dl has 24+ Twitter extractors (`TwitterTweetExtractor`, `TwitterUserExtractor`, `TwitterMediaExtractor`, `TwitterTimelineExtractor`, etc.) — supports single posts, user profiles, timelines, searches, and more. No API key needed.
+
+**Fallback method: X API v2 with bearer token.** Use this when gallery-dl fails or when you need tweet metadata (thread resolution, reply chains) that gallery-dl doesn't provide.
+
+**Alternative: yt-dlp.** `yt-dlp` also supports Twitter URLs as a quick single-post fallback with no auth.
 
 ## URL Patterns
 
 - **Posts**: `x.com/{user}/status/{id}` or `twitter.com/{user}/status/{id}`
 - **Articles**: `x.com/{user}/article/{id}` — long-form X articles with embedded media
+- **User profiles**: `x.com/{user}/media` — user's media-only timeline
+- **Search**: `x.com/search?q={query}`
+- **Hashtags**: `x.com/hashtag/{tag}`
 
-## Prerequisites
+## PRIMARY — Download via gallery-dl
+
+`gallery-dl` is the **preferred** method — no API key or bearer token required. Extractors: `TwitterTweetExtractor`, `TwitterUserExtractor`, `TwitterMediaExtractor`, `TwitterTimelineExtractor`, `TwitterHashtagExtractor`, `TwitterSearchExtractor`, `TwitterListExtractor`, and more.
+
+## FALLBACK — X API v2 with bearer token
+
+Use this when `gallery-dl` fails or when tweet metadata is needed. API access tiers matter — free tier has very limited rate limits.
+
+### Prerequisites
 
 - `X_API_BEARER_TOKEN` environment variable set
 - Obtained from the X Developer Portal after creating a project and app
 
-## Authentication
+### Authentication
 
 X uses the official API v2 with a bearer token (standard API key, no cookies or browser sessions). Store as env var `X_API_BEARER_TOKEN`.
 

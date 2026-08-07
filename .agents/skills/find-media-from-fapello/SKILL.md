@@ -36,12 +36,14 @@ Thumbnails on profile pages use a similar pattern with `_300px.jpg` suffix (e.g.
 
 ## Recommendations on how to download
 
-1. Fetch the profile page to discover the ID range. Sequential IDs appear in URLs like `/{slug}/{id}/`.
-2. Check for pagination — follow `/page-2/`, `/page-3/`, etc. until pages return empty or 404.
-3. Collect all unique IDs across pages. Some IDs may be missing (e.g., ID 3 can return 404).
-4. Download images directly using the URL formula above — no need to visit individual item pages.
-5. Rate limiting: sleep 0.3–0.5s between requests is sufficient.
-6. No authentication required.
+1. **Try gallery-dl first**:
+   If successful, skip the manual steps below. If it fails or returns 404s, fall back to **manual URL formula** below.
+2. **Manual method (primary)** — Fetch the profile page to discover the ID range. Sequential IDs appear in URLs like `/{slug}/{id}/`.
+3. Check for pagination — follow `/page-2/`, `/page-3/`, etc. until pages return empty or 404.
+4. Collect all unique IDs across pages. Some IDs may be missing (e.g., ID 3 can return 404).
+5. Download images directly using the URL formula above — no need to visit individual item pages.
+6. Rate limiting: sleep 0.3–0.5s between requests is sufficient.
+7. No authentication required.
 
 ## Media types
 

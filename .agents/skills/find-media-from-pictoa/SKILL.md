@@ -1,6 +1,6 @@
 ---
 name: find-media-from-pictoa
-description: Download high-quality media from Pictoa by scraping album pages for image URLs.
+description: Download high-quality media from Pictoa via gallery-dl (primary) with manual album parsing as fallback.
 ---
 
 # Before using this skill
@@ -11,7 +11,26 @@ Make sure to read the `shared-find-media-guidelines` skill before using this ski
 
 Download images from Pictoa (https://www.pictoa.com), a gallery site with albums of celebrity content.
 
-## URL Patterns
+gallery-dl has `PictoaAlbumExtractor` and `PictoaImageExtractor` — use as **primary** method. Fall back to manual album page parsing below.
+
+## PRIMARY — Download via gallery-dl
+
+`gallery-dl` supports Pictoa albums natively.
+
+## FALLBACK — Manual album page parsing
+
+When `gallery-dl` is unavailable or fails:
+
+1. Search using the `/s/<query>/` URL pattern. Try multiple query variations (celebrity name, handle, real full name, performer name, foreign names - like Korean and Chinese - if applicable).
+2. Also try category URLs like `/c/<celebrity-name>-<category-id>/`.
+3. Parse search results for album links matching `https://www.pictoa.com/albums/...html`. Filter for relevance — generic name searches may return unrelated adult performers with similar names (e.g., "Anissa Kate" mixed in with "Kate Hudson").
+4. Fetch each album page to extract image URLs from `data-lazy-src` attributes pointing to `t1.pictoa.com`.
+5. Extract actual album images (not related gallery thumbnails) by filtering for URLs containing the album ID.
+6. For pagination, check album page URLs for `-p2.html`, `-p3.html` patterns and include those.
+7. Rate limiting: sleep 0.3–0.5s between requests.
+8. Use a user-agent header like `"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"`.
+
+### URL Patterns
 
 - Site: `https://www.pictoa.com`
 - Search URL: `https://www.pictoa.com/s/<query>/` (e.g. `https://www.pictoa.com/s/jessi/`). Queries with spaces use `+` (e.g. `/s/jessi+kpop/`). Unicode queries URL-encoded (e.g. `/s/%EC%A0%9C%EC%8B%9C/` for "제시").
@@ -25,17 +44,6 @@ Download images from Pictoa (https://www.pictoa.com), a gallery site with albums
 - Image CDN: `t1.pictoa.com` — serves actual images (~15-35KB JPEG, up to ~48KB). Use these URLs as-is.
 - NOTE: `s2.pictoa.com` previously served high-quality versions by swapping `t1` → `s2` in URLs. As of 2026-07-18 this CDN returns 404. Only `t1.pictoa.com` works.
 - Example image URL: https://t1.pictoa.com/media/galleries/164/015/164015593e5b1db71d5/2919079593e5b1dba2c5.jpg
-
-## Recommendations on how to download
-
-1. Search using the `/s/<query>/` URL pattern. Try multiple query variations (celebrity name, handle, real full name, performer name, foreign names - like Korean and Chinese - if applicable).
-2. Also try category URLs like `/c/<celebrity-name>-<category-id>/`.
-3. Parse search results for album links matching `https://www.pictoa.com/albums/...html`. Filter for relevance — generic name searches may return unrelated adult performers with similar names (e.g., "Anissa Kate" mixed in with "Kate Hudson").
-4. Fetch each album page to extract image URLs from `data-lazy-src` attributes pointing to `t1.pictoa.com`.
-5. Extract actual album images (not related gallery thumbnails) by filtering for URLs containing the album ID.
-6. For pagination, check album page URLs for `-p2.html`, `-p3.html` patterns and include those.
-7. Rate limiting: sleep 0.3–0.5s between requests.
-8. Use a user-agent header like `"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"`.
 
 ## Quality
 
