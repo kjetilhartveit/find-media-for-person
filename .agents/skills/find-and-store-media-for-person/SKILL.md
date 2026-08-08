@@ -39,7 +39,7 @@ In general a search for media for a person should include the following. But not
    - Create subfolder for person if it doesn't exist
    - Avoid duplicate files between searches and original files in the person's subfolder
 4. Create a markdown summary of the search
-5. Report the results
+5. Output the results
 
 ## Output
 

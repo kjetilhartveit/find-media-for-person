@@ -21,15 +21,14 @@ In general a search for media from a source should include the following. But no
    - get a rough idea of how to perform the search
    - create a TODO-list with steps to follow
 2. Find media from the sources and download the media.
-3. Report the results:
+3. If new insight about the search has been found, then we can update (or create new) relevant skill(s) with the new findings. We're interested in insight about how to more efficiently search for media and we can also fix out-dated/inaccurate information in the skills.
+   - See section below.
+4. Output the results:
 
    - a summary of how the search (and persistence) of media went.
    - list which media files were persisted, which ones failed and which ones were skipped.
    - mention next steps for further research/media searches of the person/model.
    - tips on improving the search and/or persistance of media - was something cumbersome to do or did something fail?
-
-4. Update (or create new) relevant skill(s) with new insight about how to more efficiently search for media or fix out-dated/inaccurate information.
-   - See section below.
 
 ## Content / Media Guidelines
 
