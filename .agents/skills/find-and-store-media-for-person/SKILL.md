@@ -37,7 +37,7 @@ In general a search for media for a person should include the following. But not
      - A web search so we can detect and find new sources
 3. Merge unique subfolder into subfolder for person
    - Create subfolder for person if it doesn't exist
-   - Avoid duplicate files between searches and original files in the person's subfolder
+   - Merge two folders using `folder-merge`
 4. Create a markdown summary of the search
 5. Output the results
 
@@ -71,8 +71,7 @@ The media should be stored at the destination of the environment variable `MEDIA
 
 - After all the searches and persistance of media are completed, we should merge the unique subfolder for each search into the subfolder for the person. E.g. if the search created the subfolder `Caroline Nitter 2026-07-17 10-00-00` then we should attempt to merge them into the `Caroline Nitter` subfolder.
 - We should make an effort to not overwrite files between individual searches and original files in the person's subfolder. E.g. if a unique search has the `SUMMARY.md` file then we should suffix it with the date and time of the search, e.g. `SUMMARY 2026-07-17 10-00-00.md`.
-- We'd like to avoid duplicate media files in the person's subfolder. If an image/video etc already exists in the person's subfolder then we should skip it. In order to detect duplicates we prefer to use an open-source tool like `czkawka_cli` (see `czkawka_cli dup -h` for help). Let's use byte-identical checks instead of checking for similarity to avoid losing similar files.
-  - When choosing which duplicate to keep we should prioritize files organized in a folder structure rather than just files in the root directory.
+- **We should use the tool `folder-merge` to merge the unique subfolder into the subfolder for the person.** E.g. `folder-merge {path to person's subfolder} {path to unique subfolder}`. This script also automatically removes duplicates. If the unique subfolder still exists after the merge, then it means the script was unsuccesful and we should keep it to avoid losing any files.
 
 ## Technical guidelines for finding and storing media
 
