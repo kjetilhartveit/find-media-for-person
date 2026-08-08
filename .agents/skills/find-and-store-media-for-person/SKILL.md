@@ -30,7 +30,7 @@ In general a search for media for a person should include the following. But not
    - create unique subfolder for search
    - create TODO-list with steps to follow
 2. Find media from the sources and download the media.
-   - Use subagents
+   - It's recommended to use subagents for searching and downloading of media from sources.
    - A search for a person should always include (but not limited to):
      - Searches in known sources
      - A web search for facials / cum on face
