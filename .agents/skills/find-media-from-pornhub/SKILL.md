@@ -1,14 +1,17 @@
 ---
 name: find-media-from-pornhub
-description: Use when downloading media from Pornhub profiles, galleries, albums, or searching for specific pornstar content. Supports image gallery downloads via gallery-dl and video downloads via yt-dlp (with proper browser impersonation).
+description: Use when downloading media from Pornhub profiles, galleries, albums, or searching for specific pornstar content.
 ---
+
+# Before using this skill
+
+Make sure to read the `shared-find-media-guidelines` skill before using this skill.
 
 # When to use this skill
 
 - Downloading image galleries from Pornhub profiles
 - Searching for specific pornstar content
 - Scraping PornHub albums/galleries
-- Video downloads (requires browser automation - see pitfalls)
 
 # Find media from Pornhub
 
@@ -17,23 +20,12 @@ PornHub profile, gallery, album, and video page URLs.
 ## URL Patterns
 
 - **Profile**: `pornhub.com/pornstar/{name}` or `pornhub.com/pornstar/{name}/videos`
-- **Album**: `pornhub.com/album/{id}`  
+- **Album**: `pornhub.com/album/{id}`
 - **Photo gallery**: `pornhub.com/album/viewphotos?albumId={id}`
 - **Single video**: `pornhub.com/view_video.php?viewkey={phXXXXX}`
 - **Search**: `pornhub.com/video/search?search={query}`
 
 ## Primary method — gallery-dl (for images)
-
-```bash
-# Download all galleries from a profile
-gallery-dl "https://www.pornhub.com/model/halle-hayes/photos" -d "./pornhub"
-
-# Download a specific gallery
-gallery-dl "https://www.pornhub.com/album/71764561" -d "./pornhub"
-
-# Download profile photos (not albums)
-gallery-dl "https://www.pornhub.com/album/viewphotos?albumId=71764561" -d "./pornhub"
-```
 
 Extractors: `PornhubPhotosExtractor`, `PornhubGalleryExtractor`
 

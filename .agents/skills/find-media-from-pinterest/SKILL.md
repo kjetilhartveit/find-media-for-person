@@ -1,6 +1,6 @@
 ---
 name: find-media-from-pinterest
-description: Use when downloading media from Pinterest pins, boards, profiles, or search results. Gallery-dl is the primary method and works well for bulk downloading.
+description: Use when downloading media from Pinterest pins, boards, profiles, or search results.
 ---
 
 # Before using this skill
@@ -23,20 +23,6 @@ Make sure to read the `shared-find-media-guidelines` skill before using this ski
 
 ## Primary download method — gallery-dl
 
-```bash
-# Search by name (most useful)
-gallery-dl -d "./search-results" "https://www.pinterest.com/search/pins/?q=Halle+Hayes+nude"
-
-# Specific profile
-gallery-dl -d "./profile" "https://www.pinterest.com/username/"
-
-# Specific board
-gallery-dl -d "./board" "https://www.pinterest.com/username/board-name/"
-
-# Single pin
-gallery-dl -d "./pin" "https://www.pinterest.com/pin/12345/"
-```
-
 Extractors: `PinterestSearchExtractor`, `PinterestUserExtractor`, `PinterestBoardExtractor`, `PinterestPinExtractor`
 
 ## Recommendations
@@ -54,5 +40,4 @@ Extractors: `PinterestSearchExtractor`, `PinterestUserExtractor`, `PinterestBoar
 - **Bot detection** - Pinterest may block heavy scraping. Rate limiting helps avoid detection.
 - **Image quality varies** - Quality depends on the original pin source. Some pins are compressed by Pinterest.
 - **Pin expiration** - Pins may delete or become private over time. Download promptly.
-- **No gallery-dl for videos** - Pinterest video support is limited in gallery-dl.
 - **Account needed for full access** - Some content requires Pinterest login but search works well without auth.

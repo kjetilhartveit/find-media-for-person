@@ -103,6 +103,12 @@ This website might not have direct URLs for celebs/persons. We might have to do 
 - Example of URL to an album: https://www.pictoa.com/albums/caroline-nitter-nude-4088413.html
 - See skill `find-media-from-pictoa` for tips on downloading media from Pictoa.
 
+#### Pinterest
+
+- Website URL: https://www.pinterest.com/
+- Example of URL to a profile: https://www.pinterest.com/{username}/
+- See skill `find-media-from-pinterest` for tips on downloading media from Pinterest.
+
 #### Reddit
 
 If we would like to retrieve media from this page we might have to do a search.
@@ -155,6 +161,12 @@ If we would like to retrieve media from this page we might have to do a search.
 - Website URL: https://no.pornhex.com
 - Example of URL to a model: https://no.pornhex.com/video/crole-nitter-suckg-ridg-dick
 
+#### Pornhub
+
+- Website URL: https://www.pornhub.com
+- Example of URL to a profile: https://www.pornhub.com/users/{username}
+- See skill `find-media-from-pornhub` for tips on downloading media from Pornhub.
+
 #### OnlyFans
 
 - Website URL: https://onlyfans.com
@@ -182,11 +194,13 @@ Models might have linktree's which links to other platforms where they might hav
 #### stk.st (Reddit + X image aggregator)
 
 - Website URL: https://stk.st
+- Example of URL: `https://stk.st/{query}` (e.g., `stk.st/halle+hayes`)
 - See skill `find-media-from-stkst` for tips on downloading aggregated media.
 
 #### FapMenu
 
 - Website URL: https://fapmenu.com
+- Example of URL to a profile: `https://fapmenu.com/{slug}/`
 - See skill `find-media-from-fapmenu` for tips on downloading media.
 
 ### Secondary sources

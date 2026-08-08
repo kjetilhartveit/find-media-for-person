@@ -1,7 +1,11 @@
 ---
 name: find-media-from-xhamster
-description: Use when downloading media from XHamster profiles and content. Note: XHamster is a SPA JavaScript site - standard download tools (gallery-dl, yt-dlp, cloudscraper) often fail due to JavaScript-rendered content. Requires browser automation (playwright) in most cases.
+description: Use when downloading media from XHamster profiles and content.
 ---
+
+# Before using this skill
+
+Make sure to read the `shared-find-media-guidelines` skill before using this skill.
 
 # When to use this skill
 
@@ -24,6 +28,7 @@ XHamster is a **SPA (Single Page Application)** - most content is rendered clien
 ## Primary method — Browser automation (REQUIRED)
 
 XHamster requires a **real browser with JavaScript execution** because:
+
 - Profile content (videos, thumbnails, metadata) is loaded via XHR/fetch calls
 - gallery-dl returns 404 or "No results" for most URLs
 - yt-dlp returns "Unsupported URL" for pornstars pages
@@ -44,7 +49,6 @@ with sync_playwright() as p:
 
 ## Methods That Fail (Known Issues)
 
-- **gallery-dl**: Returns "No results for https://xhamster.com/users/hallehayes/photos" (404). The extractor expects URLs like `users/{handle}/photos` but profiles are at `pornstars/{name}`.
 - **yt-dlp**: Returns "Unsupported URL" for `/pornstars/` pages. `/users/` path returns 0 videos.
 - **Cloudscraper**: Page loads (200 OK, 25KB) but content is minimal - JavaScript-rendered video list is not in the response.
 - **curl**: Returns empty or incomplete HTML without the JavaScript-rendered content.

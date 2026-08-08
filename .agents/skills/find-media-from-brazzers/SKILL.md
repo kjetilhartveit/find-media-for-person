@@ -1,7 +1,11 @@
 ---
 name: find-media-from-brazzers
-description: Use when scraping media from Brazzers profiles and video pages. Extract video thumbnails/posters via curl/regex. No dedicated gallery-dl/yt-dlp extractor available. Cloudscraper works for page scraping.
+description: Use when scraping media from Brazzers profiles and video pages. Extract video thumbnails/posters via curl/regex.
 ---
+
+# Before using this skill
+
+Make sure to read the `shared-find-media-guidelines` skill before using this skill.
 
 # When to use this skill
 
@@ -11,7 +15,7 @@ description: Use when scraping media from Brazzers profiles and video pages. Ext
 
 # Find media from Brazzers
 
-Brazzers is accessible via standard HTTP scraping tools (curl, cloudscraper). No dedicated gallery-dl or yt-dlp extractor.
+Brazzers is accessible via standard HTTP scraping tools (curl, cloudscraper).
 
 ## URL Patterns
 
@@ -59,8 +63,6 @@ curl -sL -A "Mozilla/5.0" \
 
 ## Pitfalls
 
-- **No gallery-dl extractor** - site is not supported by any download tool
-- **No yt-dlp extractor** - cannot download videos directly
 - **Video downloads** - full videos require parsing video page HTML for stream URLs
 - **Poster URLs may be encoded** - the path segments are URL-encoded hash prefixes
 - **Content may be behind paywall** - Some galleries are only available to premium users
