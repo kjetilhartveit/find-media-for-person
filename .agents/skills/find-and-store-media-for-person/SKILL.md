@@ -45,7 +45,7 @@ In general a search for media for a person should include the following. But not
 
 - Store media of the person to disk.
   - We are not interested in HTML responses or the likes, only the actual media files.
-- Create a single markdown file named `SUMMARY.md` (in the folder named after the person) containing the following information:
+- Create a single markdown file named `SUMMARY {YYYY}-{MM}-{DD} {HH}-{MM}-{SS}.md` (in the folder named after the person. Remember to replace variables with the date and time of the search) containing the following information:
   - date and time of the search.
   - a short summary of the person.
   - a summary of how the search (and persistence) of media went.
@@ -63,7 +63,7 @@ The media should be stored at the destination of the environment variable `MEDIA
 
 ### Unique subfolder for each search
 
-- Each "find and store media" attempt should store the media in a subfolder in the media folder mentioned abov. The subfolder should be named after the person's name (e.g. `Caroline Nitter`, `Taylor Bow` and so on). The subfolder should be suffixed with the date and time of the search, e.g. `Caroline Nitter {YYYY}-{MM}-{DD} {HH}-{MM}-{SS}`.
+- Each "find and store media" attempt should store the media in a subfolder in the media folder mentioned above. The subfolder should be named after the person's name (e.g. `Caroline Nitter`, `Taylor Bow` and so on). The subfolder should be suffixed with the date and time of the search, e.g. `Caroline Nitter {YYYY}-{MM}-{DD} {HH}-{MM}-{SS}`.
 - When we retrieve media from the sources, we should store the results for each source in yet another subfolder in the subfolder for that person's name. E.g. (`google searches`, `fapeza`, `pictoa` and so on).
   - Tip for creating multiple directories in one command: `mkdir -p "{path to folder for search}"/{"{dirname 1}","{dirname 2}","{dirname 3}"}`.
 - Note that each unique search should create a folder at the root level of the `MEDIA_DIR` folder and not within the subfolder for the person. The unique search subfolders will later be merged into the subfolder for the person.
@@ -71,12 +71,11 @@ The media should be stored at the destination of the environment variable `MEDIA
 ### Merge unique subfolder into subfolder for person
 
 - After all the searches and persistance of media are completed, we should merge the unique subfolder for each search into the subfolder for the person. E.g. if the search created the subfolder `Caroline Nitter 2026-07-17 10-00-00` then we should attempt to merge them into the `Caroline Nitter` subfolder.
-- We should make an effort to not overwrite files between individual searches and original files in the person's subfolder. E.g. if a unique search has the `SUMMARY.md` file then we should suffix it with the date and time of the search, e.g. `SUMMARY 2026-07-17 10-00-00.md`.
 - **We should use the tool `folder-merge` to merge the unique subfolder into the subfolder for the person.** E.g. `folder-merge {path to person's subfolder} {path to unique subfolder}`. This script also automatically removes duplicates. If the unique subfolder still exists after the merge, then it means the script was unsuccesful and we should keep it to avoid losing any files.
 
 ## Technical guidelines for finding and storing media
 
-- Limits: There could be potentially much media of a person; we should pace ourselves in case there are vast amount of media available. If there are many large videos available of the model, then we should note this in the `SUMMARY.md` and rather prioritize images. A soft limit should be around 3-4 GB of media.
+- Limits: There could be potentially much media of a person; we should pace ourselves in case there are vast amount of media available. If there are many large videos available of the model, then we should note this in the summary file and rather prioritize images. A soft limit should be around 3-4 GB of media.
 - We don't need empty folders for sources and these can be deleted once we are done processing. Be careful not to delete any folders with content/media files/folders in them though.
 
 ## Tools
