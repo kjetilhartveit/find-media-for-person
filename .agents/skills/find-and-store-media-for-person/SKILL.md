@@ -87,7 +87,7 @@ The media should be stored at the destination of the environment variable `MEDIA
     - Source: https://exa.ai/docs/reference/rate-limits
 - **We should use subagents to help with the search and downloading of media** in order to avoid filling the context window of the main agent.
   - Avoid giving subagents too broad searches / too many sources to search for at once. It might be better to spawn focused subagents over multiple iterations rather than a few big ones.
-  - It's very important to encourage the subagents to use relevant skills, particularly `find-media-from-{source}` skills.
+  - It's very important to encourage the subagents to use relevant skills, particularly `find-media-from-{source}` skills and the `shared-find-media-guidelines` skill.
 
 ## Sources to Search For Media
 
