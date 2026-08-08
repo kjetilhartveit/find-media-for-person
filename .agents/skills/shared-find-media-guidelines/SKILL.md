@@ -11,9 +11,29 @@ description: Use when searching for or finding media from any source, and need g
 
 # Shared Find Media Guidelines
 
+## Soft instructions on how to search for and download media from a source
+
+In general a search for media from a source should include the following. But note you are not limited to these steps and can add or change them as you see fit:
+
+1. Prepare the search:
+   - which source(s) do I need to search?
+   - which skills do I need to use?
+   - get a rough idea of how to perform the search
+   - create a TODO-list with steps to follow
+2. Find media from the sources and download the media.
+3. Report the results:
+
+   - a summary of how the search (and persistence) of media went.
+   - list which media files were persisted, which ones failed and which ones were skipped.
+   - mention next steps for further research/media searches of the person/model.
+   - tips on improving the search and/or persistance of media - was something cumbersome to do or did something fail?
+
+4. Update (or create new) relevant skill(s) with new insight about how to more efficiently search for media or fix out-dated/inaccurate information.
+   - See section below.
+
 ## Content / Media Guidelines
 
-- We are particularly interested in explicit/adult material for our archive. Nude/revealing clothing, sexual positions are great. The main point is that they are attractive images of the person we are looking for.
+- We are particularly interested in explicit/adult material for our archive (including pornographic content). Nude/revealing clothing, sexual positions are great. The main point is that they are attractive images of the person we are looking for.
 - The most interesting material would be **facials / cum on face** of the person we are looking for.
   - If we find these then we should make note of the source and highlight it in future searches.
   - When we do web searches we should always remember to search for "facials" and "cum on face" in addition to the person's name.
@@ -51,6 +71,7 @@ When doing web searches (either via the main orchestrator or subagents):
 **If no skill exists for a source you found, or you learn new findings or knowledge about finding media in a source, then you should update the skill or create a new one.**
 
 - Update the skill whenever you learn new findings or knowledge about finding media in a source. We should also update the skill if it has out-dated information. Keep skills concise — treat them as supplementary information and not strict guidelines. Use language like "Recommendations" rather than "How to".
+- Note that individual experiences from searches might not apply to future searches, so we should not make strong assumptions based on single searches.
 - Note for skill creation: skills should follow the naming convention `find-media-from-<source-name>` (e.g. `find-media-from-instagram`).
   - A skill should include the main website URL, example URLs, and useful information about how to search for and find media from the source.
 
