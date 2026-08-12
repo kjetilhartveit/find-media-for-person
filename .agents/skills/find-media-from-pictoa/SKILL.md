@@ -60,10 +60,12 @@ When `gallery-dl` is unavailable or fails:
 
 - **Search requires `/s/<query>/` URL format.** Old patterns (`/search/<q>.html`, `/search?query=<q>`) return 404.
 - **No direct celebrity URLs.** You must search and filter results manually.
-- **Relevance filtering is important.** A simple name search (e.g. "jessi") may return unrelated performers sharing the same name. Try adding disambiguating terms (handle, full name, performer name).
+- **Relevance filtering is important.** A simple name search (e.g. "jessi") may return unrelated performers sharing the same name. Try adding disambiguating terms (handle, full name, performer name). Searching "sofie" alone returns 100+ albums of adult performers — not the celebrity you want.
+- **POST to search-by-form redirects but -L fails.** The CSRF POST to `/search-by-form` returns a 302 redirect, but following it with `-L` may return 405. Get cookies, POST to populate session, then GET the search URL directly with those cookies.
 - **The `s2` CDN is broken.** The former advice to swap `//t1.` → `//s2.` for higher quality no longer works and returns 404 — use `t1` URLs as-is.
 - Labor-intensive: one page fetch per album to extract all image URLs.
-- **No "No Results" indicator on empty search.** A search returning no albums shows `No Results` in the page body but still returns a 200 status code — check the HTML for `<p id="noResults">`.
+- **No "No Results" indicator on empty search.** A search returning no albums shows `No Results` in the page body but still returns a 200 status code — check the HTML for `<p id="noResults">` or search returns 404.
+- **Search returns 404 for non-existent queries.** If the search query has no results, the search URL may return 404 (not just 200 with No Results text).
 - **Gallery ID regex challenge.** Album names contain dashes, so `[^-]+` pattern won't work. Use regex like `albums/.*?-(\d{7})` to extract the 7-digit gallery ID, or `albums/.*?-(\d{7})/\d+\.html` for nested paths.
 - **Two album URL formats.** Some album links have a trailing `/image-id.html` (e.g., `/albums/kate-hudson-booty-3228997/75141781.html`). Extract the first 7-digit number after `-` as the gallery ID.
 - **Image filtering by gallery ID.** The gallery ID (7 digits before `.html`) must be in the image URL path on the album page to filter out related gallery thumbnails.
