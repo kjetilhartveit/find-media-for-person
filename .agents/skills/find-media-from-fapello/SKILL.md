@@ -74,3 +74,18 @@ Thumbnails on profile pages use a similar pattern with `_300px.jpg` suffix (e.g.
 - The `gallery-dl` fapello extractor has returned 404 in recent tests.
 - Thousands of images possible — pace downloads and use rate limiting.
 - Prioritize undownloaded ID ranges in follow-up sessions.
+
+## Cloudflare Protection
+
+- Fapello.com is protected by Cloudflare challenge pages.
+- Simple HTTP tools (curl, wget) will get 403/CF challenge pages.
+- `gallery-dl` and browser-based tools also hit the Cloudflare gate.
+- Use a headless browser (e.g., browser_tool) to bypass Cloudflare for scraping.
+- Alternative domains like `fapello.net` exist but have different anti-bot systems.
+
+## Profile Not Found
+
+- A person may not have any content on Fapello at all.
+- If the direct profile URL returns 404 AND all search variations return 0 results (verified with browser), the person is not on the platform.
+- Try search variations: `{name}`, `{first}-{last}`, `{first}{last}` (no hyphen).
+- Some people appear only via individual posts (web search for `site:fapello.com "{name}"`).
