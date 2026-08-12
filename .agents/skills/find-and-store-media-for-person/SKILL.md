@@ -30,11 +30,12 @@ In general a search for media for a person should include the following. But not
    - create unique subfolder for search (at the root level of the `MEDIA_DIR` folder)
    - create TODO-list with steps to follow
 2. Find media from the sources and download the media.
-   - It's recommended to use subagents for searching and downloading of media from sources.
+   - We must always **spawn a subagent per source** when searching and downloading of media.
    - A search for a person should always include (but not limited to):
-     - Searches in known sources
      - A web search for facials / cum on face
-     - A web search so we can detect and find new sources
+     - An instagram search for the person
+     - Searches in other known sources
+     - An web search for the person (only name / username / identifier) so we can detect and find new sources
 3. Merge unique subfolder into subfolder for person
    - Create subfolder for person if it doesn't exist
    - Merge two folders using `folder-merge`
@@ -84,9 +85,9 @@ The media should be stored at the destination of the environment variable `MEDIA
   - Agents should be aware that when using web search via EXA there are rate limits one should account for.
     - The `/search` endpoint has a rate limit of 10 queries per second.
     - Source: https://exa.ai/docs/reference/rate-limits
-- **We should use subagents to help with the search and downloading of media** in order to avoid filling the context window of the main agent.
-  - Avoid giving subagents too broad searches / too many sources to search for at once. It might be better to spawn focused subagents over multiple iterations rather than a few big ones.
-  - It's very important to encourage the subagents to use relevant skills, particularly `find-media-from-{source}` skills and the `shared-find-media-guidelines` skill.
+- **When we search and download media from a source we must always use a subagent** in order to avoid filling the context window of the main agent.
+  - Avoid giving subagents too broad searches at once. It's better to spawn focused subagents over multiple iterations rather than a few big ones.
+  - When you spawn a subagent it's very important to encourage them to use relevant skills, particularly `find-media-from-{source}` skills and the `shared-find-media-guidelines` skill.
 
 ## Sources to Search For Media
 

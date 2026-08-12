@@ -21,7 +21,7 @@ In general a search for media from a source should include the following. But no
    - get a rough idea of how to perform the search
    - create a TODO-list with steps to follow
 2. Find media from the sources and download the media.
-3. If new insight about the search has been found, then we can update (or create new) relevant skill(s) with the new findings. We're interested in insight about how to more efficiently search for media and we can also fix out-dated/inaccurate information in the skills.
+3. If new insight about the search has been found, then we should update (or create new) relevant skill(s) with the new findings. We want to update the skill(s) with insight about how to more efficiently search for media and we can also fix out-dated/inaccurate information in the skill(s).
    - See section below.
 4. Output the results:
 
@@ -65,13 +65,12 @@ When doing web searches (either via the main orchestrator or subagents):
 - Only make a maximum of 10 web searches per agent to avoid context exhaustion. Prefer to return quickly with a few results and encourage further searches rather than making too many large searches in one go.
 - Web search engines return article URLs, not image URLs. The actual images are embedded in the HTML of those articles. Extract image URLs efficiently without downloading full pages of HTML bloat.
 
-## Important: Update Skills When You Learn New Information when doing searches
+## Update/create skills when gaining new insight or updated information when doing searches or downloading media
 
-**If no skill exists for a source you found, or you learn new findings or knowledge about finding media in a source, then you should update the skill or create a new one.**
-
-- Update the skill whenever you learn new findings or knowledge about finding media in a source. We should also update the skill if it has out-dated information. Keep skills concise — treat them as supplementary information and not strict guidelines. Use language like "Recommendations" rather than "How to".
+- Update the skill whenever you learn new findings or knowledge about finding or downloading media in a source. We should also update the skill if it has out-dated information.
 - Note that individual experiences from searches might not apply to future searches, so we should not make strong assumptions based on single searches.
-- Note for skill creation: skills should follow the naming convention `find-media-from-<source-name>` (e.g. `find-media-from-instagram`).
+- If no skill exists for a source you used then create a new one.
+  - Note for skill creation: skills should follow the naming convention `find-media-from-<source-name>` (e.g. `find-media-from-instagram`).
   - A skill should include the main website URL, example URLs, and useful information about how to search for and find media from the source.
-
-When we make changes to skill(s) following a search then we should commit the changes and push them to the repository.
+- Keep skills concise — treat them as supplementary information and not strict guidelines. Use language like "Recommendations" rather than "How to".
+- When we create or make changes to skill(s) following a search then we should commit the changes and push them to the repository.
