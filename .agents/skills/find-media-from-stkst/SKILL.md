@@ -38,10 +38,10 @@ stk.st is a WordPress content farm that specializes in viral adult entertainment
 
 ## Limitations & Recommendations
 
-- **NOT recommended** for finding media of specific individuals (especially non-adult individuals) — searches return posts matching ANY part of the query
+- **NOT recommended** for finding media of specific individuals (especially non-adult/non-porn individuals) — searches return posts matching ANY part of the query, often just the first name
 - The site is specialized in adult entertainment content (cam models, OnlyFans leaks, etc.)
-- Search results match keywords but do not guarantee the person matches
-- No Reddit/Twitter/X scraping capability on the current site
+- Search results match keywords but do not guarantee the person matches (e.g., "sofie eikeland" returns posts about "sofie mills", "sofie skye", etc.)
+- No Reddit/Twitter/X scraping or aggregation for specific individuals — posts only contain the site's own embedded media
 - For general media of a person, prefer: Google Images, Instagram, X/Twitter, Pinterest
 
 ## Pitfalls
@@ -51,3 +51,5 @@ stk.st is a WordPress content farm that specializes in viral adult entertainment
 - Thumbnails on the search page are 480x270 (low resolution) — need to follow to individual post for full-size
 - No pagination on search results (all results on first page)
 - Some post URLs may redirect to homepage (4815 byte response)
+- Direct path queries like `stk.st/username` often 301 redirect to `/` (homepage) — use `/search?query=` instead
+- Many posts use embedded video thumbnails (pornhub, xhamster, etc.) rather than Reddit/Twitter/Imgur images
