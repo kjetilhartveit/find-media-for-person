@@ -1,4 +1,7 @@
-# Skill: find-media-from-modelsearcher
+---
+name: find-media-from-modelsearcher
+description: Use when searching for OnlyFans creator profiles on ModelSearcher.com, a directory/aggregator of OnlyFans creators across categories.
+---
 
 # Before using this skill
 
@@ -12,13 +15,16 @@ Make sure to read the `shared-find-media-guidelines` skill before using this ski
 # ModelSearcher.com
 
 ## Main URL
+
 - https://modelsearcher.com
 - Hub/Blog: https://modelsearcher.com/hub/
 
 ## How it works
+
 ModelSearcher is a directory/aggregator of OnlyFans creators across categories (fitness, Asian, MILF, etc.). It does NOT host original media - it links to OnlyFans subscription pages and provides profile info and teaser images.
 
 ## URLs and Structure
+
 - **Search**: https://modelsearcher.com/?s=QUERY (uses site search)
 - **Posts**: https://modelsearcher.com/post?s=QUERY
 - **Profile**: https://modelsearcher.com/profile/USERNAME
@@ -31,21 +37,25 @@ ModelSearcher is a directory/aggregator of OnlyFans creators across categories (
 ## Important Notes
 
 ### Cloudflare Protection
+
 The site uses Cloudflare with JavaScript challenges. Direct curl access fails. Use `web_fetch` with markdown format which bypasses Cloudflare.
 
 ### Search Behavior
+
 The search with `?s=QUERY` parameter appears to not always return relevant results - the site often shows general OnlyFans profiles regardless of query. The internal search may not work well for specific names.
 
 ### gallery-dl Support
+
 gallery-dl does NOT support modelsearcher as an extractor. Must use web scraping tools.
 
 ## Tips
+
 - Not all models have profiles here - it's OnlyFans-specific
 - The site primarily links to paid OnlyFans subscriptions
 - Images on the site are teaser/thumbnail images from OnlyFans
-- Sofie Eikeland was NOT found on modelsearcher.com (as of 2026-08-13 search)
 
 ## Pitfalls
+
 - Do NOT rely on this source for original high-quality media - it only shows OnlyFans teasers
 - Cloudflare blocks automated curl requests
 - Search functionality may not return accurate results for specific names
