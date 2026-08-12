@@ -57,7 +57,3 @@ Download media from Scandal Planet (https://scandalplanet.com), a WordPress-base
 - **Related celebs sidebar:** The page includes thumbnails (`-145x145-optimized.jpg`) of other celebs in a sidebar. Filter by checking if the URL contains the target celeb's name.
 - **Single page per celebrity** — no pagination. All content is on one article post.
 - **No content for celebrity**: Some celebrities are not covered — Scandal Planet only features a subset (~100-120) of A-list celebrities. If the site returns zero results after thorough searching, the celebrity may not be featured.
-
-## Negative findings (celebrities with no content here)
-
-- **Sofie Eikeland**: No articles exist. Verified via: direct URL patterns (/sofie-eikeland/, /sofie-eikeland-nude/) all redirect to other celebs (Sofia Richie, Sofie Hoflack); site search `?s=Sofie+Eikeland` returns "Nothing Found"; site search `?s=Eikeland` returns "Nothing Found"; DuckDuckGo `site:scandalplanet.com "Sofie Eikeland"` returns zero results; no mention on any of the 120+ celebrity pages.

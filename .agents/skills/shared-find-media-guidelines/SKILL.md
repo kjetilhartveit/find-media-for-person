@@ -67,10 +67,16 @@ When doing web searches (either via the main orchestrator or subagents):
 
 ## Update/create skills when gaining new insight or updated information when doing searches or downloading media
 
+### Creation/updating skills
+
 - Update the skill whenever you learn new findings or knowledge about finding or downloading media in a source. We should also update the skill if it has out-dated information.
-- Note that individual experiences from searches might not apply to future searches, so we should not make strong assumptions based on single searches.
 - If no skill exists for a source you used then create a new one.
   - Note for skill creation: skills should follow the naming convention `find-media-from-<source-name>` (e.g. `find-media-from-instagram`).
   - A skill should include the main website URL, example URLs, and useful information about how to search for and find media from the source.
-- Keep skills concise — treat them as supplementary information and not strict guidelines. Use language like "Recommendations" rather than "How to".
 - When we create or make changes to skill(s) following a search then we should commit the changes and push them to the repository.
+
+### Guidelines for creating/updating skills
+
+- Note that individual experiences from searches might not apply to future searches, so we should not make strong assumptions based on single searches.
+- We should **NOT** add individual search histories/results to the skills. We should only add general guidelines and best practices.
+- Keep skills concise — treat them as supplementary information and not strict guidelines. Use language like "Recommendations" rather than "How to".
