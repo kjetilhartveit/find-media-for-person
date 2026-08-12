@@ -148,12 +148,6 @@ This website might not have direct URLs for celebs/persons. We might have to do 
 - Example of URL to an album: https://www.pictoa.com/albums/caroline-nitter-nude-4088413.html
 - See skill `find-media-from-pictoa` for tips on downloading media from Pictoa.
 
-#### Pinterest
-
-- Website URL: https://www.pinterest.com/
-- Example of URL to a profile: https://www.pinterest.com/{username}/
-- See skill `find-media-from-pinterest` for tips on downloading media from Pinterest.
-
 #### Reddit
 
 If we would like to retrieve media from this page we might have to do a search.
@@ -252,12 +246,19 @@ Models might have linktree's which links to other platforms where they might hav
 
 Secondary sources are worth mentioning but might not be applicable in all cases (perhaos only relevant for certain models/persons). Sources which have proved anti-bot protection is also moved here but kept in case the anti-bot protection is bypassed.
 
+#### Pinterest
+
+- Website URL: https://www.pinterest.com/
+- Example of URL to a profile: https://www.pinterest.com/{username}/
+- See skill `find-media-from-pinterest` for tips on downloading media from Pinterest.
+- When to use the source: Pinterest is best for concepts, ideas, themes - and not for specific people unless they're famous/celebrities.
+
 #### kpopidolfap
 
 - Website URL: https://kpopidolfap.com
 - Example of URL to a model: https://kpopidolfap.com/post/tag/jessi/
 - See skill `find-media-from-kpopidolfap` for tips on downloading media from KpopIdolFap.
-- **NOTE:** This source is a WordPress-based aggregator of K-pop idol content. It's a good source for finding (mostly fake) media of K-pop idols.
+- When to use the source: It's a good source for finding (mostly fake) media of K-pop idols.
 
 #### leakedmodels
 
@@ -275,10 +276,10 @@ Secondary sources are worth mentioning but might not be applicable in all cases 
 
 - Website URL: https://celebmafia.com
 - Example of URL to a celebrity article: https://celebmafia.com/charithra-chandran-in-lilac-bikini-at-pool-in-los-angeles-april-2026-4673246/
-- **NOTE:** Celebrity gossip site with photoshoot and event coverage. Images in `wp-content/uploads/`, served as webp. Works well with `curl | grep` extraction. Pick URLs without dimension suffixes (e.g. `-171x256`) for full-size.
+- When to use the source: Celebrity gossip site with photoshoot and event coverage.
 
 #### Gethu Cinema (celebrity/public figures)
 
 - Website URL: https://www.gethucinema.com
 - Example of URL to a gallery: https://www.gethucinema.com/2025/09/actress-charithra-chandran-hd-photos-and-wallpapers-september-2025.html
-- **NOTE:** WordPress celebrity photo gallery site. Images in `wp-content/uploads/` with hash-based filenames (e.g. `Charithra-Chandran-26-nw5n3I3824.jpg`). Prefer URLs without dimension suffixes for full-size. Good for celebrity/public figure searches.
+- When to use the source: WordPress celebrity photo gallery site. Good for celebrity/public figure searches.

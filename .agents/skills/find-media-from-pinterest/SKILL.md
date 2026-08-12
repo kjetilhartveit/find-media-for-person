@@ -25,9 +25,12 @@ Make sure to read the `shared-find-media-guidelines` skill before using this ski
 
 Extractors: `PinterestSearchExtractor`, `PinterestUserExtractor`, `PinterestBoardExtractor`, `PinterestPinExtractor`
 
+Always use `--range 1-50` to limit downloads.
+
 ## Recommendations
 
 1. **Pinterest search is effective for discovering content** - Use queries like `{name} nude`, `{name} onlyfans`, `{name} photos`
+   - It's best for concepts, ideas, themes - and not for specific people unless they're famous/celebrities.
 2. **Search returns many pins** - Pinterest searches return a large number of results. Gallery-dl downloads ~200-300+ images per search query.
 3. **Many pins are reposted content** - Pinterest contains lots of reposted/curated content from other sources (Instagram, OnlyFans, other adult sites).
 4. **No authentication needed** - Gallery-dl works without cookies for public search/browsing.
