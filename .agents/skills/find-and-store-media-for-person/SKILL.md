@@ -87,8 +87,30 @@ The media should be stored at the destination of the environment variable `MEDIA
     - The `/search` endpoint has a rate limit of 10 queries per second.
     - Source: https://exa.ai/docs/reference/rate-limits
 - **When we search and download media from a source we must always use a subagent** in order to avoid filling the context window of the main agent.
+
+  - When spawning a subagent use the following template for their prompt (replace variables with actual values):
+
+    ```
+    You are searching for and downloading media of {person's name}. {short person description}.
+
+    - Source: {source name}
+    - Suggested URLs to search in: {suggested URLs}
+    - Destination directory for source: {destination directory for source}
+    - Additional instructions for what content to search for and download: {additional instructions for what content to search for and download - do NOT give search instructions or guidelines - this is communicated via the skills. If no additional instructions then leave this blank}
+
+    Before you start then read the skills:
+    - `shared-find-media-guidelines`
+    - `find-media-from-{source}`
+    {optionally other relevant skills - one per line}
+
+    Follow the following instructions (create a TODO-list with the steps to follow):
+    1. Prepare the search.
+    2. Find media from the sources and download the media.
+    3. If new insight about the search has been found, then we should update (or create new) relevant skill(s) with the new findings or up-to-date information.
+    4. Output the results.
+    ```
+
   - Avoid giving subagents too broad searches at once. It's better to spawn focused subagents over multiple iterations rather than a few big ones.
-  - When you spawn a subagent it's very important to encourage them to use relevant skills, particularly `find-media-from-{source}` skills and the `shared-find-media-guidelines` skill.
 
 ## Sources to Search For Media
 
