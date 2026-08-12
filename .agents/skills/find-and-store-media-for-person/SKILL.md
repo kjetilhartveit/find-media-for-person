@@ -111,6 +111,7 @@ The media should be stored at the destination of the environment variable `MEDIA
     ```
 
   - Avoid giving subagents too broad searches at once. It's better to spawn focused subagents over multiple iterations rather than a few big ones.
+  - Use a dedicated source skill if it exists over web search.
 
 ## Sources to Search For Media
 
