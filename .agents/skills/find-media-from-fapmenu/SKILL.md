@@ -22,6 +22,7 @@ Download images and videos from FapMenu (https://fapmenu.com), a large aggregato
 - Site: `https://fapmenu.com`
 - Profile: `https://fapmenu.com/{slug}/` — try the person's name first (e.g. `halle-hayes/`)
 - Aliases: Some profiles exist under multiple slugs — if one returns empty, try alternatives (e.g. `hallehayes1`, `hallehayesvip`, `the_real_halle_hayes`). These aliases may be referenced on the profile or via their social media bio links.
+- Names with common first names may match the wrong person (e.g. `sofie/` matches "Sofie Ivars" not "Sofie Eikeland"). Always verify the profile name and aliases listed on the page to ensure it's the correct person.
 - Item URLs: `https://fapmenu.com/media/{id}` — sequentially numbered items
 - Image source: WEBP format, URLs follow `/media/{id}` pattern
 
