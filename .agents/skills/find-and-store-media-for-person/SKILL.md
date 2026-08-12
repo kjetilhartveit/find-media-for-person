@@ -31,6 +31,7 @@ In general a search for media for a person should include the following. But not
    - create TODO-list with steps to follow
 2. Find media from the sources and download the media.
    - We must always **spawn a subagent per source** when searching and downloading of media.
+     - We can spawn multiple subagents in parallel.
    - A search for a person should always include (but not limited to):
      - A web search for facials / cum on face
      - An instagram search for the person
