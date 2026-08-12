@@ -1,6 +1,6 @@
 ---
 name: find-media-from-stkst
-description: Use when you need to find and download media from stk.st.
+description: Use when you need to find and download media from stk.st. A content farm that specializes in viral adult entertainment content.
 ---
 
 # Before using this skill

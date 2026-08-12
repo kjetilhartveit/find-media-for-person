@@ -1,6 +1,6 @@
 ---
 name: find-media-from-brazzers
-description: Use when scraping media from Brazzers profiles and video pages. Extract video thumbnails/posters via curl/regex.
+description: Use when scraping media from Brazzers profiles and video pages.
 ---
 
 # Before using this skill
