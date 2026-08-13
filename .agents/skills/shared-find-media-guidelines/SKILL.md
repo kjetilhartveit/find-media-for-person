@@ -23,7 +23,8 @@ In general a search for media from a source should include the following. But no
 2. Find media from the sources and download the media.
 3. If new insight about the search has been found, then we should update (or create new) relevant skill(s) with the new findings. We want to update the skill(s) with insight about how to more efficiently search for media and we can also fix out-dated/inaccurate information in the skill(s).
    - See section below.
-4. Output the results:
+4. Commit (only relevant files) and push skill changes to the repository.
+5. Output the results:
 
    - a summary of how the search (and persistence) of media went.
    - list which media files were persisted, which ones failed and which ones were skipped.
