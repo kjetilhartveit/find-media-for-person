@@ -38,7 +38,7 @@ stk.st is a WordPress content farm that specializes in viral adult entertainment
 
 Content from stk.st pages comes from various aggregated sources. **Important**: stk.st does NOT aggregate Reddit, X/Twitter, or Imgur content for most individuals — images come directly from adult-content hosting sites. Images go through WordPress Jetpack CDN: `https://i3.wp.com/origin-domain/path` (strip `i3.wp.com/` prefix to get original URL).
 
-Common image domains: thefappeningblog.com, nudogram.com, fapello.com, masterfap.net, erome.com, sexdug.com, mixputaria.com, virulpornhub.com, camwhores.tv, phncdn.com (Pornhub), rdtcdn.com (RedTube), xvideos-cdn.com, xnxx-cdn.com, eporner.com, vrsmash.com, sxyprn.com.es, babes.plus, vip.sexhd.pics / sexhd.pics, cdn5-images.motherlessmedia.com, www.xxxporn.pics, tiny-asians.com, wallpaperheaven.com, fappenist.com, i.imgur.com, people.com, essence.com
+Common image domains: thefappeningblog.com, nudogram.com, fapello.com, masterfap.net, erome.com, sexdug.com, mixputaria.com, virulpornhub.com, camwhores.tv, phncdn.com (Pornhub), rdtcdn.com (RedTube), xvideos-cdn.com, xnxx-cdn.com, eporner.com, vrsmash.com, sxyprn.com.es, babes.plus, vip.sexhd.pics / sexhd.pics, cdn5-images.motherlessmedia.com, www.xxxporn.pics, tiny-asians.com, wallpaperheaven.com, fappenist.com, i.imgur.com, people.com, essence.com, titis.org (Russian adult site), boomba.club (VK-based adult site), naked.chiks.org, zoomgirls.net, imperiodefamosas.com
 
 ## Primary download method — Manual scraping and download
 
@@ -84,6 +84,9 @@ Common image domains: thefappeningblog.com, nudogram.com, fapello.com, masterfap
 ### Image domain pitfalls
 
 - The i3.wp.com proxy sometimes returns 400/403 for certain domains — don't rely on it as a download method, use direct URLs instead.
+- **pictoa.com**: may return HTTP 403 Forbidden (tested on stk.st `/inna+nudes` — returned 17 bytes, not the image). Strip `&ssl=1` from URLs but direct download may still fail.
+- **titis.org**: Russian adult site — images may be low-quality or mislabeled regarding the person featured. Also `boomba.club` (VK-based) — similar concerns.
+- **i.redd.it (Reddit)**: images from Reddit may not be actually about the person the stk.st post title suggests. Verify by checking the Reddit post content.
 - **Some image domains are blocked/unreachable**:
   - `people.com` returns HTTP 400 Bad Request (blocks automated requests, likely requires specific referer header)
   - `essence.com` returns HTTP 403 Forbidden

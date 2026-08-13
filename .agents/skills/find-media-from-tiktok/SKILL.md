@@ -24,9 +24,11 @@ Make sure to read the `shared-find-media-guidelines` skill before using this ski
 
 # Recommendations on how to download
 
-**Primary method: gallery-dl**. Supports multiple TikTok extractors (user profile, posts, avatar, individual video, following, etc.).
+**Primary method for profile scraping: yt-dlp** — more reliable than gallery-dl for TikTok profiles. Gallery-dl's item_list API frequently returns 0 items on active accounts.
 
-**Fallback: yt-dlp**. Can download individual TikTok video URLs. Does not support profile scraping.
+**gallery-dl** — works for avatar extraction but NOT for video downloads. Use `gallery-dl` to get avatar + then yt-dlp for videos.
+
+**Fallback single video: yt-dlp** — works well for individual TikTok video URLs.
 
 1. Write a temporary config file:
 
@@ -81,3 +83,6 @@ du -sh <output-dir>/tiktok
 - **Region settings don't help**. Setting `"region": "NO"` in config does not change API behavior.
 - **Avatar images**: The avatar is extracted separately from the profile page. It's usually a high-quality (1080x1080) profile picture.
 - **No cookie required**. TikTok is generally public without authentication. Private accounts won't be accessible through gallery-dl API.
+- **yt-dlp impersonation warning** — yt-dlp may show `[TikTok] The extractor is attempting impersonation` warnings but downloads still work. No action needed unless blocked.
+- **yt-dlp download-archive** — use `--download-archive download_archive.txt` to prevent re-downloading already saved videos (useful for resuming interrupted downloads). Note: if the archive file path contains spaces, yt-dlp may fail — keep the archive file in a path without spaces (e.g., in `/tmp/`).
+- **yt-dlp output format with spaces** — when output path or title contains special characters, use `--output "%(id)s_%(title)s.%(ext)s"` (ID-prefix naming) to avoid filesystem issues. Avoid `%(fulltitle)s` which may create unescaped path separators.
