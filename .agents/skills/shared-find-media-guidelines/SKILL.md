@@ -79,5 +79,4 @@ When doing web searches (either via the main orchestrator or subagents):
 ### Guidelines for creating/updating skills
 
 - Note that individual experiences from searches might not apply to future searches, so we should not make strong assumptions based on single searches.
-- We should **NOT** add individual search histories and/or individual results to the skills. We should only add or update general guidelines and best practices.
 - Keep skills concise — treat them as supplementary information and not strict guidelines. Use language like "Recommendations" rather than "How to".

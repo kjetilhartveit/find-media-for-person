@@ -107,7 +107,9 @@ The media should be stored at the destination of the environment variable `MEDIA
     1. Prepare the search.
     2. Find media from the sources and download the media.
     3. If new insight about the search has been found, then we should update (or create new) relevant skill(s) with the new findings or up-to-date information.
-    4. Output the results.
+      - We should **NOT** add individual search histories and/or individual results to the skills. We should only add or update general guidelines and best practices.
+    4. Commit (only relevant files) and push skill changes to the repository.
+    5. Output the results.
     ```
 
   - Avoid giving subagents too broad searches at once. It's better to spawn focused subagents over multiple iterations rather than a few big ones.
