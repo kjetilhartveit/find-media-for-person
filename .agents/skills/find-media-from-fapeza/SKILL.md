@@ -21,6 +21,7 @@ Download images from Fapeza (https://fapeza.com), an aggregator site of leaked/n
 
 - Profile: `https://fapeza.com/{slug}/` (e.g., `fapeza.com/emily-ratajkowski/`)
 - Media items follow sequential ID pattern
+- Page title may contain alternate names: `Linda Lan / foodsandnood.s / lindarainbow Nude Leaks OnlyFans - Fapeza`. Try alternate names as additional slugs to check for more content (though these often return 404 if Fapeza has removed old slugs).
 
 ## Recommendations on how to download
 
@@ -38,16 +39,17 @@ Download images from Fapeza (https://fapeza.com), an aggregator site of leaked/n
 
 ## Pagination
 
-- Profile pages use `https://fapeza.com/{slug}/page-N/` for pagination (confirmed working up to page 30+).
-- Page 1 (no `/page-N/`) shows the 20 most recent posts.
-- Each pagination page shows ~20 images.
-- Use cloudscraper to fetch each page sequentially until a page returns no new images or 404.
+- Profile pages use `https://fapeza.com/{slug}/page-N/` for pagination, but **pagination is often non-functional** — all pages return the same content.
+- Page 1 (no `/page-N/`) shows the posts for the profile.
+- Use cloudscraper to check multiple pages; if they all return the same set of post IDs, pagination is broken and you can stop.
+- If pagination works, each page shows ~20 images.
 
 ## Individual post URLs
 
 - Individual post pages: `https://fapeza.com/{slug}/{post_id}/`
 - Post IDs are sequential (e.g., `kate-hudson/1002/`, `kate-hudson/1001/`, `kate-hudson/1000/`, etc.)
-- Individual POST pages may NOT contain image links — images are only on profile/gallery pages.
+- Individual POST pages DO contain image links — typically 2 images each: a common cover/ref image + the post-specific image.
+- Post IDs may have gaps (e.g., posts 2–21 present but 3, 4, 5, 6 missing).
 
 ## Pitfalls
 
@@ -59,10 +61,12 @@ Download images from Fapeza (https://fapeza.com), an aggregator site of leaked/n
 
 ## Typical stats
 
-- Profile pages contain ~20 images per page.
-- Total images per profile varies (e.g., Kate Hudson: 72 images, ~12MB total).
+- Profile pages contain ~20 images (may be fewer for smaller profiles).
+- Total images per profile varies widely (e.g., Kate Hudson: 72 images, ~12MB total; Linda Lan: 17 images, ~2.6MB total).
 - Image files range from ~16KB to ~520KB.
+- Profile content ranges from hundreds of KB to several MB.
 - All verified downloads are JPEG format.
+</think>
 
 ## Tips on changing photos to high quality in the browser
 
