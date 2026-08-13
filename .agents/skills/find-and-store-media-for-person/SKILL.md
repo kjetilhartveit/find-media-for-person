@@ -38,8 +38,8 @@ In general a search for media for a person should include the following. But not
      - Searches in other known sources
      - An web search for the person (only name / username / identifier) so we can detect and find new sources
 3. Merge unique subfolder into subfolder for person
-   - Create subfolder for person if it doesn't exist
-   - Merge two folders using `folder-merge`
+   1. Create subfolder for person if it doesn't exist
+   2. Merge two folders using `folder-merge {path to person's subfolder} {path to unique subfolder}`
 4. Create a markdown summary of the search
 5. Output the results
 
