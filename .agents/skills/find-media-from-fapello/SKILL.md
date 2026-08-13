@@ -102,6 +102,7 @@ Thumbnails on profile pages use a similar pattern with `_300px.jpg` suffix (e.g.
 - The profile slug may differ from the person's display name. Example: Linda Lan's profile slug is `ms-lindalan`.
 - When searching, also look for the `{username}` on social media (e.g., Instagram, OnlyFans) that links to Fapello.
 - The search results page may show the slug in profile links — look for hrefs matching `/slug/` pattern.
+- **The slug may include a number suffix**: Example: `megan-thee-stallion-5` (not `megan-thee-stallion`). Try numeric suffixes when the base slug returns 404.
 
 ### Featured/Suggested Item (ID 1000)
 
@@ -114,3 +115,16 @@ Thumbnails on profile pages use a similar pattern with `_300px.jpg` suffix (e.g.
 - Some profiles have pagination that cycles (returns the same content after the first N pages).
 - Stop paginating when you notice repeated ID sets between pages.
 - The first page of a profile may show the newest content (highest IDs).
+
+### Fapello Internal Search Doesn't Work
+
+- The Fapello internal search (`fapello.com/search_v2/{query}/`) does not return results even when content exists. The search page loads but shows 0 items.
+- **Use external search instead**: Google or Bing site search (`site:fapello.com "{name}"`) to find the correct profile URL.
+- Search results show the full profile title (display names + tags) in the page title, which helps identify the correct profile.
+
+### Video Items
+
+- Some items are videos (MP4) and have both a `.jpg` thumbnail and `.mp4` video file.
+- The `.jpg` file is the thumbnail; the `.mp4` is the actual video. Download both when available.
+- Video CDN URL: `https://cdn.fapello.com/content/{l1}/{l2}/{slug}/{version}/{slug}_{ID}.mp4`
+- The video CDN may return a 302 redirect with a time-limited token — follow redirects.

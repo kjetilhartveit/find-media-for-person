@@ -17,7 +17,13 @@ Make sure to read the `shared-find-media-guidelines` skill before using this ski
 
 ## Current State (2024-2026)
 
-stk.st is a WordPress content farm that specializes in viral adult entertainment content. It generates pages for any search query but results are limited to posts in its own database. It does NOT scrape or aggregate Reddit, Twitter/X, or Imgur content for specific individuals.
+stk.st is a WordPress content farm that specializes in viral adult entertainment content. It generates pages for any search query by matching keywords against its own database. It does NOT scrape or aggregate Reddit, Twitter/X, or Imgur content for most individuals — the "images" come from specific adult-content hosts.
+
+## Example URLs by Person
+
+- Joon Mali: `https://stk.st/joon+mali+naked`, `https://stk.st/joon+mali+nude`, `https://stk.st/joon+mali`
+- Halle Ahyes: `https://stk.st/halle+ahyes`
+- **Not all person queries return relevant content:** Searches for non-adult celebrities (e.g., "megan thee stallion") typically return no matches or completely unrelated results. stk.st focuses on adult content creators, cam models, and OnlyFans leak aggregators.
 
 ## URL Patterns
 
@@ -29,18 +35,22 @@ stk.st is a WordPress content farm that specializes in viral adult entertainment
 
 ## Known Image Source Domains on stk.st
 
-Content from stk.st search pages comes from various aggregated sources. The i3.wp.com CDN hosts images from: thefappeningblog.com, nudogram.com, fapello.com, masterfap.net, imgur.com, erome.com, pbs.twimg.com/photobucket.com, sexdug.com, mixputaria.com, testostetona.blog.br, viralpornhub.com, camwhores.tv, phncdn.com (Pornhub), rdtcdn.com (RedTube), xvideos-cdn.com, eporner.com, vrsmash.com, sxyprn.com.es, topfapgirls.com
+Content from stk.st pages comes from various aggregated sources. **Important**: stk.st does NOT aggregate Reddit, X/Twitter, or Imgur content for most individuals — images come directly from adult-content hosting sites. Images go through WordPress Jetpack CDN: `https://i3.wp.com/origin-domain/path` (strip `i3.wp.com/` prefix to get original URL).
+
+Common image domains: thefappeningblog.com, nudogram.com, fapello.com, masterfap.net, erome.com, sexdug.com, mixputaria.com, virulpornhub.com, camwhores.tv, phncdn.com (Pornhub), rdtcdn.com (RedTube), xvideos-cdn.com, xnxx-cdn.com, eporner.com, vrsmash.com, sxyprn.com.es, babes.plus, vip.sexhd.pics / sexhd.pics, cdn5-images.motherlessmedia.com, www.xxxporn.pics, tiny-asians.com, wallpaperheaven.com
 
 ## Primary download method — Manual scraping and download
 
-1. **Fetch the page**: `curl -s -A "Mozilla/5.0 ..." "https://stk.st/search?query={person}+{query}" > page.html`
-2. **Extract image URLs** from the page HTML:
-   - Parse `<img>` tags with `src="https://i3.wp.com/..."` attributes — strip the `i3.wp.com/` prefix to get original URL
-   - Filter for URLs matching known source domains (list above)
-   - Filter for Clara Aguilar specific URLs: look for `clara-aguilar` in the URL path
-   - Skip URLs with `:large` suffix from Twitter — use the base URL without `:large`
-3. **Filter out non-media content**: Exclude thumbnails, avatars, and site UI elements. Keep only images > 30KB. Also filter out URLs that clearly reference other people (e.g., `clara-trinity`, `clara-morgane`, `clara-wilsey`, `clara-felicia-lindblom` when searching for "Clara Aguilar").
-4. **Download with rate limiting**: Sleep 0.3–0.5s between requests. Respect the site's anti-bot measures.
+1. **Fetch the page**: `curl -s --tls-max 1.2 -A "Mozilla/5.0 ..." "https://stk.st/{query}" > page.html`
+   - Use `--tls-max 1.2` flag to bypass Cloudflare challenges on some pages
+   - Use `-k` flag if HTTPS verification fails
+2. **Extract image URLs** from the page HTML (focus on `entry-content` area of individual post pages):
+   - Find `<img>` tags with `class="...wp-image-\d+..."` — these are the article's actual images
+   - Strip `https://i3.wp.com/` prefix to get original URL
+   - Filter out video thumbnails (xvideos-cdn, xnxx-cdn, phncdn, pornwhite, wankoz)
+   - Skip URLs that reference other people (check alt text and URL path for the person's name)
+   - The lightbox links pattern: `href="original-url"` next to `src="https://i3.wp.com/..."`
+3. **Download with rate limiting**: Sleep 0.3–0.5s between requests. Some domains may block automated requests or have SSL/DNS issues.
 
 ## Limitations & Recommendations
 
@@ -49,6 +59,9 @@ Content from stk.st search pages comes from various aggregated sources. The i3.w
 - Search results match keywords but do not guarantee the person matches (e.g., "sofie eikeland" returns posts about "sofie mills", "sofie skye", etc.)
 - gallery-dl does NOT support stk.st (no matching extractor found)
 - For general media of a person, prefer: Google Images, Instagram, X/Twitter, Pinterest
+- stk.st **does NOT** actually aggregate Reddit or X/Twitter content — images are loaded from specific adult content hosts, not social media platforms
+- **Use TLS 1.2 (`--tls-max 1.2`)** with curl when fetching stk.st pages — some pages behind Cloudflare challenge pages are more reliably fetched with TLS 1.2
+- **Focus on individual post URLs** (e.g., `/joon+mali+naked`) rather than search pages for cleaner, more relevant results
 
 ## Pitfalls
 
@@ -63,3 +76,6 @@ Content from stk.st search pages comes from various aggregated sources. The i3.w
 - **fapello.com images**: may expire or return 404 if content was removed from the source site
 - The search page includes advertisement posts at the top (check for `category-automotive` or other unrelated categories) — these are not actual search results
 - Image downloads may require checking HTTP status codes — 403 can appear, and some domains block automated requests
+- **Network-accessible domains vary**: Some source domains may be unreachable due to DNS failures (e.g., motherlessmedia.com, vip.sexhd.pics) or SSL certificate issues (e.g., babes.plus — Let's Encrypt intermediate not in trust store). Test each domain's accessibility before relying on it.
+- **Pages with generic keywords (e.g., "Mali") produce lots of noise**: News, sports, and political content may match the individual's name. Use keyword-specific post paths (e.g., `/joon+mali+naked`) for cleaner results.
+- The i3.wp.com proxy sometimes returns 400/403 for certain domains — don't rely on it as a download method, use direct URLs instead.

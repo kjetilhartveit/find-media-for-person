@@ -132,6 +132,15 @@ Use `-o "include=..."` to control what content types are downloaded from a profi
 -o "include=all"
 ```
 
+**Recommendation: run `include=tagged` as a secondary pass.** It discovers fan accounts, media accounts, and brand collaborations where the person appears but is not the post author. For example, searching tagged content for a celebrity revealed fan accounts (`theehotgirlcoach2018`, `50shadesofstallion`, `meganstallionbr`), media accounts (`revolt`, `uproxx`, `bet`, `thejayzsource`), and brand accounts (`loveislandusa`, `Netflix`, `airbnb`). Use a separate `--range 1-250` pass since it shares the range counter with the first pass.
+
+## Tagged Content Tips
+
+- **Fan accounts** often have user-edited content, fan edits, and reposts. Common naming patterns: `<username>theestallion`, `50shadesof<username>`, `theestallionbr`.
+- **Media/news accounts** (e.g., `revolt`, `uproxx`, `bet`, `essence`) often post multi-video articles with 8-12+ parts per post.
+- **Brand collaborations**: Major brands sometimes tag influencers in their posts, which can yield exclusive or unique content.
+- **Carousels can be very large**: Some tagged media posts have 15+ image/video parts. A single `--range 1-250` pass may be consumed quickly by high-count carousels from accounts like `hhucitnews`, `revolt`, `adumboy`, `theonly.mommymaki`.
+
 ## Instagram-Specific Settings
 
 - `sleep-request: [8, 16]` — wait 8–16 seconds between requests. **Do not reduce** — Instagram will 429 or invalidate the cookie.
@@ -147,3 +156,5 @@ Use `-o "include=..."` to control what content types are downloaded from a profi
 - **Long downloads need long timeouts.** A full profile download can take 10+ minutes. Set bash timeout to at least `900000`ms (15 min).
 - **`--range` counts individual media, not posts.** A carousel with 3–10 images counts each image separately. `--range 1-1000` on a profile with many carousels can yield 2000–2500+ files. Use `--range 1-250` for a reasonable number of posts. Avoid exceeding 2–3 GB total.
 - **`-o "directory=..."` bug.** Setting `-o "directory=[instagram]"` splits each character of "instagram" into a separate nested folder (`[/i/n/s/t/a/g/r/a/m/]`). Always use `-d <path>` to set the output directory instead.
+- **YouTube-dl/ytdl fallback for videos.** When direct Instagram video URLs fail, gallery-dl tries yt-dlp as fallback. If yt-dlp/youtube-dl is not installed, the fallback errors with `[downloader.ytdl][error] Cannot import yt-dlp or youtube-dl` and the video is not downloaded. Install yt-dlp for complete video coverage.
+- **`highlights` may return "No results".** Some profiles don't have public story highlights. The output message `No results for .../highlights/` is normal and not an error.

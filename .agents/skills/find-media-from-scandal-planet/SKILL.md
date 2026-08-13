@@ -22,6 +22,8 @@ Download media from Scandal Planet (https://scandalplanet.com), a WordPress-base
 - Site: `https://scandalplanet.com`
 - Celebrity page: `https://scandalplanet.com/{name-slug}/` — e.g. `scandalplanet.com/charithra-chandran/`
   - Alternate patterns: `scandalplanet.com/{name}-nude/`, `scandalplanet.com/{name}-nude1/` (e.g. `kate-hudson-nude1/`)
+  - URL slugs may have numeric/year suffixes (e.g. `bella-thorne-2023new`, `megan-thee-stallion2`) — often indicates renamed/recycled slugs or multiple versions.
+  - Name variations may redirect (e.g. `megan-thee-stallion`, `megan-thee-stallion-nude`, `megan-thee-stallion-nude1` all redirect to `megan-thee-stallion2/`)
   - Search via `?s={name}` or Google (`"{name} scandalplanet"`) if direct URL 404s
 - og:image meta tag: provides a high-quality cover image (~830x850)
 - Images: `scandalplanet.com/wp-content/uploads/{year}/{month}/{filename}-optimized.jpg`
@@ -33,10 +35,11 @@ Download media from Scandal Planet (https://scandalplanet.com), a WordPress-base
 ## Recommendations on how to download
 
 - Celebrity pages are single WordPress articles with embedded galleries and `<video>` elements.
-- **Extract full-size images:**
-  - `curl -sL "$URL" | grep -oP 'https?://[^"'"'"'<>]+\.(jpg|jpeg|png|webp)' | grep -v '180x240\|145x145'`
+- **Extract full-size images (robust method):**
+  - WordPress `srcset` attributes contain multiple sizes per image. Use a more precise extractor rather than raw grep to avoid duplicates.
+  - Python extraction approach: parse `<img>` tags with `wp-image-` class, get `src` and prefer `-scaled-optimized.jpg` or non-resized `-optimized.jpg` URLs. Filter out `145x145`, `180x240`, `295x295` thumbnails and intermediate sizes (`-\d+x\d+-optimized`).
+  - Alternative: use gallery-dl with `--config` pointing to a custom extractor config.
   - Alternatively fetch og:image meta tag for the cover image.
-  - WordPress `srcset` attributes list multiple sizes (`-841x550-optimized.jpg`, `-1536x1005-optimized.jpg`, `-2048x1340-optimized.jpg`). Use `-scaled-optimized.jpg` variant if available for largest.
 - **Extract videos:**
   - `curl -sL "$URL" | grep -oP 'https?://[^"'"'"'<>]+\.mp4'`
   - Videos use `<video><source src="{mp4_url}">` — direct MP4 download.

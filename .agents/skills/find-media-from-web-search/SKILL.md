@@ -94,6 +94,15 @@ Large JS-heavy websites (typical news sites) are 50-300KB of HTML full of ad scr
 - Full-size originals are usually on the source platform (Instagram) and may require downloading from there directly.
 - Look for `data-orig`, `srcset`, or `data-src` attributes for higher quality variants.
 
+## Known Gallery/Celebrity Site Patterns
+
+- **celeb.gate.cc**: Celebrity nude/revealing photos gallery. Images are in `data-orig` attributes of `<img>` tags. Two URL patterns:
+  - Thumbnail (headshot): `https://celeb.gate.cc/media/cache/headshot/upload/m/e/{person}-{id}.jpg` (smaller)
+  - Full-size (data-orig): `http://celeb.gate.cc/media/cache/image/upload/m/e/{person}-{id}.jpg` (higher quality, note `http://` not `https://`)
+  - Gallery pages: `/megan-thee-stallion/gallery.html`, `/megan-thee-stallion/gallery2.html` (etc.)
+  - Extract pattern: `data-orig="http://celeb.gate.cc/media/cache/image/upload/m/e/{pattern}-\d+\.jpg"`
+  - Filter: use `-A "Mozilla/5.0 ..."` User-Agent and `-H "Referer: https://celeb.gate.cc/"`
+
 ## Pitfalls
 
 - **Image URLs may be relative** — e.g. `/upload/2026/05/...` on allkpop needs the domain prepended.

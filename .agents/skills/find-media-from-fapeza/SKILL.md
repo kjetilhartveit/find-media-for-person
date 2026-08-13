@@ -21,7 +21,12 @@ Download images from Fapeza (https://fapeza.com), an aggregator site of leaked/n
 
 - Profile: `https://fapeza.com/{slug}/` (e.g., `fapeza.com/emily-ratajkowski/`)
 - Media items follow sequential ID pattern
-- Page title may contain alternate names: `Linda Lan / foodsandnood.s / lindarainbow Nude Leaks OnlyFans - Fapeza`. Try alternate names as additional slugs to check for more content (though these often return 404 if Fapeza has removed old slugs).
+- Page title may contain alternate names: `Linda Lan / foodsandnood.s / lindarainbow Nude Leaks OnlyFans - Fapeza`. Try alternate names as additional slugs to check for more content.
+- **Note:** Some models never appear on Fapeza (e.g., Joon Mali — profile returned 404 on all slugs tried, site search returned 0 results in August 2026). Always verify by searching the site first (`fapeza.com/search?q=NAME`) before assuming a profile exists.
+- Multiple profile slugs can exist for the same person under different aliases (e.g., "Megan" appeared as both `megan` and `megan-thee-stallion-1`).
+- **Important:** Always use the non-www domain (`fapeza.com`). The `www.` domain triggers a Cloudflare JS challenge (returns 401).
+- Country-specific TLDs also exist: `cz.fapeza.com`, `de.fapeza.com`, `es.fapeza.com`, `fr.fapeza.com`, etc.
+- Profile slug may not match the exact display name. Try variations: full name, shortened name, underscore vs hyphen.
 
 ## Recommendations on how to download
 
@@ -58,6 +63,9 @@ Download images from Fapeza (https://fapeza.com), an aggregator site of leaked/n
 - Image URLs in the page source are thumbnail URLs with `_400px.` suffix — remove `_400px.` to get the full-size image.
 - Some posts (e.g., id 22) may live in a different folder (e.g., `1000`) than the recent ones (`2000`). Always use the direct URL from the page source.
 - cloudscraper works reliably; no bot protection issues encountered.
+- **Post ID 1000 on profile pages contains "related/recommended posts" from OTHER creators**, not profile content. When collecting images from profile pages, filter to only keep images with the profile's slug prefix (e.g., `megan_0021.jpg` not `jennierubyjane_0164.jpg`).
+- Some individual post pages have only 1 image instead of the typical 2 (e.g., posts 38, 449, 453).
+- Similar-looking slugs may be different people (e.g., "megan-stallion" vs "megan-thee-stallion-1") — verify by checking the page title before downloading.
 
 ## Typical stats
 

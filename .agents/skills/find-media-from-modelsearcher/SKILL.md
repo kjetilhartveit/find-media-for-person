@@ -53,6 +53,7 @@ gallery-dl does NOT support modelsearcher as an extractor. Must use web scraping
 - Not all models have profiles here - it's OnlyFans-specific
 - The site primarily links to paid OnlyFans subscriptions
 - Images on the site are teaser/thumbnail images from OnlyFans
+- Thai adult performers/pornstars (like Joon Mali) often NOT listed - focus on OnlyFans content creators, not mainstream adult film stars
 
 ## Pitfalls
 
@@ -60,3 +61,4 @@ gallery-dl does NOT support modelsearcher as an extractor. Must use web scraping
 - Cloudflare blocks automated curl requests
 - Search functionality may not return accurate results for specific names
 - The site is focused on adult/OnlyFans content - may not have mainstream influencers
+- ModelsSearcher is NOT a comprehensive directory of all adult performers; many models are not listed

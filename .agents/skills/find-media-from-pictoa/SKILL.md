@@ -68,4 +68,6 @@ When `gallery-dl` is unavailable or fails:
 - **Search returns 404 for non-existent queries.** If the search query has no results, the search URL may return 404 (not just 200 with No Results text).
 - **Gallery ID regex challenge.** Album names contain dashes, so `[^-]+` pattern won't work. Use regex like `albums/.*?-(\d{7})` to extract the 7-digit gallery ID, or `albums/.*?-(\d{7})/\d+\.html` for nested paths.
 - **Two album URL formats.** Some album links have a trailing `/image-id.html` (e.g., `/albums/kate-hudson-booty-3228997/75141781.html`). Extract the first 7-digit number after `-` as the gallery ID.
-- **Image filtering by gallery ID.** The gallery ID (7 digits before `.html`) must be in the image URL path on the album page to filter out related gallery thumbnails.
+- **Image filtering by gallery ID.** The gallery ID (7 digits before `.html`) must be in the image URL path on the album page to filter out related gallery thumbnails. Album pages include `data-lazy-src` images from related/recommended galleries — only keep URLs containing the target gallery ID.
+- **gallery-dl does not support pagination URLs.** Passing `-p2.html`, `-p3.html` etc. to gallery-dl returns "Unsupported URL". The extractor only handles the main album URL (`-p1.html` implicitly). To download all images from paginated albums, use the manual extraction fallback method.
+- **Pagination may not add new unique images.** When filtering by gallery ID, pagination page images are often duplicates of page 1 images. Check page 1 first before downloading all pagination pages.

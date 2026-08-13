@@ -20,31 +20,38 @@ Download images and videos from FapMenu (https://fapmenu.com), a large aggregato
 ## URL Patterns
 
 - Site: `https://fapmenu.com`
-- Profile: `https://fapmenu.com/{slug}/` — try the person's name first (e.g. `halle-hayes/`)
-- Aliases: Some profiles exist under multiple slugs — if one returns empty, try alternatives (e.g. `hallehayes1`, `hallehayesvip`, `the_real_halle_hayes`). These aliases may be referenced on the profile or via their social media bio links.
-- Names with common first names may match the wrong person (e.g. `sofie/` matches "Sofie Ivars" not "Sofie Eikeland"). Always verify the profile name and aliases listed on the page to ensure it's the correct person.
-- Item URLs: `https://fapmenu.com/media/{id}` — sequentially numbered items
-- Image source: WEBP format, URLs follow `/media/{id}` pattern
+- Profile: `https://fapmenu.com/{slug}/` — try the person's name first (e.g., `halle-hayes/`)
+- Suffix aliases: When multiple profiles exist, slugs use a numeric suffix (e.g., `megan-thee-stallion-3/`, `megan-thee-stallion-4/`). Try searching for the person first.
+- Aliases: Some profiles exist under multiple slugs — if one returns empty, try alternatives (e.g., `hallehayes1`, `hallehayesvip`, `the_real_halle_hayes`). These aliases may be referenced on the profile or via their social media bio links.
+- Names with common first names may match the wrong person (e.g., `sofie/` matches "Sofie Ivars" not "Sofie Eikeland"). Always verify the profile name and aliases listed on the page to ensure it's the correct person.
+
+## Image URL Patterns
+
+- Full-size: `/models/{1st_char}/{2nd_char}/{slug}/1/full/{slug}_nude_XXXX.webp`
+  - Example: `/models/m/e/megan-thee-stallion-3/1/full/megan-thee-stallion-3_nude_0001.webp`
+  - The 1st/2nd chars are first/second chars of the slug (e.g., m/e for megan-thee-stallion-3)
+- Thumbnail: `/models/{1st_char}/{2nd_char}/{slug}/1/300px/{slug}_nude_XXXX_300px.webp`
+  - To get full-size URL from thumbnail: replace `300px` → `full` and remove `_300px` from filename
+
+## Search
+
+- Search endpoint: POST to `https://fapmenu.com/search` with body `searchVal={name}`
+- Search form uses field name `searchVal`
+- Results contain profile links like `/slug/`
+- Search is client-side rendered; use curl POST, not GET
 
 ## Primary download method — Manual scraping of paginated profile
 
-1. **Fetch the profile page**: `curl -s "https://fapmenu.com/{slug}/" > page.html`
-2. **Extract item URLs** from the page HTML:
-   - Look for links or image sources referencing `/media/` followed by numeric IDs
-   - IDs are sequential (e.g., 1, 2, 3...) — scrape all IDs listed on the page
-   - Page 1 typically has ~25 items, with pagination providing subsequent pages
-3. **Pagination**: If pagination exists, scrape each page to collect all media IDs. FapMenu profiles may have 100+ items across multiple pages.
-4. **Download images**: For each media ID, fetch `https://fapmenu.com/media/{id}` and extract the actual image URL or download directly. Files are typically in WEBP format.
+1. **Fetch the profile page**: `curl -sL "https://fapmenu.com/{slug}/page/{page}/" > page.html`
+2. **Extract image URLs** from the page HTML:
+   - Look for `src="/models/{...}/{slug}/1/300px/{slug}_nude_XXXX_300px.webp"` in `<img>` tags
+   - Each page typically has ~25 images
+   - Remove leading `src="` and trailing `"` and the `/300px/{slug}_nude_\d+_300px` → `/full/{slug}_nude_\d+` pattern to convert to full-size paths
+   - Prepend `https://fapmenu.com` to create full URLs
+3. **Pagination**: Check which pages exist by iterating page numbers. Each page usually has 25 images. Stop when a page has no images.
+  - Note: The avatar image (often showing up as `nude_0001` or near the start) may appear on every page — deduplicate when collecting across pages.
+4. **Download images**: Fetch `https://fapmenu.com/{image_path}` and save as `.webp`. Files are typically WEBP format.
 5. **Rate limiting**: Sleep 0.3–0.5s between requests. Respect the site's anti-bot measures.
-
-## Fallback — Direct ID scanning
-
-If scraping page URLs fails, scan sequential IDs:
-
-1. Start at ID 1 and increment
-2. For each ID, try fetching `https://fapmenu.com/media/{id}`
-3. Stop when you get consistent 404s (end of content)
-4. Note: Some IDs may be missing (gaps in sequence) — skip these gracefully
 
 ## Quality
 
@@ -55,7 +62,8 @@ If scraping page URLs fails, scan sequential IDs:
 
 ## Pitfalls
 
-- Multiple alias slugs may exist for the same person — try all if the primary slug yields no results
+- Multiple alias slugs may exist for the same person — search is the best way to find all profiles
+- The primary slug without a number (e.g., `megan-thee-stallion/`) may return 404 and won't work
 - Profile may return 200 with no media items — this means the profile either doesn't exist for that person or is private
 - Some sequential IDs may not exist (gaps) — handle gracefully
 - WEBP format requires conversion for some viewers — consider converting to JPG if needed
