@@ -87,6 +87,16 @@ Large JS-heavy websites (typical news sites) are 50-300KB of HTML full of ad scr
 
 - Include social media handles: `"<handle> bikini"`, `"@<handle> photos"`
 - Target image-heavy sites in search.
+- For explicit/deepfake content, try specific aggregator sites: `thotdeep.com`, `sexcelebrity.net`, `realdeepfakes.com`, `stk.st`. These have dedicated celebrity categories.
+- For deepfake content of musicians, use full legal names (e.g. "Tyla Laura Seethal") in combination with mononym ("Tyla").
+- Search on adult tube sites using variations: tube queries may return content tagged under the person's legal name or mononym.
+
+## Deepfake / Adult Aggregator Site Notes
+
+- **ThotDeep** (thotdeep.com): Dedicated deepfake porn site with celebrity categories. URLs for thumbnails (e.g. `cdn*.thotdeep.com/images/thotdeep/*/thumbnail.jpg`) often return HTML error pages instead of real images — always verify with `file` command. Profile images (e.g. `img-st*.thotdeep.com/*/player.jpg`) are usually real images. All content is AI-generated/fakeswap — not real footage.
+- **SexCelebrity** (sexcelebrity.net): Search-based site for "person + creampie/deepfake". May return 504 errors.
+- **RealDeepFakes** (realdeepfakes.com): Social platform for deepfake creators. Requires login for full access. Search has many results per celebrity.
+- **stk.st**: General celebrity adult content aggregator. Search with queries like `person+leak` or `person+facial`.
 
 ## Quality Notes
 
