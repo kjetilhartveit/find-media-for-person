@@ -46,14 +46,24 @@ When gallery-dl is unavailable or fails:
 
 ## Quality
 
-- Image quality is modest: files range from ~24KB to ~167KB.
-- Resolutions are typically 480–576px wide, with occasional higher-res images (up to 1280×720 observed).
-- No videos observed in some albums — content is image-heavy.
-- Content quality varies by uploader; search results are limited per person.
+- **Images**: modest quality, files range from ~24KB to ~250KB, typically 480–576px wide, occasional higher-res (up to 1280×720 observed).
+- **Videos**: typically 720p quality, can be large (1MB–240MB+). Videos are served from `v{number}.erome.com` with `_720p.mp4` suffix.
+- Content quality varies significantly by uploader.
+- Some content is from dedicated content creators/farms (e.g., "Gloryhole-Top-Secrets", "Gangbang-Creampie-Secrets", "PrettyDirtySluts") that post multiple albums per person.
+
+## Known Sources with High-Value Content
+
+- **Gloryhole-Top-Secrets**: Posts multiple albums per person focusing on facial/cumshot content.
+- **Gangbang-Creampie-Secrets**: Post gangbang/creampie themed content.
+- **PrettyDirtySluts**: Posts explicit solo/couple content.
+- **ESPOSASAFADINHA**: Posts leaked/personal content.
+- **GoingOutofBusiness**: Posts studio/performance content.
 
 ## Pitfalls
 
 - Album pages may be behind Cloudflare protection in some cases.
 - Erome filenames are random IDs — no semantic naming for downloaded files.
-- Search results per person may be limited (only 2 albums found for "Charithra Chandran").
+- Search results per person may vary widely in quantity (2–9+ albums observed).
 - Some albums may have duplicate images shared across albums.
+- Video downloads can be slow due to file sizes; consider rate-limiting for large batches.
+- Gallery-dl search downloads handle all albums at once; individual album downloads can be used for targeted fetching.
