@@ -87,16 +87,6 @@ curl -sL -H "User-Agent: Mozilla/5.0" \
 5. Images in galleries are typically high-res (1080p+)
 6. Gallery images can be downloaded without authentication
 
-## Recent findings (Linda Lan search, Aug 2026)
-
-- Video listings on `/pornstar/{name}/videos` pages are **dynamically loaded via JavaScript** - the raw HTML contains no video data. Video thumbnails and keys are added after page load by AJAX calls.
-- The `PornhubUserExtractor` and `PornhubPhotosExtractor` **do not automatically discover galleries** from `/model/` or `/pornstar/` profile pages. You must extract album IDs from the page HTML first, then feed them directly to gallery-dl as explicit URLs.
-- Model profile pages (`/model/{name}`) link to albums as `/album/{id}` — these can be extracted with: `grep -oP 'href="/album/\d+"' page.html | sort -u`
-- Video thumbnails can be scraped directly from any page containing video content: `grep -oP 'https://ei\.phncdn\.com/videos/[a-zA-Z0-9_/]+/original/[^\s"\']+\.jpg' page.html`
-- GIFs appear on model pages: `grep -oP 'https://ei\.phncdn\.com/pics/gifs/[a-zA-Z0-9_/]+/[^\s"\']+\.(gif|jpg)' page.html`
-- The `/pornstar/{name}/videos?o=mv` sort parameter works (mv = most viewed; other options: tr = trending, lg = longest). But content is JS-rendered.
-- The profile avatar may be dynamically loaded and not always visible in raw HTML.
-
 ## Pitfalls
 
 - **Video downloads fail** - PornHub CDN (phncdn.com) returns HTTP 470/403 without proper session cookies. yt-dlp tries impersonation but fails if no browser is available.

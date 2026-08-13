@@ -1,4 +1,7 @@
-# Skill: find-media-from-xasiat
+---
+name: find-media-from-xasiat
+description: Use when you need to find and download media from Xasiat (xasiat.com), an aggregator of leaked adult content, particularly Asian models.
+---
 
 # When to use this skill
 
@@ -57,6 +60,7 @@ yt-dlp --restrict-filenames -o "%(title)s.%(ext)s" \
 ## Video pages often show content from multiple models/collections
 
 When scraping a model page, the HTML may list videos in section blocks. Some videos may be from different models. Always verify:
+
 1. Video title matches the model name
 2. Description matches the model name (shows model name, not just "Thaiswinger" or collection name)
 

@@ -132,8 +132,6 @@ Use `-o "include=..."` to control what content types are downloaded from a profi
 -o "include=all"
 ```
 
-**Recommendation: run `include=tagged` as a secondary pass.** It discovers fan accounts, media accounts, and brand collaborations where the person appears but is not the post author. For example, searching tagged content for a celebrity revealed fan accounts (`theehotgirlcoach2018`, `50shadesofstallion`, `meganstallionbr`), media accounts (`revolt`, `uproxx`, `bet`, `thejayzsource`), and brand accounts (`loveislandusa`, `Netflix`, `airbnb`). Use a separate `--range 1-250` pass since it shares the range counter with the first pass.
-
 ## Tagged Content Tips
 
 - **Fan accounts** often have user-edited content, fan edits, and reposts. Common naming patterns: `<username>theestallion`, `50shadesof<username>`, `theestallionbr`.

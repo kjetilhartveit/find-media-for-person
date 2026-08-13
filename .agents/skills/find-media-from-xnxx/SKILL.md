@@ -1,4 +1,7 @@
-# Skill: find-media-from-xnxx
+---
+name: find-media-from-xnxx
+description: Use when you need to find and download media from XNXX (xnxx.com), a pornographic video sharing website.
+---
 
 ## Main website
 

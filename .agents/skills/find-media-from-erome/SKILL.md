@@ -65,17 +65,6 @@ When gallery-dl is unavailable or fails:
 - **Digitaldash**: Posts celebrity PMV and edited content.
 - **Celebs_Trending**: Posts trending celebrity content with emojis in titles.
 
-## Search Strategy & Pitfalls — Updated 2026-08-13
-
-- **No dedicated user profiles for most celebrities**. User pages like `erome.com/megantheestallion`, `erome.com/megan_stallion` return 404 even when album links are visible in page HTML. Do NOT rely on gallery-dl User extractor for celebrities.
-- **Erome search returns false positives**. Search results include unrelated albums (other celebrities, general content). After downloading, filter by filename/album title containing the person's name.
-- **Erome search is unreliable**. The `EromeSearchExtractor` and even direct HTML search often return "No results" for model names even when a matching user page exists. Try multiple search queries: `query`, `first+last`, `firstlast` (no space), and variations.
-- **gallery-dl User extractor can fail** with 404. If the user URL fails, download individual albums using their IDs extracted from the HTML.
-- **Album titles may use abbreviations** like "Meg" or "Megs". Check both full name and common abbreviations when filtering.
-- **Gallery-dl search downloads batched albums** (~20-30 per run). For larger result sets (50-100+ albums), split URL lists into batch files and process sequentially.
-- **Pagination**: User pages typically have multiple pages. Check `?page=2`, `?page=3`, etc. to get all albums.
-- **Gallery-dl gallery directory config**: Don't use nested dict config for archive (e.g., `{'archive': {'file': '...'}}`); use flat string format.
-
 ## Download Filtering Tips
 
 - After downloading, filter files by checking filename for the person's name.

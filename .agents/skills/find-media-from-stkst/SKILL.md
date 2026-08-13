@@ -15,14 +15,10 @@ Make sure to read the `shared-find-media-guidelines` skill before using this ski
 
 # Find media from stk.st
 
-## Current State (2024-2026)
-
 stk.st is a WordPress content farm that specializes in viral adult entertainment content. It generates pages for any search query by matching keywords against its own database. It does NOT scrape or aggregate Reddit, Twitter/X, or Imgur content for most individuals — the "images" come from specific adult-content hosts.
 
 ## Example URLs by Person
 
-- Joon Mali: `https://stk.st/joon+mali+naked`, `https://stk.st/joon+mali+nude`, `https://stk.st/joon+mali`
-- Halle Ahyes: `https://stk.st/halle+ahyes`
 - **Not all person queries return relevant content:** Searches for non-adult celebrities (e.g., "megan thee stallion") typically return no matches or completely unrelated results. stk.st focuses on adult content creators, cam models, and OnlyFans leak aggregators.
 
 ## URL Patterns
