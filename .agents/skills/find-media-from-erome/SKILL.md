@@ -46,8 +46,9 @@ When gallery-dl is unavailable or fails:
 
 ## Quality
 
-- **Images**: modest quality, files range from ~24KB to ~250KB, typically 480–576px wide, occasional higher-res (up to 1280×720 observed).
-- **Videos**: typically 720p quality, can be large (1MB–240MB+). Videos are served from `v{number}.erome.com` with `_720p.mp4` suffix.
+- **Images**: modest quality, files range from ~10KB to ~300KB, typically 480–576px wide, occasional higher-res (up to 1280×720 observed).
+- **Videos**: typically 720p quality, can be large (1MB–17MB+). Videos are served from `v{number}.erome.com` with `_720p.mp4` suffix.
+- Some video albums contain very large individual files (e.g., "Absolute perfection" by TheGoat47: 25+ videos totaling 650MB+ from a single album).
 - Content quality varies significantly by uploader.
 - Some content is from dedicated content creators/farms (e.g., "Gloryhole-Top-Secrets", "Gangbang-Creampie-Secrets", "PrettyDirtySluts") that post multiple albums per person.
 
@@ -69,12 +70,19 @@ When gallery-dl is unavailable or fails:
 
 - After downloading, filter files by checking filename for the person's name.
 - Remove incomplete downloads (.part files) after filtering.
+- Inspect results before bulk downloading: use `gallery-dl -J URL` to dump JSON and `gallery-dl --get-urls URL` to see album list first.
+- Filter out AI-generated content: users like `AiCelebrityy`, `ThaHxncho`, `Xgalicialol`, `Botman32`, `KustomEditz` frequently post AI/fake content, not real media of the person.
+- Filter out non-relevant "Tyla" variants: search results often include content about different people named "Tyla" (Tyla Wynn, Coco Tyla, Tyla Moore, Tyla Tyler, etc.).
+- Content farm albums like "BJ Toy" by `Giltypleasure` or "gyrate" by `Giltypleasure` often appear in search results but are unrelated ads.
+- For high-volume searches, consider downloading album-by-album in batches rather than all at once (search results can return 48+ albums).
 
 ## Pitfalls
 
 - Album pages may be behind Cloudflare protection in some cases.
 - Erome filenames are random IDs — no semantic naming for downloaded files.
-- Search results per person may vary widely in quantity (2–9+ albums observed).
+- Search results per person can be very large (48+ albums), leading to timeouts; download in batches.
 - Some albums may have duplicate images shared across albums.
 - Video downloads can be slow due to file sizes; consider rate-limiting for large batches.
 - Gallery-dl search downloads handle all albums at once; individual album downloads can be used for targeted fetching.
+- Gallery-dl `-d` destination argument can create nested directory structures (`erome/erome/`) in certain invocation patterns — flatten after download.
+- When using `gallery-dl -i` with an input file of URLs, the download destination parameter may create a nested `erome/` directory that needs flattening.
