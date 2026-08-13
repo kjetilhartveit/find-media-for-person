@@ -65,6 +65,10 @@ When gallery-dl is unavailable or fails:
 - **djkidrich**: Posts large collections (100+ images) of celebrity content.
 - **Digitaldash**: Posts celebrity PMV and edited content.
 - **Celebs_Trending**: Posts trending celebrity content with emojis in titles.
+- **funika**: Posts Romanian celebrity content in compilations (e.g., "ROMANIAN FAMOUS BEAUTYS WHO WOULD LOOK HOT IN A PORN SCENE") and solo albums. Tags albums with person name.
+- **miillffss**: Posts dedicated albums per person (e.g., "INNA LOVE 1", "INNA LOVE 3") with large image sets (35-78 images per album).
+- **Dclotta**: Posts INNA music video re-edits (e.g., "INNA - 'INNdiA' MV [Sexy Lesbian Re-Edit]", "INNA - 'Cola Song' [Bikini Dancing Edit]").
+- **Zwood007**: Posts German model content in series (e.g., "Inna Blank 52yo German slut", "Inna Blank 53 Brandenburg").
 
 ## Download Filtering Tips
 
@@ -73,8 +77,11 @@ When gallery-dl is unavailable or fails:
 - Inspect results before bulk downloading: use `gallery-dl -J URL` to dump JSON and `gallery-dl --get-urls URL` to see album list first.
 - Filter out AI-generated content: users like `AiCelebrityy`, `ThaHxncho`, `Xgalicialol`, `Botman32`, `KustomEditz` frequently post AI/fake content, not real media of the person.
 - Filter out non-relevant "Tyla" variants: search results often include content about different people named "Tyla" (Tyla Wynn, Coco Tyla, Tyla Moore, Tyla Tyler, etc.).
+- Filter out other-name variants: common names like "Inna" often return results for multiple people (German models named Inna, Ukrainian models, adult entertainers, etc.). Use tags like `#romania`, album titles mentioning singer/music, or user source to distinguish.
+- Filter out "inna" as slang: the word "inna" (slang for "in a") appears in many unrelated album titles (e.g., "Sucking dick inna car!", "cumtribute inna spot"). These are noise, not the person's name. Look for capitalized "INNA" or clear person references.
 - Content farm albums like "BJ Toy" by `Giltypleasure` or "gyrate" by `Giltypleasure` often appear in search results but are unrelated ads.
 - For high-volume searches, consider downloading album-by-album in batches rather than all at once (search results can return 48+ albums).
+- gallery-dl output file structure varies: some albums create `USERNAME/FILENAME` (flat), others `USERNAME/ALBUM_ID Filename` (nested). Handle both patterns when moving files.
 
 ## Pitfalls
 
