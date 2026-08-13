@@ -87,7 +87,7 @@ Large JS-heavy websites (typical news sites) are 50-300KB of HTML full of ad scr
 
 - Include social media handles: `"<handle> bikini"`, `"@<handle> photos"`
 - Target image-heavy sites in search.
-- For explicit/deepfake content, try specific aggregator sites: `thotdeep.com`, `sexcelebrity.net`, `realdeepfakes.com`, `stk.st`. These have dedicated celebrity categories.
+- For explicit/deepfake content, try specific aggregator sites: `thotdeep.com`, `sexcelebrity.net`, `realdeepfakes.com`. stk.st does NOT have dedicated person pages — use search queries or try other sources instead.
 - For deepfake content of musicians, use full legal names (e.g. "Tyla Laura Seethal") in combination with mononym ("Tyla").
 - Search on adult tube sites using variations: tube queries may return content tagged under the person's legal name or mononym.
 
@@ -96,7 +96,28 @@ Large JS-heavy websites (typical news sites) are 50-300KB of HTML full of ad scr
 - **ThotDeep** (thotdeep.com): Dedicated deepfake porn site with celebrity categories. URLs for thumbnails (e.g. `cdn*.thotdeep.com/images/thotdeep/*/thumbnail.jpg`) often return HTML error pages instead of real images — always verify with `file` command. Profile images (e.g. `img-st*.thotdeep.com/*/player.jpg`) are usually real images. All content is AI-generated/fakeswap — not real footage.
 - **SexCelebrity** (sexcelebrity.net): Search-based site for "person + creampie/deepfake". May return 504 errors.
 - **RealDeepFakes** (realdeepfakes.com): Social platform for deepfake creators. Requires login for full access. Search has many results per celebrity.
-- **stk.st**: General celebrity adult content aggregator. Search with queries like `person+leak` or `person+facial`.
+- **stk.st** (stk.st): General celebrity adult content aggregator. NOTE: `stk.st/{person}` URLs do NOT show person-specific content — they show a generic gallery. Use `stk.st/search?query=person+leak` instead. Image URLs follow pattern: `https://i3.wp.com/{cdn}/{path}/{filename}.jpg`.
+- **stk.st** images are served from multiple CDNs: `i3.wp.com`, `i0.wp.com`, `i2.wp.com`, `i1.wp.com` (WordPress.com CDN). The CDN host in the URL is variable.
+
+## Celebrity Nude Photo Aggregators
+
+These sites maintain dedicated galleries per celebrity and are high-value sources:
+
+- **AZNude** (aznude.com): 80+ photos for major celebs. Celebrity pages at `/view/celeb/{initial}/{slug}-{id}.html`. Image URLs: `https://user-uploads.aznude.com/data/azncdn/{hash}/{hash}.jpg` for full-size, `data/thumbs/{hash}/{hash}.jpg` for thumbnails. Use `curl` to extract URLs from HTML — the full-size URLs contain the same hash as the thumbnail.
+- **CelebGate** (celeb.gate.cc): Dedicated celebrity nude photo gallery site. Gallery at `/{slug}/gallery.html`. Image URLs: `http://celeb.gate.cc/media/cache/image/upload/t/{initial}/{slug}-{id}.jpg` (use `data-orig` attribute for full-size, replace `http` with `https`).
+- **CelebHub** (celebhub.net): Similar format. Celebrity page at `/celebrity/{slug}`.
+- **Babepedia** (babepedia.com): Profile pages with user-uploaded photos. Images at `/pics/{Slug}.jpg` (main), `/pics/{Slug}N.jpg` (additional). Also has `/user-uploads/` directory for community uploads. Useful for aliases/biographical data.
+
+## Fashion/Reveal Article Sources
+
+These sites regularly post about celebrities in revealing outfits:
+
+- **TheFashionSpot** (thefashionspot.com): High-quality fashion photos of celebs in revealing outfits. URL pattern: `/fashion-news/{id}-{slug}/`. Images from Getty Images CDN.
+- **Harper's Bazaar** (harpersbazaar.com): Fashion articles with Getty Images. Pattern: `/celebrity/latest/{id}-{slug}/`.
+- **inStyle** (instyle.com): Celebrity fashion articles with high-quality photos.
+- **WWD** (wwd.com): Celebrity style galleries.
+- **Reality Tea** (realitytea.com): Articles about celebrity revealing fashion.
+- **The Sun** (the-sun.com): Celebrity fashion news with photos from `s-uk.illumservice.com` CDN.
 
 ## Quality Notes
 
