@@ -20,10 +20,12 @@ PornHub profile, gallery, album, and video page URLs.
 ## URL Patterns
 
 - **Profile**: `pornhub.com/pornstar/{name}` or `pornhub.com/pornstar/{name}/videos`
+- **Model profile**: `pornhub.com/model/{name}` - may have additional galleries/albums not shown on pornstar page
 - **Album**: `pornhub.com/album/{id}`
 - **Photo gallery**: `pornhub.com/album/viewphotos?albumId={id}`
 - **Single video**: `pornhub.com/view_video.php?viewkey={phXXXXX}`
-- **Search**: `pornhub.com/video/search?search={query}`
+- **Search**: `pornhub.com/video/search?searchterm={query}` (newer format; older `view_video.php?searchkey=` still works but may return unrelated results)
+- **Playlists**: `pornhub.com/pornstar/{name}/videos?o=mr&page=N` - pagination for model pages
 
 ## Primary method — gallery-dl (for images)
 
@@ -40,6 +42,32 @@ yt-dlp -o "%(title)s.%(ext)s" "https://www.pornhub.com/pornstar/halle-hayes"
 ```
 
 **Requires**: playwright browser impersonation (`impersonate:browser=chrome`) for video downloads to work.
+
+### Fallback: Extract HLS URLs from HTML and download
+
+When yt-dlp fails but the video page returns HTML, extract the HLS URL directly:
+
+```bash
+# 1. Get the video page HTML
+curl -sL "https://www.pornhub.com/view_video.php?viewkey=phXXXXXXXX" \
+  -H "User-Agent: Mozilla/5.0" > page.html
+
+# 2. Extract the default quality HLS URL (use Python to unescape JSON)
+python3 -c "
+import re, json
+page = open('page.html').read()
+m = re.search(r'defaultQuality[^}]*\"videoUrl\":\"([^\"]+)\"', page)
+if m:
+    url = m.group(1)
+    url = json.loads('\"' + url + '\"')
+    print(url)
+"
+
+# 3. Download with yt-dlp using the extracted HLS URL
+yt-dlp --referer "https://www.pornhub.com/" \
+  --user-agent "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36" \
+  -o "video.%(ext)s" "https://hv-h.phncdn.com/hls/videos/.../master.m3u8?..."
+```
 
 ## Cloudscraper method — extracting image URLs
 
@@ -59,6 +87,16 @@ curl -sL -H "User-Agent: Mozilla/5.0" \
 5. Images in galleries are typically high-res (1080p+)
 6. Gallery images can be downloaded without authentication
 
+## Recent findings (Linda Lan search, Aug 2026)
+
+- Video listings on `/pornstar/{name}/videos` pages are **dynamically loaded via JavaScript** - the raw HTML contains no video data. Video thumbnails and keys are added after page load by AJAX calls.
+- The `PornhubUserExtractor` and `PornhubPhotosExtractor` **do not automatically discover galleries** from `/model/` or `/pornstar/` profile pages. You must extract album IDs from the page HTML first, then feed them directly to gallery-dl as explicit URLs.
+- Model profile pages (`/model/{name}`) link to albums as `/album/{id}` — these can be extracted with: `grep -oP 'href="/album/\d+"' page.html | sort -u`
+- Video thumbnails can be scraped directly from any page containing video content: `grep -oP 'https://ei\.phncdn\.com/videos/[a-zA-Z0-9_/]+/original/[^\s"\']+\.jpg' page.html`
+- GIFs appear on model pages: `grep -oP 'https://ei\.phncdn\.com/pics/gifs/[a-zA-Z0-9_/]+/[^\s"\']+\.(gif|jpg)' page.html`
+- The `/pornstar/{name}/videos?o=mv` sort parameter works (mv = most viewed; other options: tr = trending, lg = longest). But content is JS-rendered.
+- The profile avatar may be dynamically loaded and not always visible in raw HTML.
+
 ## Pitfalls
 
 - **Video downloads fail** - PornHub CDN (phncdn.com) returns HTTP 470/403 without proper session cookies. yt-dlp tries impersonation but fails if no browser is available.
@@ -67,3 +105,13 @@ curl -sL -H "User-Agent: Mozilla/5.0" \
 - **Cloudscraper works but CDN is protected** - Basic page fetching works, but direct CDN links need cookies
 - **Video stream URLs** - HLS playlists (m3u8) and segmented MP4s require proper decryption tokens
 - **No gallery-dl for videos** - Only supports image galleries, not full videos
+- **Retired pornstar profiles return 410 Gone** - For retired models, `pornstar/{name}/videos` and `model/{name}/videos` return 410. The main profile page (`pornstar/{name}`) may still show thumbnails and links.
+- **YouTube-dlp may fail while curl works** - curl may return 200 on video pages where yt-dlp returns 410 (different UA/SNI behavior). Extract HLS URLs from HTML and pipe to yt-dlp directly.
+- **Albums survive profile removal** - Even when a pornstar's profile is gone, their photo albums remain accessible via `pornhub.com/album/{id}`
+- **gallery-dl doesn't support video search** - Only image galleries. Use `pornhub.com/video/search?searchterm={query}` with curl for video discovery.
+- **Search results may include unrelated content** - When searching for a name (e.g., "joon mali"), results can include videos with matching words in titles (e.g., "Mali Ubon", "Little Maly", "my tiny dyke friends") that are NOT the target model. Always verify video content before downloading.
+- **Model/performer video pages return 410 Gone** - For many models, both `/model/{name}/videos` and `/pornstar/{name}/videos` return 410. The main profile page may also be gone. Some individual videos with direct links may still work temporarily. Video keys that include `&pkey=` parameters are often expired. Check the video URL first (`--simulate`) before attempting to download.
+- **Gallery-dl for HLS URLs**: The reliable pattern to extract and decode HLS URLs from video page HTML: extract `"videoUrl"` JSON values, then `url.replace('\\/', '/')` followed by `.encode().decode('unicode_escape', errors='replace')`. This handles escaped JSON string encoding properly. Then pass the decoded URL to yt-dlp with `--referer https://www.pornhub.com/`.
+- **Non-existent profiles (301 redirect)** - Profile URLs for non-pornstars (celebrities, mainstream figures, people with no Pornhub account) return HTTP 301 redirect to `/pornstars`. This includes both `/pornstar/{name}` and `/model/{name}` URLs. No profile content exists - the redirect returns the generic pornstars listing page. gallery-dl will resolve to `/photos` but get 404 on the photo API.
+- **Celebrity name searches return parody content** - Searching for celebrity names (e.g., "megan thee stallion", "meg thee stallion") on video search typically returns parody/imitation porn videos made by adult performers impersonating or referencing the celebrity. The profile/avatar page for such profiles doesn't have real albums - generic albums found on search/result pages are typically unrelated (they appear on generic pages and are random user albums).
+- **Video search with `&o=mv`** (most viewed) helps surface the most popular videos first, but verification is essential - search results often contain content about performers with similar names (e.g., "Mini Stallion", "YumTheeBoss") that are NOT the target person.
