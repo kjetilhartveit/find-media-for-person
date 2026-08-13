@@ -24,25 +24,36 @@ Two related aggregator sites with different image hosting patterns.
 - Image URLs: `https://fappeningbook.com/photos/{l1}/{l2}/{slug}/1000/{id}t.jpg` (thumbnail) → remove `t` for full-size (e.g. `1t.jpg` → `1.jpg`). Resolution segment is `1000`.
 
 ### TheFappeningBlog (thefappeningblog.com)
-There are THREE image patterns to extract:
+There are FOUR image patterns to extract:
 
-**Pattern 1 — Data directory (legacy format):**
-- Category page: `https://thefappeningblog.com/category/{person-slug}-2/` (the `-2` is a WordPress category suffix; try variations like `-3`, `-4`)
-- Gallery URLs: `https://thefappeningblog.com/{gallery-title}/` — slug often `megan-thee-stallion-{event}-{N}-photos`
-- Images: `https://thefappeningblog.com/data/{l1}/{l2}/{slug}/1000/{name}_{id}_350px.jpg` → remove `_350px` for full-size
+**Pattern 1 — Gallery page (newer format, user-suggested):**
+- Profile/gallery: `https://thefappeningblog.com/gallery/{slug}/` (e.g., `/gallery/inna/`)
+- Paginated: `/gallery/{slug}/page-N/`
+- Individual gallery: `/gallery/{slug}/{N}/` (gallery number) — each shows ONE full-size image
+- Full-size images are inside `<a href="...">` tags in the article content
 
-**Pattern 2 — WordPress uploads (current format):**
+**Pattern 2 — Data directory (legacy format):**
+- Gallery URLs: `https://thefappeningblog.com/gallery/{slug}/{N}/`
+- Images: `https://thefappeningblog.com/data/{l1}/{l2}/{slug}/1000/{name}_{id}.jpg` (full-size)
+- Thumbnail: `https://thefappeningblog.com/data/{l1}/{l2}/{slug}/1000/{name}_{id}_350px.jpg` (remove `_350px` for full-size)
+- Slug is **lowercase** in URL (e.g., `/data/i/n/inna/1000/inna_0044.jpg`)
+- When scraping listing pages, use case-insensitive regex for `Inna/inna/jpg`
+
+**Pattern 3 — WordPress uploads (current format):**
 - Images: `https://thefappeningblog.com/wp-content/uploads/YYYY/MM/name_thefappeningblog.com_.jpg`
 - Full-size images end with `_thefappeningblog.com_.jpg` (no dimension suffix like `-1024x1280`)
 - Resized versions have `-1024x1280.jpg`, `-768x960.jpg`, `-240x300.jpg`, etc. — skip these
 - All images are listed in a single page HTML (no URL pagination)
+- Some WordPress images have embedded filename dimensions (e.g., `Inna-Sexy20--826x1024.jpg`) — these ARE the full-size version; WordPress may serve the same file for both full and resized URLs
 
-**Pattern 3 — cnt directory (OnlyFans leaks):**
+**Pattern 4 — cnt directory (OnlyFans leaks):**
 - Images at: `https://thefappeningblog.com/cnt/{l1}/{l2}/{slug}/{date-slug}/name.jpg`
 - Format: `/cnt/m/e/{person-slug}/{YYYY-MM-DD-uuid}/{name}.jpg`
 - Gallery URLs contain `megan-renee316-nude-onlyfans-leaks-` — these are NOT actual celebrity content, they are OnlyFans creator content misattributed.
 
-**Finding galleries:** Use web search to find category pages for a specific person, then scrape all pages: `https://thefappeningblog.com/category/{slug}-2/page/{N}/`. Check up to 6-7 pages.
+**Gallery page structure:** Individual gallery pages show ONE full-size image per page. Gallery pages are numbered sequentially (1–N). The gallery listing page shows ALL galleries with thumbnails, numbered in reverse order (highest first). Gallery URLs may use different image formats (data directory vs. WordPress uploads).
+
+**Finding galleries:** Use `https://thefappeningblog.com/gallery/{slug}/` first. If that fails, try web search: `site:thefappeningblog.com "person name"` and scrape category pages: `https://thefappeningblog.com/category/{slug}-2/page/{N}/`. Check up to 6-7 pages.
 
 ## Recommendations on how to download
 
@@ -53,25 +64,28 @@ There are THREE image patterns to extract:
 - Validate downloaded files are > 10KB.
 
 ### TheFappeningBlog
+- **Gallery pages:** Each gallery page shows ONE full-size image. Extract from `<a>` tag in article content area. Number galleries sequentially and download one by one with rate limiting.
 - **WordPress uploads:** Extract images matching `*_thefappeningblog.com_.jpg` (the full-size version). Filter out resized versions (with `-1024x`, `-768x`, `-240x`, `-624x`, `-1229x` etc.)
-- **Data directory:** Extract images matching `/data/.../1000/..._350px.jpg`, remove `_350px` for full-size.
+- **Data directory:** Extract images matching `/data/.../1000/..._350px.jpg` → remove `_350px` for full-size. URLs contain lowercase slug (e.g., `/data/i/n/inna/1000/inna_0044.jpg`). Case-insensitive regex needed when searching for `Inna/inna`.
 - **cnt/ directory (OnlyFans):** Only extract if you explicitly want OnlyFans leak content of the person.
+- **Scraping:** Full-size images on individual gallery pages are in `<a href="...jpg">` tags. For listing pages, extract thumbnails and resolve full-size.
 - Rate limiting: sleep 0.3–0.5s between requests.
 - For large galleries: the full HTML may contain hundreds of images (WordPress embeds them all). Some sites use lazy loading — check `data-src` and `data-srcset` attributes.
 
 ## Quality
 
-- **Fappeningbook images:** ~45KB–111KB (themed), full-size ~1000px wide
-- **TheFappeningBlog images (WordPress):** Full-size images typically 1100–1920px wide, ranging from ~80KB to 500KB+ depending on content
-- **TheFappeningBlog images (data/):** Full-size ~1000px wide, ~50–150KB
+- **Fappeningbook images:** ~35KB–700KB (varies by content), 1000px wide thumbnails → full-size available at same URL minus `t`
+- **TheFappeningBlog images (WordPress):** Full-size images typically 1100–1920px wide, ranging from ~80KB to 700KB+ depending on content
+- **TheFappeningBlog images (data/):** Full-size ~800–1000px wide, ~35–230KB
+- Some WordPress images have embedded dimensions in filename (e.g., `-820x1024`) — these ARE the original saved size, not WordPress-resized
 - Generally good quality for an aggregator site
 
 ## Pitfalls
 
+- **Some gallery pages are 404:** Gallery numbers may not be consecutive (e.g., galleries 36, 41 can be 404). Skip them gracefully.
 - **No profile pages on fappeningbook.com for some celeb:** If `<name>-nude/` returns 404, try using `theappeningblog.com` instead. Fappeningbook.com profiles are for "OnlyFans creators" not celebrities.
 - **fappeningbook.com search doesn't work well:** `/?s=query` returns 200 but no useful results — prefer direct URLs.
 - **TheFappeningBlog category slug varies:** Try `-2`, `-3`, `-4` suffixes. Some use just the person's name, others have variations.
 - **Web search is the best way to find TheFappeningBlog galleries:** Use `site:thefappeningblog.com "person name"` to discover relevant galleries.
 - **OnlyFans leak galleries misclassified:** Some galleries labeled as a celebrity's "OnlyFans leaks" are actually from different creators. Check if the gallery URL contains names like `renee316` — skip these unless you want OnlyFans creator content.
-- **gallery/{slug} does not work for celeb galleries:** Individual gallery posts use the format `megan-thee-stallion-{descriptive-title}-{n}-photos/`
 - **No videos on fappeningbook.com profiles** — only static images. TheFappeningBlog may occasionally host videos.
