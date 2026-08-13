@@ -89,3 +89,28 @@ Thumbnails on profile pages use a similar pattern with `_300px.jpg` suffix (e.g.
 - If the direct profile URL returns 404 AND all search variations return 0 results (verified with browser), the person is not on the platform.
 - Try search variations: `{name}`, `{first}-{last}`, `{first}{last}` (no hyphen).
 - Some people appear only via individual posts (web search for `site:fapello.com "{name}"`).
+
+## Model Not on Fapello
+
+- Joon Mali (Thai adult model) has **no content on Fapello**. Profile URL variations tried: `joon-mali`, `joonmali`, `joon-mali-th`, `joonmali-th` plus site search. All returned 404 or no results.
+- When searching for Joon Mali, use alternative sources: xhamster.com/pornstars/joon-mali (40+ videos), imagefap.com (dedicated galleries), jjgirls.com, yespornpics.com.
+
+## New Insights (Aug 2025)
+
+### Slug != Display Name
+
+- The profile slug may differ from the person's display name. Example: Linda Lan's profile slug is `ms-lindalan`.
+- When searching, also look for the `{username}` on social media (e.g., Instagram, OnlyFans) that links to Fapello.
+- The search results page may show the slug in profile links — look for hrefs matching `/slug/` pattern.
+
+### Featured/Suggested Item (ID 1000)
+
+- Every profile page shows a featured/suggested item with ID 1000.
+- This item returns 404 when accessed directly — it's not a real content item, just a placeholder on the page.
+- When collecting IDs from profile pages, filter out ID 1000 before downloading.
+
+### Pagination Behavior
+
+- Some profiles have pagination that cycles (returns the same content after the first N pages).
+- Stop paginating when you notice repeated ID sets between pages.
+- The first page of a profile may show the newest content (highest IDs).
