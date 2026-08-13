@@ -27,11 +27,13 @@ Download images and videos from FapMenu (https://fapmenu.com), a large aggregato
 
 ## Image URL Patterns
 
-- Full-size: `/models/{1st_char}/{2nd_char}/{slug}/1/full/{slug}_nude_XXXX.webp`
-  - Example: `/models/m/e/megan-thee-stallion-3/1/full/megan-thee-stallion-3_nude_0001.webp`
+- Full-size: `/models/{1st_char}/{2nd_char}/{slug}/{model_num}/full/{slug}_nude_XXXX.webp`
+  - Example: `/models/m/e/megan-thee-stallion-3/2/full/megan-thee-stallion-3_nude_0001.webp`
   - The 1st/2nd chars are first/second chars of the slug (e.g., m/e for megan-thee-stallion-3)
-- Thumbnail: `/models/{1st_char}/{2nd_char}/{slug}/1/300px/{slug}_nude_XXXX_300px.webp`
-  - To get full-size URL from thumbnail: replace `300px` → `full` and remove `_300px` from filename
+  - **Multiple model numbers can exist** on a profile (e.g., model 1 = avatar, model 2+ = galleries)
+- Thumbnail: `/models/{1st_char}/{2nd_char}/{slug}/{model_num}/300px/{slug}_nude_XXXX_300px.webp`
+  - To get full-size URL from thumbnail: replace `/300px/` with `/full/` and remove the `_300px` from filename
+  - Note: `_300px` appears in BOTH the path segment AND the filename (e.g., `_300px_300px.webp` → `.webp`)
 
 ## Search
 
@@ -40,17 +42,21 @@ Download images and videos from FapMenu (https://fapmenu.com), a large aggregato
 - Results contain profile links like `/slug/`
 - Search is client-side rendered; use curl POST, not GET
 
-## Primary download method — Manual scraping of paginated profile
+## Primary download method — Manual scraping of paginated profile (Python script recommended)
 
-1. **Fetch the profile page**: `curl -sL "https://fapmenu.com/{slug}/page/{page}/" > page.html`
+A Python script is recommended for reliable multi-model, multi-page scraping. Use `curl` + `grep`/`sed` as an alternative for simple cases.
+
+1. **Fetch the profile page**: `curl -sL "https://fapmenu.com/{slug}/page/{page}/"`
 2. **Extract image URLs** from the page HTML:
-   - Look for `src="/models/{...}/{slug}/1/300px/{slug}_nude_XXXX_300px.webp"` in `<img>` tags
-   - Each page typically has ~25 images
-   - Remove leading `src="` and trailing `"` and the `/300px/{slug}_nude_\d+_300px` → `/full/{slug}_nude_\d+` pattern to convert to full-size paths
-   - Prepend `https://fapmenu.com` to create full URLs
-3. **Pagination**: Check which pages exist by iterating page numbers. Each page usually has 25 images. Stop when a page has no images.
-  - Note: The avatar image (often showing up as `nude_0001` or near the start) may appear on every page — deduplicate when collecting across pages.
-4. **Download images**: Fetch `https://fapmenu.com/{image_path}` and save as `.webp`. Files are typically WEBP format.
+    - Match pattern: `/models/{1st}/{2nd}/{slug}/{model_num}/300px/{slug}_nude_XXXX_300px.webp`
+    - Use regex to capture the model number and image number: `/models/[a-z]+/[a-z]+/{slug}/(\d+)/300px/{slug}_nude_(\d+)_300px\.webp`
+    - Convert to full-size: replace `/300px/` → `/full/` and strip `_300px` from filename
+    - Full-size URL pattern: `https://fapmenu.com/models/{1st}/{2nd}/{slug}/{model_num}/full/{slug}_nude_XXXX.webp`
+    - Each page typically has ~24–30 images
+3. **Pagination**: Iterate page numbers. Each page usually has 24–25 images. Stop when a page has no images.
+   - Skip model number 1 (avatar) which appears on every page as a duplicate — only scrape gallery models (typically model 2+)
+   - Deduplicate across pages since the same image numbers may appear in different model folders
+4. **Download images**: Use wget/curl to fetch each URL. Save as `.webp`. Files are typically WEBP format.
 5. **Rate limiting**: Sleep 0.3–0.5s between requests. Respect the site's anti-bot measures.
 
 ## Quality

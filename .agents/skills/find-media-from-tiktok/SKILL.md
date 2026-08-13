@@ -73,6 +73,7 @@ du -sh <output-dir>/tiktok
 
 - **item_list API returns 0 items**. The TikTok `creator/item_list` API (used by gallery-dl's `TiktokPostsExtractor`) frequently returns 0 items, even for accounts with published videos. Videos are discovered via HTML page parsing instead, yielding fewer but still valid results.
 - **Small/inactive accounts** may have very few or no videos. Check profile stats (followers, likes, videoCount) before investing time. A signature of "Ikke i bruk" (Not in use) indicates an abandoned account.
+- **Accounts with 0 posted videos**. Some verified/celebrity accounts exist on TikTok but have no public videos posted (0 in videoCount). The account exists and is public, but the user has never posted content. Use `yt-dlp --simulate` to quickly check: if it returns "This account does not have any videos posted", stop before wasting time. The account @tyla is an example — only 238 followers, 0 videos, not verified.
 - **Alternative usernames** may not exist (e.g., @username vs @username). Try variations if needed.
 - **TikTok search via gallery-dl is not supported** — no extractor for TikTok's search/discover. Use `yt-dlp --simulate` on a profile URL to preview what would be downloaded.
 - **Long downloads need long timeouts**. Profile downloads can take 10+ minutes even for large accounts. Set bash timeout to at least `900000`ms (15 min).
