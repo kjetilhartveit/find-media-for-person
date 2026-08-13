@@ -20,20 +20,25 @@ stk.st is a WordPress content farm that specializes in viral adult entertainment
 ## Example URLs by Person
 
 - **Not all person queries return relevant content:** Searches for non-adult celebrities (e.g., "megan thee stallion") typically return no matches or completely unrelated results. stk.st focuses on adult content creators, cam models, and OnlyFans leak aggregators.
+- **stk.st is generally NOT useful for non-adult celebrities**: For Tyla (South African singer), virtually all results were about OTHER people named "Tyla" (Tyla Jessop, Tyla Wyn, Tyla ASMR, etc.) plus completely unrelated articles. Only 2 Fappenist images of Tyla Seethal were found across all searches.
+- Search URLs for specific searches: `/search?query={person}+nude`, `/search?query={person}+seethal`, etc.
+- The `/search?query=tyla+seethal` search returned posts like `/tyla+seethal+porn`, `/tyla+seethal+ass` but these pages are essentially garbage — random images from any article mentioning "Tyla" or "South Africa".
 
 ## URL Patterns
 
 - Site: `https://stk.st`
 - Profile/Query: `https://stk.st/{query}` — use `+` for spaces, e.g. `https://stk.st/halle+ahyes`
 - Search endpoint: `https://stk.st/search?query={query}` — generates blog search results
+- Individual post pages: `https://stk.st/{post-slug}` — e.g., `/tyla+naked`, `/tyla+abe`
 - Images are served via WordPress Jetpack CDN: `https://i3.wp.com/origin-domain/path` (strip `i3.wp.com/` prefix to get original URL)
 - Additional search variations: `/search?query={person}+onlyfans`, `/search?query={person}+onlyfans+porn`, `/search?query={person}+onlyfans+videos`
+- `?ssl=1` suffix on images can usually be stripped for direct access, but some domains may require it
 
 ## Known Image Source Domains on stk.st
 
 Content from stk.st pages comes from various aggregated sources. **Important**: stk.st does NOT aggregate Reddit, X/Twitter, or Imgur content for most individuals — images come directly from adult-content hosting sites. Images go through WordPress Jetpack CDN: `https://i3.wp.com/origin-domain/path` (strip `i3.wp.com/` prefix to get original URL).
 
-Common image domains: thefappeningblog.com, nudogram.com, fapello.com, masterfap.net, erome.com, sexdug.com, mixputaria.com, virulpornhub.com, camwhores.tv, phncdn.com (Pornhub), rdtcdn.com (RedTube), xvideos-cdn.com, xnxx-cdn.com, eporner.com, vrsmash.com, sxyprn.com.es, babes.plus, vip.sexhd.pics / sexhd.pics, cdn5-images.motherlessmedia.com, www.xxxporn.pics, tiny-asians.com, wallpaperheaven.com
+Common image domains: thefappeningblog.com, nudogram.com, fapello.com, masterfap.net, erome.com, sexdug.com, mixputaria.com, virulpornhub.com, camwhores.tv, phncdn.com (Pornhub), rdtcdn.com (RedTube), xvideos-cdn.com, xnxx-cdn.com, eporner.com, vrsmash.com, sxyprn.com.es, babes.plus, vip.sexhd.pics / sexhd.pics, cdn5-images.motherlessmedia.com, www.xxxporn.pics, tiny-asians.com, wallpaperheaven.com, fappenist.com, i.imgur.com, people.com, essence.com
 
 ## Primary download method — Manual scraping and download
 
@@ -51,11 +56,11 @@ Common image domains: thefappeningblog.com, nudogram.com, fapello.com, masterfap
 ## Limitations & Recommendations
 
 - **NOT recommended** for finding media of specific individuals (especially non-adult/non-porn individuals) — searches return posts matching ANY part of the query, often just the first name
-- The site is specialized in adult entertainment content (cam models, OnlyFans leaks, etc.)
+- **stk.st produces massive noise for non-adult celebrities**: Images on these pages come from ANY article on the site mentioning the search term, not just adult content. Found unrelated images from Dutch sink companies, Kenyan politics, Toyota Argentina, etc.
 - Search results match keywords but do not guarantee the person matches (e.g., "sofie eikeland" returns posts about "sofie mills", "sofie skye", etc.)
 - gallery-dl does NOT support stk.st (no matching extractor found)
 - For general media of a person, prefer: Google Images, Instagram, X/Twitter, Pinterest
-- stk.st **does NOT** actually aggregate Reddit or X/Twitter content — images are loaded from specific adult content hosts, not social media platforms
+- stk.st **does NOT** actually aggregate Reddit, X/Twitter, or Imgur content — images are loaded from specific adult content hosts, not social media platforms
 - **Use TLS 1.2 (`--tls-max 1.2`)** with curl when fetching stk.st pages — some pages behind Cloudflare challenge pages are more reliably fetched with TLS 1.2
 - **Focus on individual post URLs** (e.g., `/joon+mali+naked`) rather than search pages for cleaner, more relevant results
 
@@ -74,4 +79,14 @@ Common image domains: thefappeningblog.com, nudogram.com, fapello.com, masterfap
 - Image downloads may require checking HTTP status codes — 403 can appear, and some domains block automated requests
 - **Network-accessible domains vary**: Some source domains may be unreachable due to DNS failures (e.g., motherlessmedia.com, vip.sexhd.pics) or SSL certificate issues (e.g., babes.plus — Let's Encrypt intermediate not in trust store). Test each domain's accessibility before relying on it.
 - **Pages with generic keywords (e.g., "Mali") produce lots of noise**: News, sports, and political content may match the individual's name. Use keyword-specific post paths (e.g., `/joon+mali+naked`) for cleaner results.
+- Search result thumbnail titles and the actual images on the linked pages often don't match. Thumbnails may show one person while the page content shows another.
+
+### Image domain pitfalls
+
 - The i3.wp.com proxy sometimes returns 400/403 for certain domains — don't rely on it as a download method, use direct URLs instead.
+- **Some image domains are blocked/unreachable**:
+  - `people.com` returns HTTP 400 Bad Request (blocks automated requests, likely requires specific referer header)
+  - `essence.com` returns HTTP 403 Forbidden
+  - `thenativemag.com` returns HTTP 404 (image may have been removed)
+  - `mjazzmagonline.co.za` returns HTTP 404 (image may have been removed)
+- Test accessibility with `curl -sI` before bulk downloading from a domain.
