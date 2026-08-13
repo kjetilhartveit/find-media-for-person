@@ -22,6 +22,7 @@ PROMPT_TEMPLATE = """\
 DEFAULT_QUEUE_NAME = "find-media-for-person"
 DEFAULT_AGENT_CWD = "/home/kjetil/_index/git/find-media-for-person"
 DEFAULT_RALPH_RUNS_DIR = "/mnt/laptop-mediaperson/ralph-runs"
+DEFAULT_DESTINATION_RALPH_CONFIG_DIR = "/mnt/laptop-mediaperson/ralph-configs"
 
 
 BOLD = "\033[1m"
@@ -90,6 +91,13 @@ def show_prompt_card(person, idx, total):
     print()
 
 
+def show_people_list(people):
+    print()
+    for i, person in enumerate(people):
+        print(f"  {DIM}#{i + 1}{RESET}  {person}")
+    print()
+
+
 def add_person():
     return prompt_field("Person name")
 
@@ -113,6 +121,15 @@ def review_mode(people, start_idx=0):
         clear_screen()
         total = len(people)
         header(f"Review ({idx + 1}/{total})")
+
+
+        # Show full list summary at top
+        for i, p in enumerate(people):
+            marker = "  ◀" if i == idx else f"  #{i + 1}"
+            print(f"  {marker}  {p}")
+        print()
+
+
         show_prompt_card(people[idx], idx, total)
 
         nav = []
@@ -155,17 +172,18 @@ def review_mode(people, start_idx=0):
             return "quit"
 
 
-def next_available_path(name):
-    path = Path(f"{name}.yaml")
+def next_available_path(name, config_dir):
+    config_dir = Path(config_dir)
+    config_dir.mkdir(parents=True, exist_ok=True)
+    path = config_dir / f"{name}.yaml"
     if not path.exists():
         return path
     i = 1
     while True:
-        path = Path(f"{name}-({i}).yaml")
+        path = config_dir / f"{name}-({i}).yaml"
         if not path.exists():
             return path
         i += 1
-
 
 def multiline_str_representer(dumper, data):
     if "\n" in data:
@@ -235,7 +253,13 @@ def main():
             print(f"\n  {YELLOW}Cancelled.{RESET}")
             sys.exit(0)
 
-    output_path = next_available_path(DEFAULT_QUEUE_NAME)
+    # Show full list of people before submit
+    clear_screen()
+    header("Final List")
+    show_people_list(people)
+
+    output_path = next_available_path(DEFAULT_QUEUE_NAME, DEFAULT_DESTINATION_RALPH_CONFIG_DIR)
+
     generate_config(people, str(output_path), DEFAULT_QUEUE_NAME, DEFAULT_AGENT_CWD, DEFAULT_RALPH_RUNS_DIR)
 
     clear_screen()
