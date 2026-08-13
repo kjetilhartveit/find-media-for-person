@@ -11,7 +11,7 @@ description: Use when you need to find and download media from Xasiat (xasiat.co
 
 # Find media from Xasiat (xasiat.com)
 
-Xasiat is an aggregator of leaked adult content, particularly Asian models. Content is organized by model and album.
+Xasiat is an aggregator of leaked adult content, particularly Asian models (Thai, Chinese, Japanese, Korean). Content is organized by model and album. **Non-Asian celebrities and pop stars are rarely featured.** The site specializes in leaked adult content of Asian adult entertainment performers. Search results for Western celebrities or pop stars typically return empty.
 
 ## URL Patterns
 
@@ -63,6 +63,12 @@ When scraping a model page, the HTML may list videos in section blocks. Some vid
 
 1. Video title matches the model name
 2. Description matches the model name (shows model name, not just "Thaiswinger" or collection name)
+
+## Important caveats
+
+- **Non-Asian/non-adult-model searches return empty**: Searching for Western celebrities, pop stars, or non-adult-models typically yields zero results. Xasiat primarily covers Asian adult entertainment performers.
+- **Name-based false positives**: Searching for a celebrity name (e.g. "Tyla") may return no results, while searching a variant (e.g. "Tyla chanteuse" = "Tyla singer" in French) may return videos of an adult performer who looks like or resembles the celebrity — NOT the actual celebrity. Always verify content by checking titles, descriptions, and video previews.
+- **Both videos and albums may return empty**: The async endpoints return `There is no data in this list.` when no content matches, for both video and album searches.
 
 ## Thumbnails and preview
 

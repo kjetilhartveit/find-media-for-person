@@ -60,3 +60,5 @@ Download media from Scandal Planet (https://scandalplanet.com), a WordPress-base
 - **Related celebs sidebar:** The page includes thumbnails (`-145x145-optimized.jpg`) of other celebs in a sidebar. Filter by checking if the URL contains the target celeb's name.
 - **Single page per celebrity** — no pagination. All content is on one article post.
 - **No content for celebrity**: Some celebrities are not covered — Scandal Planet only features a subset (~100-120) of A-list celebrities. If the site returns zero results after thorough searching, the celebrity may not be featured.
+- **Redirect (301) for non-existent profiles**: URL variations for non-existent celebrity profiles (e.g. `scandalplanet.com/nonexistent/`) will 301-redirect to the homepage rather than returning a 404. This is distinct from a profile that exists with no content. Use search (`?s=query`) as the definitive check.
+- **Rising/young celebrities may not be covered**: Newer or younger celebrities without major scandal history may not have articles. The site focuses on established A-list celebrities with scandal/leak history.
