@@ -103,10 +103,11 @@ Large JS-heavy websites (typical news sites) are 50-300KB of HTML full of ad scr
 
 These sites maintain dedicated galleries per celebrity and are high-value sources:
 
-- **AZNude** (aznude.com): 80+ photos for major celebs. Celebrity pages at `/view/celeb/{initial}/{slug}-{id}.html`. Image URLs: `https://user-uploads.aznude.com/data/azncdn/{hash}/{hash}.jpg` for full-size, `data/thumbs/{hash}/{hash}.jpg` for thumbnails. Use `curl` to extract URLs from HTML — the full-size URLs contain the same hash as the thumbnail.
+- **AZNude** (aznude.com): 80+ photos for major celebs. Celebrity pages at `/view/celeb/{initial}/{slug}-{id}.html`. Image URLs: `https://cdn2.aznude.com/{hash}/{hash}.jpg` for full-size (640px wide JPEG). Thumbnails have `thumb3_` prefix. Story pages (galleries within a celeb page) use JS rendering — `curl | grep` won't find images there. Extract from the main celebrity index page instead. Also has `/view/story/c/{slug}.html` story pages.
 - **CelebGate** (celeb.gate.cc): Dedicated celebrity nude photo gallery site. Gallery at `/{slug}/gallery.html`. Image URLs: `http://celeb.gate.cc/media/cache/image/upload/t/{initial}/{slug}-{id}.jpg` (use `data-orig` attribute for full-size, replace `http` with `https`).
 - **CelebHub** (celebhub.net): Similar format. Celebrity page at `/celebrity/{slug}`.
 - **Babepedia** (babepedia.com): Profile pages with user-uploaded photos. Images at `/pics/{Slug}.jpg` (main), `/pics/{Slug}N.jpg` (additional). Also has `/user-uploads/` directory for community uploads. Useful for aliases/biographical data.
+- **Pictoa** (pictoa.com): Adult photo album site. Album URLs: `/albums/{slug}-{id}.html`. Images at `https://t1.pictoa.com/media/galleries/{hash}/{album_id}{timestamp_hex}.jpg`. Album IDs contain a hex timestamp suffix. Multiple albums per celeb may exist.
 
 ## Fashion/Reveal Article Sources
 
@@ -135,3 +136,8 @@ These sites regularly post about celebrities in revealing outfits:
 - **Yahoo articles fail with `curl | grep`** — Yahoo (and other AOL-media sites) return zero image URLs via regex extraction, likely due to JavaScript-rendered images or external CDNs. When `curl | grep` returns nothing, fall back to `web_fetch` with markdown format or og:image extraction.
 - **Avoid complex download loops** — when downloading many images, prefer simple batch scripts with known URLs over inline URL construction with nested `curl` calls, which can create duplicate/badly-named files.
 - **Verify downloaded files are actual images** — some sites (e.g. `bodysizex.com`, `celebsta.com`, `famousages.com`) redirect `.jpg` URLs to HTML pages. After downloading, use `file <filepath>` to verify the content is an image (e.g. `JPEG image data`). Remove files that are HTML documents.
+
+## Video Extraction Tips
+
+- **XHamster** (xhamster.com): gallery-dl does NOT support xHamster video URLs (only has extractors for photo galleries and user gallery pages). Use `yt-dlp` directly with the video URL. Videos use HLS streaming (m3u8 manifests), so yt-dlp should work without extra tools. Video IDs are embedded in HTML URLs: `xhamster.com/videos/{title}-{id}`.
+- **Adult tubes generally**: Most tube sites deliver videos via HLS/m3u8. `yt-dlp` is reliable for these. Gallery-dl only supports a subset of sites for videos.
