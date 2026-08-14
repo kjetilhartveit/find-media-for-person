@@ -51,6 +51,9 @@ When gallery-dl is unavailable or fails:
 - Some video albums contain very large individual files (e.g., "Absolute perfection" by TheGoat47: 25+ videos totaling 650MB+ from a single album).
 - Content quality varies significantly by uploader.
 - Some content is from dedicated content creators/farms (e.g., "Gloryhole-Top-Secrets", "Gangbang-Creampie-Secrets", "PrettyDirtySluts") that post multiple albums per person.
+- Some uploaders post bulk compilations of content: users like `8704`, `8713`, `5913`, `3899` post large albums (80-95 images) per person, often titled generically (e.g., "yumieto vid1", "YUMIETO VIDEOS"). These are fan compilations rather than original content.
+- Some albums contain both image (.jpg) and video (.mp4) files with the same base filename ID. The images are single-frame thumbnails/screenshots of the videos. Gallery-dl downloads both, so you get redundant content. Consider downloading only videos for efficiency.
+- Some albums contain ONLY image files that are thumbnails from videos. The actual video content may not be available for those albums. Always check `gallery-dl --get-urls` first to see what is available.
 
 ## Known Sources with High-Value Content
 
@@ -81,6 +84,8 @@ When gallery-dl is unavailable or fails:
 - Filter out "inna" as slang: the word "inna" (slang for "in a") appears in many unrelated album titles (e.g., "Sucking dick inna car!", "cumtribute inna spot"). These are noise, not the person's name. Look for capitalized "INNA" or clear person references.
 - Content farm albums like "BJ Toy" by `Giltypleasure` or "gyrate" by `Giltypleasure` often appear in search results but are unrelated ads.
 - For high-volume searches, consider downloading album-by-album in batches rather than all at once (search results can return 48+ albums).
+- **Multiple search term variants**: Try compact/abbreviated variants of the name (e.g., "yumieto" for "Yumi Eto") as they may return more comprehensive results. Also try underscored versions (e.g., "yumi_eto").
+- **Album images vs videos**: Some albums have both images and videos sharing the same filename ID (images are frame thumbnails). When gallery-dl downloads such albums, both are saved. For space efficiency, you can filter to keep only videos (which contain the full content).
 - gallery-dl output file structure varies: some albums create `USERNAME/FILENAME` (flat), others `USERNAME/ALBUM_ID Filename` (nested). Handle both patterns when moving files.
 
 ## Pitfalls
