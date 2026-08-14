@@ -62,6 +62,7 @@ Cache API responses as JSON files keyed by tweet ID (e.g., `.data/x-api-cache/{t
 
 ## Pitfalls
 
+- **Handle may not match display name.** Content creators use different names/handles on X/Twitter vs. display names shown on aggregator sites. Search for aliases found on other platforms. Try variations with underscores, periods, and different capitalizations.
 - **API access tiers matter.** Free tier has very limited rate limits. Media lookup counts against read quota. Check X developer docs for current limits.
 - **Video URLs are temporary.** The `variants[].url` values are signed URLs that expire. Download immediately; do not store URLs for later.
 - **Raw JSON uses snake_case.** The raw API returns `media_key`, `preview_image_url`, `bit_rate`. The `@xdevplatform/xdk` SDK transforms to camelCase.

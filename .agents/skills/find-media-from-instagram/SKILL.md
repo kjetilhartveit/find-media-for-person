@@ -146,6 +146,7 @@ Use `-o "include=..."` to control what content types are downloaded from a profi
 
 ## Pitfalls
 
+- **Handle may not match display name.** Content creators use different names/handles on Instagram vs. display names shown on aggregator sites. Search for aliases found on other platforms. Try variations with underscores, periods, and different capitalizations.
 - **Rate limits are aggressive.** Do not reduce `sleep-request`. Instagram will 429 or soft-ban IPs making rapid requests.
 - **Do not scrape HTML.** Instagram changes their frontend constantly. `gallery-dl` uses internal API and is actively maintained.
 - **Stories are ephemeral.** Only fetchable while active (24h). Must be authenticated to view them.

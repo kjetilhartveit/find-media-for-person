@@ -66,6 +66,19 @@ When doing web searches (either via the main orchestrator or subagents):
 - Only make a maximum of 10 web searches per agent to avoid context exhaustion. Prefer to return quickly with a few results and encourage further searches rather than making too many large searches in one go.
 - Web search engines return article URLs, not image URLs. The actual images are embedded in the HTML of those articles. Extract image URLs efficiently without downloading full pages of HTML bloat.
 
+### Handle/Pseudonym Discovery
+
+When searching for content creators, the display name and social media handle are often different:
+
+- **Search for aliases**: Many creators use multiple handles across platforms. Look for their OnlyFans username, Instagram handle, Twitter/X handle, and any known aliases. Search aggregators for the display name AND various handle variations.
+- **Handle vs. display name**: On aggregator sites (Erome, etc.), content may be tagged with a creator's alternate handle or alias rather than their display name. Search using multiple variations found from other sources.
+- **Aggregator tagging patterns**: Content on sites like Erome is often tagged with the creator's primary social media handle. Searching for that handle on the aggregator can yield more results than searching the display name.
+
+### Search Verification Pitfalls
+
+- **False positives on search-based sites**: Search queries on aggregator sites (Xasiat, etc.) may return results for common names or initials. Always verify that downloaded content actually matches the target person before keeping it.
+- **Different people, same name**: Common given names (e.g., "Yumi" as a Japanese first name) combined with a search term return many unrelated results from different people. Verify by checking album titles, descriptions, and image content.
+
 ## Update/create skills when gaining new insight or updated information when doing searches or downloading media
 
 ### Creation/updating skills
