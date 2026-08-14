@@ -92,8 +92,10 @@ Thumbnails on profile pages use a similar pattern with `_300px.jpg` suffix (e.g.
 
 - A person may not have any content on Fapello at all.
 - If the direct profile URL returns 404 AND all search variations return 0 results (verified with browser), the person is not on the platform.
-- Try search variations: `{name}`, `{first}-{last}`, `{first}{last}` (no hyphen).
+- Try search variations: `{name}`, `{first}-{last}`, `{first}{last}` (no hyphen), and `{name}-1` (some profiles have numeric suffix when main slug is taken, e.g., `eleonora-bertoli-1`).
 - Some people appear only via individual posts (web search for `site:fapello.com "{name}"`).
+- SEO landing pages may exist at alternative slugs (e.g., `fapello.com/elebertoli/`) but return 200 with no actual items — only the profile slug with content matters.
+- `/feed/{id}/` URLs are curated/featured feed pages linking to profiles, not standalone profiles themselves.
 
 ### Fapello Internal Search Doesn't Work
 
