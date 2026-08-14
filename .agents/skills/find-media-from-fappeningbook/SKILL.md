@@ -40,10 +40,11 @@ There are FOUR image patterns to extract:
 - When scraping listing pages, use case-insensitive regex for `Inna/inna/jpg`
 
 **Pattern 3 — WordPress uploads (current format):**
-- Images: `https://thefappeningblog.com/wp-content/uploads/YYYY/MM/name_thefappeningblog.com_.jpg`
-- Full-size images end with `_thefappeningblog.com_.jpg` (no dimension suffix like `-1024x1280`)
-- Resized versions have `-1024x1280.jpg`, `-768x960.jpg`, `-240x300.jpg`, etc. — skip these
-- All images are listed in a single page HTML (no URL pagination)
+- Images: `https://thefappeningblog.com/wp-content/uploads/YYYY/MM/name.jpg`
+- Thumbnail: `https://thefappeningblog.com/wp-content/uploads/YYYY/MM/name_350px.jpg` (remove `_350px` for full-size)
+- **Same thumbnail transformation as data directory: remove `_350px` suffix** to get full-size URL. No `_thefappeningblog.com_` suffix needed.
+- Resized WordPress images have dimension suffixes like `-1024x576.jpg`, `-768x1024.jpg` — the actual full-size images do NOT have these dimension suffixes
+- All images may be listed in a single page HTML when visiting the gallery page directly (no individual gallery sub-pages needed for WordPress uploads)
 - Some WordPress images have embedded filename dimensions (e.g., `Inna-Sexy20--826x1024.jpg`) — these ARE the full-size version; WordPress may serve the same file for both full and resized URLs
 
 **Pattern 4 — cnt directory (OnlyFans leaks):**
@@ -64,11 +65,11 @@ There are FOUR image patterns to extract:
 - Validate downloaded files are > 10KB.
 
 ### TheFappeningBlog
-- **Gallery pages:** Each gallery page shows ONE full-size image. Extract from `<a>` tag in article content area. Number galleries sequentially and download one by one with rate limiting.
-- **WordPress uploads:** Extract images matching `*_thefappeningblog.com_.jpg` (the full-size version). Filter out resized versions (with `-1024x`, `-768x`, `-240x`, `-624x`, `-1229x` etc.)
-- **Data directory:** Extract images matching `/data/.../1000/..._350px.jpg` → remove `_350px` for full-size. URLs contain lowercase slug (e.g., `/data/i/n/inna/1000/inna_0044.jpg`). Case-insensitive regex needed when searching for `Inna/inna`.
+- **Thumbnail transformation (unified):** For BOTH data directory and WordPress uploads, the full-size URL is obtained by simply removing `_350px` from the thumbnail URL: `name_350px.jpg` → `name.jpg`. This works with Python `.replace("_350px.jpg", ".jpg")`.
+- **Listing page HTML structure:** Uses `<div class="item_content">` → `<a href=".../gallery/{slug}/{N}/">` → `<div class="item_img">` → `<img src="THUMBNAIL">`. Extract gallery number from href and thumbnail from img src.
+- **Gallery pages:** Each individual gallery page shows ONE full-size image in `<a href="...jpg">`. Useful for verification or when listing pages are insufficient.
 - **cnt/ directory (OnlyFans):** Only extract if you explicitly want OnlyFans leak content of the person.
-- **Scraping:** Full-size images on individual gallery pages are in `<a href="...jpg">` tags. For listing pages, extract thumbnails and resolve full-size.
+- **Scraping:** For listing pages, extract thumbnails and apply the unified `_350px` → `.jpg` transformation. For individual gallery pages, extract from `<a>` tag in content area.
 - Rate limiting: sleep 0.3–0.5s between requests.
 - For large galleries: the full HTML may contain hundreds of images (WordPress embeds them all). Some sites use lazy loading — check `data-src` and `data-srcset` attributes.
 

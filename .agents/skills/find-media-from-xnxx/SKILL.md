@@ -47,3 +47,5 @@ yt-dlp -f "hls-1080p" \
 - Search results may contain videos of people with similar names. Filter manually by checking if the title contains the target person's name.
 - Pagination: search URLs are paginated with `/1`, `/2`, `/3` etc. Stop when no results appear for a page.
 - The `/video-streams/{query}` URL pattern returns "Not found" - use `/search/{query}/` instead.
+- Common surnames in search results: Search terms like "Fernandes" may return videos of unrelated performers (e.g., many Brazilian models named "Fernandes"). Always verify by checking titles or extracting video URLs and comparing against known results.
+- Some models may not have videos on XNXX even if they appear on other sites (e.g., XHamster). If the search returns no matches for the person's name, they may not have content on XNXX.
