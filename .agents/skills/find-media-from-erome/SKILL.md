@@ -78,8 +78,10 @@ When gallery-dl is unavailable or fails:
 - After downloading, filter files by checking filename for the person's name.
 - Remove incomplete downloads (.part files) after filtering.
 - Inspect results before bulk downloading: use `gallery-dl -J URL` to dump JSON and `gallery-dl --get-urls URL` to see album list first.
-- Filter out AI-generated content: users like `AiCelebrityy`, `ThaHxncho`, `Xgalicialol`, `Botman32`, `KustomEditz` frequently post AI/fake content, not real media of the person.
+- Filter out AI-generated content: users like `AiCelebrityy`, `ThaHxncho`, `Xgalicialol`, `Botman32`, `KustomEditz`, `ggt1748` frequently post AI/fake content, not real media of the person.
 - Filter out non-relevant "Tyla" variants: search results often include content about different people named "Tyla" (Tyla Wynn, Coco Tyla, Tyla Moore, Tyla Tyler, etc.).
+- **Search term "jiji" is extremely noisy**: Returns unrelated results including Spanish slang "jiji" (giggle), user names like "LadyboysFuckedBareback Jiji", and completely unrelated content. Only search with "jijiwonder" or "jiji+wonder" for better precision. When searching "jiji" alone, most results are false positives.
+- **Search term "wonder" alone is extremely noisy**: Returns 36+ albums with the word "wonder" in various contexts (wonder woman, one-hit wonder, etc.). Always use "jiji" + "wonder" together for precise results.
 - Filter out other-name variants: common names like "Inna" often return results for multiple people (German models named Inna, Ukrainian models, adult entertainers, etc.). Use tags like `#romania`, album titles mentioning singer/music, or user source to distinguish.
 - Filter out "inna" as slang: the word "inna" (slang for "in a") appears in many unrelated album titles (e.g., "Sucking dick inna car!", "cumtribute inna spot"). These are noise, not the person's name. Look for capitalized "INNA" or clear person references.
 - Content farm albums like "BJ Toy" by `Giltypleasure` or "gyrate" by `Giltypleasure` often appear in search results but are unrelated ads.
