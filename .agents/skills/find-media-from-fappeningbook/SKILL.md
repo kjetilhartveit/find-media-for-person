@@ -20,7 +20,7 @@ Two related aggregator sites with different image hosting patterns.
 ## URL Patterns
 
 ### Fappeningbook (fappeningbook.com)
-- Profile: `https://fappeningbook.com/{slug}-nude/` — try person's name first (e.g. `caroline-nitter-nude/`), then their Instagram username if that 404s (e.g. `jessicah-o-nude/` for @jessicah_o). The `us.fappeningbook.com` subdomain mirrors content.
+- Profile: `https://fappeningbook.com/{slug}-nude/` — try person's name first (e.g. `caroline-nitter-nude/`), then their Instagram username if that 404s (e.g. `jessicah-o-nude/` for @jessicah_o), then try their OnlyFans/handle alias (e.g. `yumi-kiwi-nude/` for Yumi Eto who uses @yumi.kiwi as social handle). The `us.fappeningbook.com` subdomain mirrors content.
 - Image URLs: `https://fappeningbook.com/photos/{l1}/{l2}/{slug}/1000/{id}t.jpg` (thumbnail) → remove `t` for full-size (e.g. `1t.jpg` → `1.jpg`). Resolution segment is `1000`.
 
 ### TheFappeningBlog (thefappeningblog.com)
