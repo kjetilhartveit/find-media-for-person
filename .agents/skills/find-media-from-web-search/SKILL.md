@@ -107,6 +107,7 @@ These sites maintain dedicated galleries per celebrity and are high-value source
 - **CelebGate** (celeb.gate.cc): Dedicated celebrity nude photo gallery site. Gallery at `/{slug}/gallery.html`. Image URLs: `http://celeb.gate.cc/media/cache/image/upload/t/{initial}/{slug}-{id}.jpg` (use `data-orig` attribute for full-size, replace `http` with `https`).
 - **CelebHub** (celebhub.net): Similar format. Celebrity page at `/celebrity/{slug}`.
 - **Babepedia** (babepedia.com): Profile pages with user-uploaded photos. Images at `/pics/{Slug}.jpg` (main), `/pics/{Slug}N.jpg` (additional). Also has `/user-uploads/` directory for community uploads. Useful for aliases/biographical data.
+- **ModelsIntro** (modelsintro.com): Professional model photo gallery with 100-600+ photos per model. Uses JavaScript-rendered image URLs with token-based auth (`/gallery/loadimage.php?token=...`). Image extraction requires `web_fetch` markdown format — images appear as `![](/gallery/loadimage.php?token=...)`. Pagination via `/page/{n}`. Each photo link includes width/height params for thumbnails. Full-size images need larger token requests.
 - **Pictoa** (pictoa.com): Adult photo album site. Album URLs: `/albums/{slug}-{id}.html`. Images at `https://t1.pictoa.com/media/galleries/{hash}/{album_id}{timestamp_hex}.jpg`. Album IDs contain a hex timestamp suffix. Multiple albums per celeb may exist.
 
 ## Fashion/Reveal Article Sources
@@ -119,6 +120,10 @@ These sites regularly post about celebrities in revealing outfits:
 - **WWD** (wwd.com): Celebrity style galleries.
 - **Reality Tea** (realitytea.com): Articles about celebrity revealing fashion.
 - **The Sun** (the-sun.com): Celebrity fashion news with photos from `s-uk.illumservice.com` CDN.
+- **MexicoYa** (mexicoya.com.mx): High-volume photo gallery site, posts multiple articles per celebrity. Image URLs follow WordPress pattern: `https://mexicoya.com.mx/wp-content/uploads/{year}/{month}/{IMG_XXXX}.jpeg`. Multiple articles per person (bikini, fashion, travel). Download with curl but convert `.jpeg` extension to `.jpg` in filename.
+- **CelebMafia** (celebmafia.com): Celebrity fashion/photos gallery. WordPress images at `/wp-content/uploads/{year}/{month}/{slug}-{n}.jpg`. Per-celebrity tag pages at `/tag/{celeb-name}/`. 800-1200px wide images.
+- **FTV News** (ftvnews.com.tw): Taiwanese news site with celebrity photography. Images hosted on `cdn.ftvnews.com.tw` at specific article URLs (not extractable via regex). Use `web_fetch` on article pages to extract.
+- **Zoom TV** (zoomtventertainment.com): India entertainment site with celebrity photo galleries. Thumbnail URLs may all resolve to same placeholder; try fetching article to find actual image URLs.
 
 ## Quality Notes
 
