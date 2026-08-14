@@ -39,22 +39,24 @@ Download images from Fapeza (https://fapeza.com), an aggregator site of leaked/n
 
 ## Quality
 
-- Images range from ~42KB to ~520KB per image.
+- Images range from ~11KB (cover/thumbnail) to ~616KB per image.
 - All verified downloads are JPEG format.
 - Good quality HQ images, consistent URL pattern.
+- First few posts (low IDs) may have smaller image sizes; subsequent posts have full HQ images.
 
 ## Pagination
 
-- Profile pages use `https://fapeza.com/{slug}/page-N/` for pagination, but **pagination is often non-functional** — all pages return the same content.
+- Profile pages use `https://fapeza.com/{slug}/page-N/` for pagination, but **pagination is often non-functional** — pages either return 404 or show the same content as page 1.
 - Page 1 (no `/page-N/`) shows the posts for the profile.
-- Use cloudscraper to check multiple pages; if they all return the same set of post IDs, pagination is broken and you can stop.
+- Use cloudscraper to check pages 2 and 3; if they return 404 or same post IDs, pagination is broken and you can stop.
 - If pagination works, each page shows ~20 images.
+- Profile pages typically show the ~20 most recent posts; older posts require checking by post ID.
 
 ## Individual post URLs
 
 - Individual post pages: `https://fapeza.com/{slug}/{post_id}/`
 - Post IDs are sequential (e.g., `kate-hudson/1002/`, `kate-hudson/1001/`, `kate-hudson/1000/`, etc.)
-- Individual post pages have **2 images each**: a common cover/ref image (same for all posts in a profile, typically `_0016.jpg`) + the post-specific image. Only download the post-specific image (exclude `_0016.jpg`).
+- Individual post pages have **2 images each**: a common cover/ref image (shared across all posts in a profile) + the post-specific image. The shared image filename varies per profile (e.g., `_0006.jpg`, `_0016.jpg`). On Eleonora Bertoli: `_0006.jpg`. Consider skipping the shared cover to avoid duplicates, or download it once.
 - On **individual post pages**, images are already full-size (no `_400px.` suffix) — the thumbnail conversion is only needed on profile/gallery pages.
 - Profile pages may show ~1-20 images depending on profile size; smaller profiles (like Collien Fernandes with 6-19 posts) appear as a single page.
 - Post IDs may have gaps (e.g., posts 2–21 present but 3, 4, 5, 6 missing).
@@ -74,8 +76,8 @@ Download images from Fapeza (https://fapeza.com), an aggregator site of leaked/n
 ## Typical stats
 
 - Profile pages contain ~20 images (may be fewer for smaller profiles).
-- Total images per profile varies widely (e.g., Kate Hudson: 72 images, ~12MB total; Linda Lan: 17 images, ~2.6MB total).
-- Image files range from ~16KB to ~520KB.
+- Total images per profile varies widely (e.g., Kate Hudson: 72 images, ~12MB total; Linda Lan: 17 images, ~2.6MB total; Eleonora Bertoli: 67 posts, 68 unique images, ~12MB total).
+- Image files range from ~11KB (cover) to ~616KB.
 - Profile content ranges from hundreds of KB to several MB.
 - All verified downloads are JPEG format.
 </think>
