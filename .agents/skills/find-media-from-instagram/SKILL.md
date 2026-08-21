@@ -144,6 +144,17 @@ Use `-o "include=..."` to control what content types are downloaded from a profi
 - `sleep-request: [8, 16]` — wait 8–16 seconds between requests. **Do not reduce** — Instagram will 429 or invalidate the cookie.
 - `sleep-429: 120` — wait 120 seconds on rate limit response.
 
+## Common Account Name Changes
+
+Celebrity and public figure accounts frequently change handles. Search news sources to find the current handle:
+
+- **Name simplification**: e.g., `@meghanmarkle` → removed → `@meghan` (Jan 2025 return)
+- **Brand rebranding**: e.g., `@americanrivieraorchard` → `@aseverofficial`
+- **Official accounts discontinued**: e.g., `@sussexroyal` (stopped 2020) — still exists but has no new posts
+- **Old personal accounts deleted**: Old handles become available and may be re-registered
+
+When searching for media of a person, verify the current Instagram handle via web search, as the old one may no longer exist or may return NotFoundError.
+
 ## Pitfalls
 
 - **Handle may not match display name.** Content creators use different names/handles on Instagram vs. display names shown on aggregator sites. Search for aliases found on other platforms. Try variations with underscores, periods, and different capitalizations.
