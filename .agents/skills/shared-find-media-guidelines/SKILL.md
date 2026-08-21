@@ -74,11 +74,6 @@ When searching for content creators, the display name and social media handle ar
 - **Handle vs. display name**: On aggregator sites (Erome, etc.), content may be tagged with a creator's alternate handle or alias rather than their display name. Search using multiple variations found from other sources.
 - **Aggregator tagging patterns**: Content on sites like Erome is often tagged with the creator's primary social media handle. Searching for that handle on the aggregator can yield more results than searching the display name.
 
-### Search Verification Pitfalls
-
-- **False positives on search-based sites**: Search queries on aggregator sites (Xasiat, etc.) may return results for common names or initials. Always verify that downloaded content actually matches the target person before keeping it.
-- **Different people, same name**: Common given names (e.g., "Yumi" as a Japanese first name) combined with a search term return many unrelated results from different people. Verify by checking album titles, descriptions, and image content.
-
 ## Update/create skills when gaining new insight or updated information when doing searches or downloading media
 
 ### Creation/updating skills
