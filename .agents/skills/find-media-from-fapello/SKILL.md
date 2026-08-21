@@ -112,3 +112,10 @@ Thumbnails on profile pages use a similar pattern with `_300px.jpg` suffix (e.g.
 - **HEAD requests to video CDN URLs typically return 404 even when the video exists.** Use GET requests to check and download.
 - Videos tend to cluster in the upper end of the ID range (near the end of the profile). For a profile with 1,500+ items, videos were found at IDs ~1,495-1,575.
 - To find videos efficiently for large profiles: iterate through all IDs and try downloading `.mp4` files with GET requests (404 = no video, 200 = valid video). Videos typically range from ~150KB to ~12MB.
+
+### Small Profiles
+
+- Some profiles are very small (e.g., Kylie Jenner has only 14 items).
+- For small profiles, pagination may return the same items on all pages — deduplication is still needed, but you'll quickly see the profile is small.
+- Small profiles have no videos and only one page of real items.
+- Profile URL slug variations: try `{first}{last}` (no hyphen, e.g., `kyliejenner`), `{first}-{last}`, and `{name}-1`.
