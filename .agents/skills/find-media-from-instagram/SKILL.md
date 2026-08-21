@@ -137,6 +137,8 @@ Use `-o "include=..."` to control what content types are downloaded from a profi
 - **Fan accounts** often have user-edited content, fan edits, and reposts. Common naming patterns: `<username>theestallion`, `50shadesof<username>`, `theestallionbr`.
 - **Media/news accounts** (e.g., `revolt`, `uproxx`, `bet`, `essence`) often post multi-video articles with 8-12+ parts per post.
 - **Brand collaborations**: Major brands sometimes tag influencers in their posts, which can yield exclusive or unique content.
+- **Indian web series collaborators**: For Indian models/actresses, tagged content from web series production accounts (e.g., Cinema Dosti, Ullu, Kooku) provides valuable behind-the-scenes and BTS content. Check accounts of directors/producers who worked with the target.
+- **Repost/reel accounts**: Accounts like `<topic>_reel_<number>` often repost content. They can yield additional angles and versions not on the original profile.
 - **Carousels can be very large**: Some tagged media posts have 15+ image/video parts. A single `--range 1-250` pass may be consumed quickly by high-count carousels from accounts like `hhucitnews`, `revolt`, `adumboy`, `theonly.mommymaki`.
 
 ## Instagram-Specific Settings
