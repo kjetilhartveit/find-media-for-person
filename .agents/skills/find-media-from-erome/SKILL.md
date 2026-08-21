@@ -78,7 +78,7 @@ When gallery-dl is unavailable or fails:
 - After downloading, filter files by checking filename for the person's name.
 - Remove incomplete downloads (.part files) after filtering.
 - Inspect results before bulk downloading: use `gallery-dl -J URL` to dump JSON and `gallery-dl --get-urls URL` to see album list first.
-- Filter out AI-generated content: users like `AiCelebrityy`, `ThaHxncho`, `Xgalicialol`, `Botman32`, `KustomEditz`, `ggt1748` frequently post AI/fake content, not real media of the person.
+- Filter out AI-generated content: users like `AiCelebrityy`, `ThaHxncho`, `Xgalicialol`, `Botman32`, `KustomEditz`, `ggt1748` frequently post AI/fake content, not real media of the person. When filtering AI by title, catch patterns like "[Name] AI [word]" (where AI is separated from the name by other words, e.g., "Kylie Jenner AI leaked") as simple substring searches for "kylie ai" may miss these. Also filter by suspicious usernames containing "AI", "lora", or "realistic" in title context.
 - Filter out non-relevant "Tyla" variants: search results often include content about different people named "Tyla" (Tyla Wynn, Coco Tyla, Tyla Moore, Tyla Tyler, etc.).
 - **Search term "jiji" is extremely noisy**: Returns unrelated results including Spanish slang "jiji" (giggle), user names like "LadyboysFuckedBareback Jiji", and completely unrelated content. Only search with "jijiwonder" or "jiji+wonder" for better precision. When searching "jiji" alone, most results are false positives.
 - **Search term "wonder" alone is extremely noisy**: Returns 36+ albums with the word "wonder" in various contexts (wonder woman, one-hit wonder, etc.). Always use "jiji" + "wonder" together for precise results.
