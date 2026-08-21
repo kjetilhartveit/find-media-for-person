@@ -127,11 +127,24 @@ These sites regularly post about celebrities in revealing outfits:
 - **FTV News** (ftvnews.com.tw): Taiwanese news site with celebrity photography. Images hosted on `cdn.ftvnews.com.tw` at specific article URLs (not extractable via regex). Use `web_fetch` on article pages to extract.
 - **Zoom TV** (zoomtventertainment.com): India entertainment site with celebrity photo galleries. Thumbnail URLs may all resolve to same placeholder; try fetching article to find actual image URLs.
 
+## Indian Entertainment/Gallery Sites
+
+These sites host Indian celebrity/model content including web series photos and biographical galleries:
+
+- **televisiondrama.in**: Blogger-hosted Indian entertainment blog with comprehensive web series lists and photos per celebrity. Images at `blogger.googleusercontent.com/img/b/{HASH}/s1280/{file}.jpg` (full-size, 1280px wide) or `/s16000-rw/{file}.jpg` (thumbnail). Each article may have 10-20+ photos per celebrity covering individual web series. Useful for finding promotional photos from web series appearances.
+- **Enigmatixmedia** (enigmatixmedia.com): Professional media/artist directory with actor profiles. Full-size images at `https://www.restapi.enigmatixmedia.com/static/images/full/{id}.jpg`, Thumbnails at `/static/images/thumb/{id}.jpg`. Profile pages at `/{username}/photos`. May have bio, filmography, and photos.
+- **StarsUnfolded** (starsunfolded.com): Celebrity biography site with body measurements, filmography, and photos. WordPress images at `https://starsunfolded.com/wp-content/uploads/{year}/{month}/{name}.jpg`. Useful for biographical data and promotional photos.
+- **videocelebs.net**: Video gallery index with screenshot thumbnails. Screenshot URL pattern: `/contents/videos_screenshots/{range}/{id}/source/{n}.jpg` (e.g., `{range}` is like 80000, 103000 based on video ID range). Each video page has multiple screenshots (7-15+). Use `web_fetch` markdown format to extract screenshot URLs from video pages.
+- **Braflix** (braflix.bz): Adult content platform. Cast pages at `/cast/{id}-{username}`. May have poster/thumbnail images.
+- **Postcredit** (postcredit.tv): Indian movie/TV database with cast profiles. May have profile pictures.
+- **MXMaal** (mxmaal.com): Indian adult content directory. Model pages at `/model/` with A-Z listing. Check for profile images.
+
 ## Quality Notes
 
 - News/reblog sites typically host resized images (600-1200px wide). They are copies of the original from the person's Instagram/social media.
 - Full-size originals are usually on the source platform (Instagram) and may require downloading from there directly.
 - Look for `data-orig`, `srcset`, or `data-src` attributes for higher quality variants.
+- **Blogger/Blogspot images**: Use `/s1280/` path segment for 1280px wide full-size vs `/s800/` or `/s400/` for smaller. `/s16000-rw/` is the Blogger CDN internal resize — not the URL path segment.
 
 ## Pitfalls
 
