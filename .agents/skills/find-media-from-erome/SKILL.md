@@ -92,6 +92,9 @@ When gallery-dl is unavailable or fails:
 
 ## Pitfalls
 
+- **"Desi-rekha" persona confusion**: User `RITUHINA` frequently posts content tagged as "Desi-rekha" — this is a generic Desi adult persona, NOT necessarily any specific real person. Search for "Rekha" on Erome returns mostly RITUHINA content that is unrelated to the Indian actress/model Rekha Mona Sarkar (known for Ullu/Kooku web series). When you see "Desi-rekha" in titles, it's almost certainly NOT the real person.
+- **Search terms that return NO results for "Rekha Bhabhi" / "Rekha Mona Sarkar"**: "Rekha Bhabhi", "Rekhabhabi", "Rekha Mona", "Rekha Mona Sarkar", "mona_rekha", "Rekha+Ullu", "Rekha+Kooku" all return zero results on Erome. This suggests Erome does not have content specifically tagged for this person.
+- **False positives from similar names**: Search for "rekha" (lowercase) returns albums about completely unrelated people (e.g., "Réka 23 Hungary" by user Miketzo, or Spanish-language content with "#REKA" tag). Carefully inspect album titles before downloading.
 - Album pages may be behind Cloudflare protection in some cases.
 - Erome filenames are random IDs — no semantic naming for downloaded files.
 - Search results per person can be very large (48+ albums), leading to timeouts; download in batches.
