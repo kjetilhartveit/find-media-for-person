@@ -30,6 +30,12 @@ stk.st is a WordPress content farm that specializes in viral adult entertainment
 - **Kylie Jenner**: `/kylie+jenner+naked+dress`, `/leaked+photos+of+kylie+jenner`, `/kylie+jenner+nude+photoshoot`, `/kylie+jenner+r34`, `/kylie+jenner+leaked+nude+photos`, `/kylie+jenner+deep+fake`, `/kylie+jenner+clown`
 - Note: Many of the "nude" articles contain mainstream fashion/editorial images, not actual adult content.
 
+- **Rekha Bhabhi (Rekha Mona Sarkar)**: `/rekha+mona+sarkar` (main article, ~170KB), `/rekha+mona+sarkar+nudes`, `/rekha+mona+sarkar+web+series+video`, `/rekha+nude`, `/rekha+sex`
+  - **IMPORTANT**: stk.st `/search?query=rekha+bhabhi` returns content but individual POST URLs like `/stk.st/rekha+bhabhi` return 0 bytes (empty page, not blocked). Use full names (`rekha+mona+sarkar`) for reliable results.
+  - Pages like `/rekha+nude`, `/rekha+sex` return content but images may be from various "Rekha" sources (actress Rekha, NCW chief Rekha Sharma, etc.) — filter carefully.
+  - **No facials/cum-on-face content found** from stk.st searches for Rekha Bhabhi — results are mostly web series stills, Instagram screenshots, and general nude photo gallery images from adult content sites.
+  - Search pages via `/search?query=rekha+mona+sarkar` also work but individual post URLs are easier to parse.
+
 ## URL Patterns
 
 - Site: `https://stk.st`
@@ -39,12 +45,15 @@ stk.st is a WordPress content farm that specializes in viral adult entertainment
 - Images are served via WordPress Jetpack CDN: `https://i3.wp.com/origin-domain/path` (strip `i3.wp.com/` prefix to get original URL)
 - Additional search variations: `/search?query={person}+onlyfans`, `/search?query={person}+onlyfans+porn`, `/search?query={person}+onlyfans+videos`
 - `?ssl=1` suffix on images can usually be stripped for direct access, but some domains may require it
+- For Indian "bhabhi" content creators using the nickname format: stk.st uses `/search?query=` endpoint but individual POST URLs with `+bhabhi` may return 0 bytes. Use the full name variation (e.g., `rekha+mona+sarkar`) for better results.
 
 ## Known Image Source Domains on stk.st
 
 Content from stk.st pages comes from various aggregated sources. **Important**: stk.st does NOT aggregate Reddit, X/Twitter, or Imgur content for most individuals — images come directly from adult-content hosting sites. Images go through WordPress Jetpack CDN: `https://i3.wp.com/origin-domain/path` (strip `i3.wp.com/` prefix to get original URL).
 
 Common image domains: thefappeningblog.com, nudogram.com, fapello.com, masterfap.net, erome.com, sexdug.com, mixputaria.com, virulpornhub.com, camwhores.tv, phncdn.com (Pornhub), rdtcdn.com (RedTube), xvideos-cdn.com, xnxx-cdn.com, eporner.com, vrsmash.com, sxyprn.com.es, babes.plus, vip.sexhd.pics / sexhd.pics, cdn5-images.motherlessmedia.com, www.xxxporn.pics, tiny-asians.com, wallpaperheaven.com, fappenist.com, i.imgur.com, people.com, essence.com, titis.org (Russian adult site), boomba.club (VK-based adult site), naked.chiks.org, zoomgirls.net, imperiodefamosas.com
+
+Additional found domains (2026-08-22): biographyinhindi.com, trendceylon.com, webseriesplus.com, news.easyshiksha.com, picshare649565002.files.wordpress.com, desitales2.com, eroticmv.com, dropmms.net, aznude.com/aznude.com, desixflix.com, www.dnpindia.in, www.informalnewz.com, pornkeen.net, pornrain.com, nangiphotos.com, imgfy.net, mensxp.com, hindustantimes.com (NOT about the person), timesofindia.com (NOT about the person), jagran.com (NOT about the person), freepressjournal.com (NOT about the person), siasat.com (NOT about the person), abplive.com (NOT about the person), www.bollywoodshaadis.com, lehres.com
 
 ## Primary download method — Manual scraping and download
 
@@ -112,4 +121,13 @@ Since stk.st heavily protects itself with Cloudflare, web search is often the mo
   - `essence.com` returns HTTP 403 Forbidden
   - `thenativemag.com` returns HTTP 404 (image may have been removed)
   - `mjazzmagonline.co.za` returns HTTP 404 (image may have been removed)
+  - **trendceylon.com**: may return HTTP 403/404 for certain images (tested on rekha mona sarkar pages)
+  - **desixflix.com**: may return empty responses or fail downloads
 - Test accessibility with `curl -sI` before bulk downloading from a domain.
+- **Desi adult content sites** (desitales2.com, eroticmv.com, dropmms.net, etc.) generally work but check HTTP status — they may return different content than expected.
+
+### Person-name collision pitfalls
+
+- **"Rekha" name collision**: Indian actress Rekha (Bollywood veteran), NCW chief Rekha Sharma, Telugu actress Rekha Boj, and Rekha Mona Sarkar ("Rekha Bhabhi") are all frequently confused on stk.st pages. Always check the actual image source URL and filename for context.
+- **News article images are NOT adult content**: Times of India, Indian Express, Hindustan Times, Economic Times, etc. images are mainstream news photos that may match name searches. Most are NOT about the person you're looking for.
+- **"Bhabhi" keyword generates generic content**: Pages like `/naked+bhabhi+pics`, `/bhabhi+nude+image` are for generic Indian "bhabhi" porn, not specifically about "Rekha Bhabhi" (Rekha Mona Sarkar). These are NOT person-specific results.
