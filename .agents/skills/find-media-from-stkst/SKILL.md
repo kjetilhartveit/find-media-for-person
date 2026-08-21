@@ -21,8 +21,14 @@ stk.st is a WordPress content farm that specializes in viral adult entertainment
 
 - **Not all person queries return relevant content:** Searches for non-adult celebrities (e.g., "megan thee stallion") typically return no matches or completely unrelated results. stk.st focuses on adult content creators, cam models, and OnlyFans leak aggregators.
 - **stk.st is generally NOT useful for non-adult celebrities**: For Tyla (South African singer), virtually all results were about OTHER people named "Tyla" (Tyla Jessop, Tyla Wyn, Tyla ASMR, etc.) plus completely unrelated articles. Only 2 Fappenist images of Tyla Seethal were found across all searches.
+- **Major celebrities like Kylie Jenner**: stk.st does find relevant articles, but they are mostly mainstream fashion/celebrity press images, not adult content. The "nude" articles are typically magazine editorial photoshoots, swimsuit issues, or revealing fashion looks.
 - Search URLs for specific searches: `/search?query={person}+nude`, `/search?query={person}+seethal`, etc.
 - The `/search?query=tyla+seethal` search returned posts like `/tyla+seethal+porn`, `/tyla+seethal+ass` but these pages are essentially garbage — random images from any article mentioning "Tyla" or "South Africa".
+
+### Example stk.st article URLs by person
+
+- **Kylie Jenner**: `/kylie+jenner+naked+dress`, `/leaked+photos+of+kylie+jenner`, `/kylie+jenner+nude+photoshoot`, `/kylie+jenner+r34`, `/kylie+jenner+leaked+nude+photos`, `/kylie+jenner+deep+fake`, `/kylie+jenner+clown`
+- Note: Many of the "nude" articles contain mainstream fashion/editorial images, not actual adult content.
 
 ## URL Patterns
 
@@ -42,9 +48,21 @@ Common image domains: thefappeningblog.com, nudogram.com, fapello.com, masterfap
 
 ## Primary download method — Manual scraping and download
 
+### Method 1: Using web search to discover URLs (recommended)
+
+Since stk.st heavily protects itself with Cloudflare, web search is often the most effective way to discover image URLs:
+
+1. **Web search for stk.st articles**: `site:stk.st "{person}+nude"` or `site:stk.st "{person}"`
+2. **Parse the search result highlights** — they contain image URLs embedded in the result snippets
+3. **Strip the `https://i3.wp.com/` prefix** from each image URL to get the original source
+4. **Strip `?ssl=1` or `&ssl=1` suffixes** from the URLs
+
+### Method 2: Direct fetching (works sometimes but Cloudflare is common)
+
 1. **Fetch the page**: `curl -s --tls-max 1.2 -A "Mozilla/5.0 ..." "https://stk.st/{query}" > page.html`
    - Use `--tls-max 1.2` flag to bypass Cloudflare challenges on some pages
    - Use `-k` flag if HTTPS verification fails
+   - **Note**: stk.st now frequently uses JavaScript-based Cloudflare challenges that block curl, headless browsers (playwright), and other automated tools. Expect 4815 byte responses or empty pages.
 2. **Extract image URLs** from the page HTML (focus on `entry-content` area of individual post pages):
    - Find `<img>` tags with `class="...wp-image-\d+..."` — these are the article's actual images
    - Strip `https://i3.wp.com/` prefix to get original URL
@@ -80,6 +98,8 @@ Common image domains: thefappeningblog.com, nudogram.com, fapello.com, masterfap
 - **Network-accessible domains vary**: Some source domains may be unreachable due to DNS failures (e.g., motherlessmedia.com, vip.sexhd.pics) or SSL certificate issues (e.g., babes.plus — Let's Encrypt intermediate not in trust store). Test each domain's accessibility before relying on it.
 - **Pages with generic keywords (e.g., "Mali") produce lots of noise**: News, sports, and political content may match the individual's name. Use keyword-specific post paths (e.g., `/joon+mali+naked`) for cleaner results.
 - Search result thumbnail titles and the actual images on the linked pages often don't match. Thumbnails may show one person while the page content shows another.
+- **s.yimg.com URLs**: The Yahoo image CDN sometimes returns 400 when the URL contains `/http?ssl=1` as part of the path (a stk.st quirk). These URLs need manual reconstruction.
+- **Encoded filenames**: URLs with `%20` (spaces), `:large` (Twitter), or complex query params need URL-decoding for clean file names.
 
 ### Image domain pitfalls
 
