@@ -24,25 +24,33 @@ Download images from Fapeza (https://fapeza.com), an aggregator site of leaked/n
 - Page title may contain alternate names: `Linda Lan / foodsandnood.s / lindarainbow Nude Leaks OnlyFans - Fapeza`. Try alternate names as additional slugs to check for more content.
 - **Note:** Some models never appear on Fapeza (e.g., Joon Mali — profile returned 404 on all slugs tried, site search returned 0 results in August 2026). Always verify by searching the site first (`fapeza.com/search?q=NAME`) before assuming a profile exists.
 - Multiple profile slugs can exist for the same person under different aliases (e.g., "Megan" appeared as both `megan` and `megan-thee-stallion-1`).
-- **Multiple slugs may have DIFFERENT content, not just duplicates:** (e.g., Collien Fernandes has both `collien-fernandes` with 6 posts and `collien-ulmen-fernandes` with 19 posts — different images on each, not overlapping). Always check all discovered slugs and combine unique images.
+- **Multiple slugs may have DIFFERENT content, not just duplicates:** (e.g., Collien Fernandes has both `collien-fernandes` with 6 posts and `collien-ulmen-fernandes` with 19 posts — different images on each, not overlapping). Kylie Jenner has both `kylie-jenner` (785 images, IDs 29-5826 with gaps) and `kyliejenner` (6 images, IDs 2-18) — distinct images, no overlap. Always check all discovered slugs and combine unique images.
 - **Important:** Always use the non-www domain (`fapeza.com`). The `www.` domain triggers a Cloudflare JS challenge (returns 401).
 - Country-specific TLDs also exist: `cz.fapeza.com`, `de.fapeza.com`, `es.fapeza.com`, `fr.fapeza.com`, etc.
 - Profile slug may not match the exact display name. Try variations: full name, shortened name, underscore vs hyphen.
+
+## Direct image URL pattern (bypass post pages)
+
+- Direct image URLs can be constructed without visiting individual post pages:
+  `https://fapeza.com/media/k/y/{slug}/{folder}/{filename}`
+  - `folder = floor(post_id/1000)*1000 + 1000` (e.g., ID 1011→folder 2000, ID 5826→folder 6000, ID 29→folder 1000)
+  - `filename`: For IDs >= 1000 → `{slug}_{id}.jpg` (e.g., `kylie-jenner_1011.jpg`); For IDs < 1000 → `{slug}_0{id}.jpg` or `{slug}_00{id}.jpg` (zero-padded to 4 digits, e.g., `kylie-jenner_0029.jpg`)
+  - **Note:** The Referer header is NOT required for direct image URL requests.
+  - This avoids the need to enumerate post IDs — you can attempt downloads directly and skip 404s.
 
 ## Recommendations on how to download
 
 - Fapeza has sequential post IDs. URLs are predictable: base URL + ID-based paths.
 - Full-size HQ images are available directly.
-- **Required:** Set a `Referer` header in requests. Without it, image requests return 404.
-- Rate limiting: sleep 0.3–0.5s between requests is sufficient to avoid blocking.
+- Rate limiting: sleep 0.15–0.5s between requests. Cloudscraper sessions can be reused.
 - Directory formula: `floor(id/1000)*1000 + 1000` for organizing downloads.
 
 ## Quality
 
-- Images range from ~11KB (cover/thumbnail) to ~616KB per image.
+- Images range from ~11KB (cover/thumbnail) to ~760KB per image.
 - All verified downloads are JPEG format.
-- Good quality HQ images, consistent URL pattern.
 - First few posts (low IDs) may have smaller image sizes; subsequent posts have full HQ images.
+- No videos have been found on Fapeza profiles (image-only content).
 
 ## Pagination
 
@@ -56,10 +64,11 @@ Download images from Fapeza (https://fapeza.com), an aggregator site of leaked/n
 
 - Individual post pages: `https://fapeza.com/{slug}/{post_id}/`
 - Post IDs are sequential (e.g., `kate-hudson/1002/`, `kate-hudson/1001/`, `kate-hudson/1000/`, etc.)
-- Individual post pages have **2 images each**: a common cover/ref image (shared across all posts in a profile) + the post-specific image. The shared image filename varies per profile (e.g., `_0006.jpg`, `_0016.jpg`). On Eleonora Bertoli: `_0006.jpg`. Consider skipping the shared cover to avoid duplicates, or download it once.
+- Individual post pages have **2 images each**: a common cover/ref image (shared across all posts in a profile) + the post-specific image. The shared image filename varies per profile (e.g., `_0006.jpg`, `_0012.jpg`, `_0016.jpg`). Consider skipping the shared cover to avoid duplicates.
 - On **individual post pages**, images are already full-size (no `_400px.` suffix) — the thumbnail conversion is only needed on profile/gallery pages.
+- **Filename padding for low IDs:** Posts with IDs < 1000 use zero-padded filenames in the URL (e.g., `kylie-jenner_0029.jpg`). Posts with IDs >= 1000 use non-padded (e.g., `kylie-jenner_1011.jpg`).
 - Profile pages may show ~1-20 images depending on profile size; smaller profiles (like Collien Fernandes with 6-19 posts) appear as a single page.
-- Post IDs may have gaps (e.g., posts 2–21 present but 3, 4, 5, 6 missing).
+- Post IDs may have gaps — content can be very sparse in the lower ID range (e.g., IDs 29 and 32 exist but 30-31 don't).
 
 ## Pitfalls
 
@@ -77,9 +86,11 @@ Download images from Fapeza (https://fapeza.com), an aggregator site of leaked/n
 
 - Profile pages contain ~20 images (may be fewer for smaller profiles).
 - Total images per profile varies widely (e.g., Kate Hudson: 72 images, ~12MB total; Linda Lan: 17 images, ~2.6MB total; Eleonora Bertoli: 67 posts, 68 unique images, ~12MB total).
-- Image files range from ~11KB (cover) to ~616KB.
-- Profile content ranges from hundreds of KB to several MB.
+- Some models may have MULTIPLE profiles with different content (e.g., Kylie Jenner: `kylie-jenner` with 785 images ~121MB, and `kyliejenner` with 6 images).
+- Image files range from ~11KB (cover) to ~760KB.
+- Profile content ranges from hundreds of KB to several MB (or 100+ MB for very large profiles).
 - All verified downloads are JPEG format.
+- No videos have been found on Fapeza profiles.
 </think>
 
 ## Tips on changing photos to high quality in the browser
