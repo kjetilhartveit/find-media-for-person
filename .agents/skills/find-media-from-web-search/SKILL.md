@@ -112,6 +112,18 @@ These sites maintain dedicated galleries per celebrity and are high-value source
 - **Pictoa** (pictoa.com): Adult photo album site. Album URLs: `/albums/{slug}-{id}.html`. Images at `https://t1.pictoa.com/media/galleries/{hash}/{album_id}{timestamp_hex}.jpg`. Album IDs contain a hex timestamp suffix. Multiple albums per celeb may exist.
 - **EroMe** (erome.com): User-hosted adult content sharing with albums. Album URLs: `https://erome.com/a/{albumId}`. Extract full-size image URLs by searching the HTML for `https://s{N}.erome.com/{id}/{albumId}/thumbs/{imgId}.jpg` and removing `/thumbs/` to get the full-size URL pattern `https://s{N}.erome.com/{id}/{albumId}/{imgId}.jpg`. Albums may contain many images across multiple server subdomains (s2, s10, s15, s19, s20, s22, s3, s41-s83, etc.). Use `curl | grep -oE` to extract thumbnail URLs, then `sed 's|/thumbs/|/|g'` to get full-size. Some albums have 50-100+ images. EroMe content is often tagged with the creator's alternate handles, aliases, or display names — search for content using multiple name variations.
 
+## Adult Star Photo Galleries
+
+These sites are high-value sources for specific adult film stars/models:
+
+- **PornPics** (pornpics.com): Largest porn star photo gallery site. 16-20 images per gallery. Use `gallery-dl` for bulk downloads: `gallery-dl "https://www.pornpics.com/pornstars/{name}/"` (see skill `find-media-from-pornpics`). Search for extras: `gallery-dl "https://www.pornpics.com/?q={name}+facial"`. Full-size images ~2MB each.
+- **MyPornstarBook** (mypornstarbook.net): 45+ galleries per star, ~16 images each. Thumbnails accessible at `/thumbnails/tn{N}.jpg` — full images blocked by Cloudflare (403). Pattern: `https://www.mypornstarbook.net/pornstars/{first_letter}/{name}/gallery{NN}/thumbnails/tn{NN}.jpg`.
+- **EroticBeauties** (eroticbeauties.net): Gallery site with images from multiple studios (Digital Desire, FtvGirls, etc.). Image URLs: `https://cdn.eroticbeauties.net/content/{gallery_path}/full/{image_name}.jpg` — use `/full/` path for highest quality.
+- **MyPornstarBlogs** (mypornstarblogs.com): Blog-style gallery per star. Images at `https://pictures.mypornstarblogs.com/wp-content/blogs.dir/761/files/202X/03/{slug}-scaled.jpg`. Usually 10-20 images per gallery post, multiple posts per star.
+- **YesPornPics** (yespornpics.com): Adult photo gallery site with model pages at `/sex/{name}/`. Note: many placeholder/16-byte images may be returned — verify with `file` command. Pattern: `https://x.uuu.cam/pics/{source}/{name}/{slug}/arya-fae-{N}.jpg`.
+- **Pichunter** (pichunter.com): Gallery site with model pages at `/models/{name_underscored}`. Requires `web_fetch` HTML format to extract images due to JS rendering.
+- **JJGirls** (jjgirls.com): Pornpics mirror/gallery with biography sections. Gallery format similar to pornpics.com.
+
 ## Fashion/Reveal Article Sources
 
 These sites regularly post about celebrities in revealing outfits:
