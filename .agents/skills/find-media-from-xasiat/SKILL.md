@@ -7,68 +7,63 @@ description: Use when you need to find and download media from Xasiat (xasiat.co
 
 - Downloading leaked videos from Xasiat (xasiat.com) featuring specific models/pornstars
 - Searching for content by model name on Xasiat
-- Scraping Xasiat album/video pages using gallery-dl or yt-dlp
+- Scraping Xasiat album pages (images) using gallery-dl
+- Downloading video files using curl_cffi directly
 
 # Find media from Xasiat (xasiat.com)
 
-Xasiat is an aggregator of leaked adult content, particularly Asian models (Thai, Chinese, Japanese, Korean). Content is organized by model and album. **Non-Asian celebrities and pop stars are rarely featured.** The site specializes in leaked adult content of Asian adult entertainment performers. Search results for Western celebrities or pop stars typically return empty.
+Xasiat is an aggregator of leaked adult content, particularly Asian models (Thai, Chinese, Japanese, Korean). Content is organized by model and album. **Non-Asian adult performers (pornstars) may also appear** if they are known in the industry. Search results for non-adult Western celebrities typically return empty results.
 
 ## URL Patterns
 
-- **Model profile**: `https://www.xasiat.com/albums/models/MODEL/` or `https://www.xasiat.com/fr/models/MODEL/` (French locale)
-- **Model RSS feed**: `https://www.xasiat.com/rss/models/MODEL/`
-- **Model search**: `https://www.xasiat.com/search/QUERY/`
+- **Model search**: `https://www.xasiat.com/search/QUERY/` (use model name variations)
 - **Video page**: `https://www.xasiat.com/videos/VIDEO_ID/TITLE/`
 - **Album page**: `https://www.xasiat.com/albums/ALBUM_ID/TITLE/`
 - **Tags**: `https://www.xasiat.com/tags/TAG_NAME/`
 - **Categories**: `https://www.xasiat.com/categories/CATEGORY/`
 
+**Note**: Model profile pages (`/albums/models/MODEL/`) return 403/404 and are not usable.
+
 ## Model page discovery
 
-Model pages show content organized into sections like "Top Models", "Top Categories", and the specific model's section. Content is grouped by section headings (h4 tags). Video URLs follow the pattern `/videos/NUMBER/TITLE/`.
+Model profiles at `/albums/models/MODEL/` return 403/404. Use search instead. Search results are rendered in async blocks with section headings. Video URLs follow the pattern `/videos/NUMBER/TITLE/`.
 
-Videos on the model page may include both the target model's content AND related/recommended videos from the same collection. **Verify each video** by checking the title and description for the model's name. Videos without the model's name in the title/description may be from a different model entirely.
+Videos on the search page may include both the target model's content AND related/recommended videos. **Verify each video** by checking the title and description for the model's name. Videos without the model's name in the title/description may be from a different model entirely.
 
 ## Extractors
 
 ### gallery-dl
 
-- **XasiatModelExtractor**: `https://www.xasiat.com/albums/models/MODEL/`
-  - Note: The async block endpoint may return 404 in headless environments. Content may not be fully discoverable via gallery-dl.
 - **XasiatSearchExtractor**: `https://www.xasiat.com/search/QUERY/`
-  - Note: The async block endpoint may also return 404 for search results.
+  - Works for search results. Uses the async block endpoint successfully.
+  - Note: Returns ALL content matching the query - filter results for the target model.
 - **XasiatAlbumExtractor**: `https://www.xasiat.com/albums/ALBUM_ID/TITLE/`
+  - Downloads album images. Works with `i-acctoken` authentication.
+- **Model profiles are NOT supported**: The `/albums/models/MODEL/` URL pattern returns 403/404. Model profiles do not exist on Xasiat.
 
-### yt-dlp (recommended for videos)
+### yt-dlp (does NOT work for video downloads)
 
-```bash
-# Download from model profile
-yt-dlp --restrict-filenames -o "%(title)s.%(ext)s" \
-  "https://www.xasiat.com/albums/models/MODEL/"
+yt-dlp falls back to the generic extractor and fails due to the KVS player engine version mismatch. The player engine on Xasiat uses an untested major version which prevents format extraction. **Do not use yt-dlp for Xasiat video downloads**.
 
-# Download individual video
-yt-dlp --restrict-filenames -o "%(title)s.%(ext)s" \
-  "https://www.xasiat.com/videos/12345/TITLE/"
+### gallery-dl does NOT support individual video URLs
 
-# Download multiple videos at once
-yt-dlp --restrict-filenames -o "%(title)s.%(ext)s" \
-  --no-playlist \
-  "https://www.xasiat.com/videos/ID1/TITLE1/" \
-  "https://www.xasiat.com/videos/ID2/TITLE2/"
-```
+The `XasiatSearchExtractor` and `XasiatAlbumExtractor` work for search results and albums (downloading images). However, individual video URLs like `/videos/12345/` are not supported by gallery-dl.
 
-## Video pages often show content from multiple models/collections
+## Searching and verification
 
-When scraping a model page, the HTML may list videos in section blocks. Some videos may be from different models. Always verify:
+When searching, filter results by checking:
+1. Video/album title contains the exact model name
+2. Description matches (avoids misidentified models)
 
-1. Video title matches the model name
-2. Description matches the model name (shows model name, not just "Thaiswinger" or collection name)
+Search for name variations (e.g., hyphenated vs underscored). Always verify by checking titles before downloading.
 
 ## Important caveats
 
-- **Non-Asian/non-adult-model searches return empty**: Searching for Western celebrities, pop stars, or non-adult-models typically yields zero results. Xasiat primarily covers Asian adult entertainment performers.
+- **Non-Asian/adult-model searches may return results**: While Xasiat primarily covers Asian performers, adult performers (pornstars) of any ethnicity may appear. Western adult models/pornstars (e.g., Maya Bijou) CAN have content if they are known in the industry.
 - **Name-based false positives**: Searching for a celebrity name (e.g. "Tyla") may return no results, while searching a variant (e.g. "Tyla chanteuse" = "Tyla singer" in French) may return videos of an adult performer who looks like or resembles the celebrity — NOT the actual celebrity. Always verify content by checking titles, descriptions, and video previews.
+- **Search results contain many false positives**: Search queries often return content from multiple models with similar names. Always filter by exact model name matches.
 - **Both videos and albums may return empty**: The async endpoints return `There is no data in this list.` when no content matches, for both video and album searches.
+- **Model profile pages return 403/404**: The `/albums/models/MODEL/` format does not work for model profiles. They return 403 (Forbidden) or 404. Only search URLs and individual video/album pages are accessible.
 
 ## Thumbnails and preview
 
@@ -76,6 +71,36 @@ Video previews are available at:
 `https://www.xasiat.com/get_file/CATEGORY/HASH/DIRECTORY/VIDEO_ID/VIDEO_ID_preview.mp4/`
 
 Example: `https://www.xasiat.com/get_file/10/376a31b278f571abb79944f5dc25f089/14000/14444/14444_preview.mp4/`
+
+## Downloading videos
+
+Direct download URLs require browser fingerprinting (Cloudflare protection). Use `curl_cffi` in Python:
+
+```python
+from curl_cffi import requests as cffi_requests
+import re
+
+s = cffi_requests.Session(impersonate='chrome')
+resp = s.get('https://www.xasiat.com/videos/VIDEO_ID/TITLE/')
+
+# Extract video URL from flashvars (best quality)
+alt_match = re.search(r'video_alt_url:\s*["\x27]([^"\x27\r\n]+)["\x27]', resp.text)
+# Or SD quality:
+sd_match = re.search(r'video_url:\s*["\x27]([^"\x27\r\n]+)["\x27]', resp.text)
+
+vurl = alt_match.group(1) if alt_match else sd_match.group(1)
+vresp = s.get(vurl, stream=True, timeout=300)
+
+with open('output.mp4', 'wb') as f:
+    for chunk in vresp.iter_content(chunk_size=65536):
+        f.write(chunk)
+```
+
+The video download URL has the format:
+`https://www.xasiat.com/get_file/CATEGORY/HASH/60000/VIDEO_ID/VIDEO_ID_source.mp4/?v-acctoken=TOKEN`
+
+Or SD:
+`https://www.xasiat.com/get_file/CATEGORY/HASH/60000/VIDEO_ID/VIDEO_ID.mp4/?v-acctoken=TOKEN`
 
 ## Tags commonly associated with Asian models
 
