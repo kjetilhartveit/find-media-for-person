@@ -106,6 +106,26 @@ Since stk.st heavily protects itself with Cloudflare, web search is often the mo
 - Image downloads may require checking HTTP status codes — 403 can appear, and some domains block automated requests
 - **Network-accessible domains vary**: Some source domains may be unreachable due to DNS failures (e.g., motherlessmedia.com, vip.sexhd.pics) or SSL certificate issues (e.g., babes.plus — Let's Encrypt intermediate not in trust store). Test each domain's accessibility before relying on it.
 - **Pages with generic keywords (e.g., "Mali") produce lots of noise**: News, sports, and political content may match the individual's name. Use keyword-specific post paths (e.g., `/joon+mali+naked`) for cleaner results.
+
+### Known stk.st article URLs by person — Arya Fae
+
+- **stk.st/arya+fae+gallery**: Main gallery page with 19 images from various adult gallery sites (porngals4, eporner, jjgirls, pornstar.gallery, lemmccheck, erosberry, babesinporn, pornpics.vip, eroticbeauties, babe.today, im9.eu, mypornstarbook)
+- **stk.st/arya+faye**: Fashion/wallpaper page with 10 images including pinimg.com wallpapers and wallhaven.cc images
+- **stk.st/arya+faye+porn**: Links to babepedia and ypncdn content, plus anal galleries
+- **stk.st/cowgirl.kassidy**: Contains a MAX.PORN screenshot with Arya Fae
+- **stk.st/arya+fae+bdsm**: Thumbnail preview of BDSM video content
+
+### Image domain accessibility for Arya Fae stk.st content
+
+**Domains that work reliably:**
+- `porngals4.com`, `babes.plus`, `lemmecheck.com`, `eroticbeauties.net`, `pornpics.vip`, `babe.today`, `im9.eu`, `pinimg.com`, `max.porn`, `babepedia.com`
+- `wallhaven.cc` works but blocks direct curl requests (returns 0 bytes)
+
+**Domains that FAIL:**
+- `pics.jjgirls.com` — returns empty/HTML (blocks automated requests)
+- `vip.pornstar.gallery` — returns empty/HTML
+- `vip.sexhd.pics` — network unreachable (DNS issues noted in general pitfalls)
+- `wallhaven.cc` — blocks curl (0 bytes)
 - Search result thumbnail titles and the actual images on the linked pages often don't match. Thumbnails may show one person while the page content shows another.
 - **s.yimg.com URLs**: The Yahoo image CDN sometimes returns 400 when the URL contains `/http?ssl=1` as part of the path (a stk.st quirk). These URLs need manual reconstruction.
 - **Encoded filenames**: URLs with `%20` (spaces), `:large` (Twitter), or complex query params need URL-decoding for clean file names.

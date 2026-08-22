@@ -74,6 +74,12 @@ When gallery-dl is unavailable or fails:
 - **miillffss**: Posts dedicated albums per person (e.g., "INNA LOVE 1", "INNA LOVE 3") with large image sets (35-78 images per album).
 - **Dclotta**: Posts INNA music video re-edits (e.g., "INNA - 'INNdiA' MV [Sexy Lesbian Re-Edit]", "INNA - 'Cola Song' [Bikini Dancing Edit]").
 - **Zwood007**: Posts German model content in series (e.g., "Inna Blank 52yo German slut", "Inna Blank 53 Brandenburg").
+- **Jon987456qwdr**: Posts cumfacial content (e.g., "Arya Fae Cum").
+- **El-Mejor-Anal**: Posts anal-themed content, often with Spanish titles and multiple videos per album. Also posts content tagged with aliases (e.g., "arya faye" vs "arya fae").
+- **Just-Taboo**: Posts step-family/themed content (e.g., "I think I found the problem, miss", "My stepson will fuck your pussy sore!").
+- **The_Prez**: Posts AMWF (Asian-White-Male-Female) or interracial themed content.
+- **Totalporn**: Posts oral-themed content (e.g., "Arya Fae takes all seed in her mouth").
+- **S0494**: Posts Spanish-language photo collections, often with generic titles in Spanish (e.g., "Mi top de caritas mas lecheables del porno"). May include both images and occasional videos.
 
 ## Download Filtering Tips
 
