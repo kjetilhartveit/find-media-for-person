@@ -34,14 +34,20 @@ Extractors: `PornhubPhotosExtractor`, `PornhubGalleryExtractor`
 ## Alternative method — yt-dlp (for videos)
 
 ```bash
-# Single video (requires browser impersonation)
-yt-dlp -o "%(title)s.%(ext)s" -f "best" "https://www.pornhub.com/view_video.php?viewkey=ph632a2ba4c7c09"
+# Single video with Chrome impersonation (install curl_cffi first)
+yt-dlp -f "best[height<=720]" --impersonate "Chrome-131:Android-14" \
+  --no-playlist -o "%(title)s.%(ext)s" \
+  "https://www.pornhub.com/view_video.php?viewkey=ph632a2ba4c7c09"
 
-# Profile pages
-yt-dlp -o "%(title)s.%(ext)s" "https://www.pornhub.com/pornstar/halle-hayes"
+# Profile pages (may return 410 for retired models)
+yt-dlp -f "best[height<=720]" --impersonate "Chrome-131:Android-14" \
+  "https://www.pornhub.com/pornstar/halle-hayes"
 ```
 
-**Requires**: playwright browser impersonation (`impersonate:browser=chrome`) for video downloads to work.
+**Prerequisite**: Install `curl_cffi` for `--impersonate` to work (`pip install curl_cffi`).
+Verify available targets: `yt-dlp --list-impersonate-targets`.
+
+**Search URL format**: Use `pornhub.com/video/search?search={query}` - the modern `/visual/search` endpoint may return 404.
 
 ### Fallback: Extract HLS URLs from HTML and download
 
@@ -108,3 +114,6 @@ curl -sL -H "User-Agent: Mozilla/5.0" \
 - **Empty model profiles (HTTP 200, no content)** - Some model profiles return HTTP 200 with a page title but contain NO actual uploaded content. gallery-dl returns "No results" because the photo AJAX endpoint returns empty (0 bytes). These profiles show only recommended/premium upsell content on their video and photos pages. The profile URL exists (not redirected) but no videos or galleries exist. This can happen for mainstream figures who haven't uploaded adult content. Verify by checking the AJAX endpoint response size and looking for actual video/album links on the page.
 - **Mainstream celebrities have no Pornhub presence** - Mainstream public figures (singers, actors, athletes) typically have NO adult content on Pornhub. Non-existent profiles may return HTTP 200 (empty model profile page) or HTTP 301 redirect to `/pornstars`. If no pornstar/model profile exists, no parody videos featuring the person will be found in search either. Search results for celebrity names on Pornhub typically return parody/imitation content where adult performers impersonate the celebrity, not actual content of the person. For celebrities without adult presence, it's efficient to check the model profile first (HTTP status + gallery-dl `--get-urls`) before spending time on video search.
 - **Virtual influencers/influencers return 200 with generic page title** - Profiles for virtual influencers or social media influencers without adult presence on Pornhub may return HTTP 200 with the generic pornhub page title "Top Pornstars and Models In Full-Length Free Sex Videos" rather than a redirect or 410. The page contains no profile-specific content. This is a distinct from the 301 redirect for non-existent profiles. Check the page title or profile banner area to distinguish.
+- **"Bhabhi" is a character/genre in Indian adult films** - In Indian/Desi adult content, "Bhabhi" (sister-in-law) is a common character archetype/persona, similar to "Lust Stories" on OTT platforms. Content tagged "Rekha Bhabhi" refers to a character/series format, not necessarily the real person (Rekha Mona Sarkar). When searching for a model known for "X Bhabhi" content, expect results about characters in that genre, not verified content of the actual person. The model may have official OTT series (Ullu, Kooku, etc.) but not official Pornhub content.
+- **Indian adult content uses title mix of Hindi/English** - Video titles often mix Hindi and English words (e.g., "Thukaee", "Malkin", "Devar", "Chotuu", "Bhabhi", "Naukar"). Search with these terms may yield more relevant results than English-only queries.
+- **Search with visual endpoint returns 404** - The modern URL `pornhub.com/visual/search?search={query}` returns HTTP 404. Use the older format `pornhub.com/video/search?search={query}` instead.
