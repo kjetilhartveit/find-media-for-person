@@ -61,6 +61,13 @@ curl -sL -A "Mozilla/5.0" \
 4. For full-size images/videos, visit individual video pages and parse their HTML
 5. Poster thumbnails are typically 1080x1920 (vertical format)
 
+## Tips
+
+- **Two poster hash variants**: `m=eaSaaTbWx/.../poster/poster_01.jpg` (main video posters, ~150KB) and `m=eyzaevFb/.../poster/poster_01.jpg` (gallery thumbnails, ~40-60KB). Different pages may use different hash prefixes for their posters.
+- **Profile images** from `image-service-ht.project1content.com` with `model/profile_001.jpg` — may have query parameters like `width=600&aspectRatio=3x4&imageVersion=...` that can be modified (e.g., `width=1200`).
+- **Video page posters include cross-references** — poster URLs from other performers appear on a video page. Filter to the performer's hash prefix(es) to get only relevant posters.
+- **Search may not find all performers** — some profiles exist but aren't returned by site search. Use Google: `site:brazzers.com "{performer name}"` to find profiles.
+
 ## Pitfalls
 
 - **Video downloads** - full videos require parsing video page HTML for stream URLs
