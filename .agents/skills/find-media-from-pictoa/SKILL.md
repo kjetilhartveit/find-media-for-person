@@ -23,13 +23,36 @@ gallery-dl has `PictoaAlbumExtractor` and `PictoaImageExtractor` — use as **pr
 
 `gallery-dl` supports Pictoa albums natively.
 
+### gallery-dl config for Pictoa (to control output format)
+
+Create a JSON config file for fine-grained output control:
+
+```json
+{
+  "extractor": {
+    "pictoa": {
+      "filename": "{id}.{extension}"
+    }
+  }
+}
+```
+
+Then run: `gallery-dl --config /path/to/config.json -d output_dir URL1 URL2 ...`
+
+Key variables for Pictoa: `album_id`, `album_title`, `id`, `extension`, `filename` (hash). Use `--restrict-filenames windows` for Windows-compatible filenames.
+
+### gallery-dl known limitations for Pictoa
+
+- gallery-dl only downloads page 1 of paginated albums. For paginated albums, use the manual extraction fallback method.
+- gallery-dl does NOT support pagination URLs (`-p2.html`, `-p3.html` returns "Unsupported URL").
+
 ## Fallback download method — Manual album page parsing
 
 When `gallery-dl` is unavailable or fails:
 
-1. Search using the `/s/<query>/` URL pattern. Try multiple query variations (celebrity name, handle, real full name, performer name, foreign names - like Korean and Chinese - if applicable).
+1. Search using the `/s/<query>/` URL pattern. Try multiple query variations including name spelling variants (e.g. "arya fae" AND "arya faye"). Try full name, handle, performer name.
 2. Also try category URLs like `/c/<celebrity-name>-<category-id>/`.
-3. Parse search results for album links matching `https://www.pictoa.com/albums/...html`. Filter for relevance — generic name searches may return unrelated adult performers with similar names (e.g., "Anissa Kate" mixed in with "Kate Hudson").
+3. Parse search results for album links matching `https://www.pictoa.com/albums/...html`. Filter for relevance — generic name searches may return unrelated adult performers with similar names (e.g., "Anissa Kate" mixed in with "Kate Hudson"). Group albums with other models (e.g., "Arya Fae and Jill Kassidy", "Arya Fae and Bailey Brooke") are relevant if they contain the target person.
 4. Fetch each album page to extract image URLs from `data-lazy-src` attributes pointing to `t1.pictoa.com`.
 5. Extract actual album images (not related gallery thumbnails) by filtering for URLs containing the album ID.
 6. For pagination, check album page URLs for `-p2.html`, `-p3.html` patterns and include those.
@@ -54,8 +77,9 @@ When `gallery-dl` is unavailable or fails:
 
 ## Quality
 
-- Images range from ~15KB to ~35KB per file from the `t1` CDN.
+- Images range from ~15KB to ~150KB+ per file from the `t1` CDN (varies by gallery; newer galleries tend to be larger, e.g. 200KB-500KB).
 - Decent quality for thumbnails/gallery previews.
+- Note: gallery images from 2017+ tend to be larger (200-500KB) while older galleries (2015-2016) may be smaller (40-80KB).
 
 ## Pitfalls
 
