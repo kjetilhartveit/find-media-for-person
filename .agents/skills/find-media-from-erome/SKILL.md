@@ -38,9 +38,11 @@ When gallery-dl is unavailable or fails:
 
 1. **Search** for the person's name on `https://www.erome.com/search?q={name}` — results include album cards with titles and engagement metrics. Look for album links matching `/a/{album_id}`.
 2. **Parse album pages**
-   - Extract `data-src` and `src` attributes from `<img>` tags — these point directly to full-size media on `s{number}.erome.com`.
-   - Filter out any URLs containing `/thumbs/` — those are thumbnails.
-   - No URL pattern guessing needed; the `data-src`/`src` attributes provide the actual full-size URLs directly.
+   - Extract `data-src` and `src` attributes from `<img>` tags — these may point to full-size media or thumbnails.
+   - **Important**: The same page often contains BOTH full-size URLs AND thumbnail URLs. Full-size URLs look like `https://s{number}.erome.com/USER/ALBUM/FILE.jpg` while thumbnails are `https://s{number}.erome.com/USER/ALBUM/thumbs/FILE.jpg`.
+   - Filter out any URLs containing `/thumbs/` to get full-size images.
+   - **Alternative**: If album pages use `/thumbs/` for thumbnails only, construct full-size URLs by removing `/thumbs/` from thumbnail URLs: `https://s58.erome.com/8871/BH3pUnNW/thumbs/rKZOrCLm.jpg` → `https://s58.erome.com/8871/BH3pUnNW/rKZOrCLm.jpg`
+   - Videos are served from `v{number}.erome.com` with `_720p.mp4` suffix in `data-src` attributes.
 3. **Download media** with `Referer: https://www.erome.com/` header and rate-limit to 0.3–0.5s between requests.
 4. Prefix filenames with the album ID to avoid collisions (Erome files have random IDs).
 
@@ -87,7 +89,11 @@ When gallery-dl is unavailable or fails:
 - Content farm albums like "BJ Toy" by `Giltypleasure` or "gyrate" by `Giltypleasure` often appear in search results but are unrelated ads.
 - For high-volume searches, consider downloading album-by-album in batches rather than all at once (search results can return 48+ albums).
 - **Multiple search term variants**: Try compact/abbreviated/underscored/hyphenated variants of the name as they may return different or more comprehensive results across albums.
-- **Album images vs videos**: Some albums have both images and videos sharing the same filename ID (images are frame thumbnails). When gallery-dl downloads such albums, both are saved. For space efficiency, you can filter to keep only videos (which contain the full content).
+- gallery-dl `-d` destination argument can create nested directory structures (`erome/erome/`) in certain invocation patterns — flatten after download.
+- When using `gallery-dl -i` with an input file of URLs, the download destination parameter may create a nested `erome/` directory that needs flattening.
+- **EromeUserExtractor may return 404**: The `EromeUserExtractor` (for `https://www.erome.com/USER`) can return 404 even when the user page exists and has content. The API endpoint it uses (`/{user}?t=posts&page=1`) may not be accessible. In such cases, fall back to parsing the page manually to extract `/a/{album_id}` links and download album-by-album. Also try the username variant (e.g., `natalia-bukowiecka` vs `nataliaakaczmarek`).
+- Video downloads can be slow due to file sizes; consider rate-limiting for large batches.
+- Gallery-dl search downloads handle all albums at once; individual album downloads can be used for targeted fetching.
 - gallery-dl output file structure varies: some albums create `USERNAME/FILENAME` (flat), others `USERNAME/ALBUM_ID Filename` (nested). Handle both patterns when moving files.
 
 ## Pitfalls
@@ -99,7 +105,4 @@ When gallery-dl is unavailable or fails:
 - Erome filenames are random IDs — no semantic naming for downloaded files.
 - Search results per person can be very large (48+ albums), leading to timeouts; download in batches.
 - Some albums may have duplicate images shared across albums.
-- Video downloads can be slow due to file sizes; consider rate-limiting for large batches.
-- Gallery-dl search downloads handle all albums at once; individual album downloads can be used for targeted fetching.
-- Gallery-dl `-d` destination argument can create nested directory structures (`erome/erome/`) in certain invocation patterns — flatten after download.
-- When using `gallery-dl -i` with an input file of URLs, the download destination parameter may create a nested `erome/` directory that needs flattening.
+- Erome filenames are random IDs — no semantic naming for downloaded files.

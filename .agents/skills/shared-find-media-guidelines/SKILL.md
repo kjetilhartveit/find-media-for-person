@@ -55,6 +55,7 @@ In general a search for media from a source should include the following. But no
 - You may use `yt-dlp` to download videos from YouTube or other supported platforms.
 - You may use `gallery-dl` to download media from many websites. See skill `using-gallery-dl` for guidance.
   - To verify that `gallery-dl` supports the target source, use the command `gallery-dl --list-extractors` with `grep`.
+  - **Known gaps**: `gallery-dl` does NOT support: Fapeza, stk.st, Fappeningbook. These require cloudscraper or manual scraping.
 - You may use web searches and/or web scraping to find media of the person.
 - Sometimes your internal tooling might fail or error (e.g. parsing errors). Don't panic! Read the error and consider ways to get around it or fix the error. Be creative, sometimes we can retry or change the way we used the tool to get around it. We should try to avoid skipping the step because of the error.
 
