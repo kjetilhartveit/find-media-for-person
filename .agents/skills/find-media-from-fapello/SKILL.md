@@ -119,3 +119,11 @@ Thumbnails on profile pages use a similar pattern with `_300px.jpg` suffix (e.g.
 - For small profiles, pagination may return the same items on all pages — deduplication is still needed, but you'll quickly see the profile is small.
 - Small profiles have no videos and only one page of real items.
 - Profile URL slug variations: try `{first}{last}` (no hyphen, e.g., `kyliejenner`), `{first}-{last}`, and `{name}-1`.
+
+### Pagination Cycling (Medium Profiles)
+
+- Medium-sized profiles (e.g., Maya Bijou with ~110 items, 4 unique pages): pages beyond the unique content cycle — they return the same items repeatedly (e.g., pages 5+ show the same 32 items).
+- Detect unique pages: stop scanning pages when the max ID no longer decreases between consecutive pages (page n max_id == page n+1 max_id means page n+1 is cycling).
+- Alternatively, stop when you've seen the same set of IDs twice.
+- Example: Maya Bijou (maya-bijou-1) has IDs 1-111 (missing 38 = 110 items). Pages 1-4 have different IDs; pages 5+ cycle the same 32 items.
+- This cycling pattern means scanning the full 50 pages of a small profile without deduplication is wasteful.
