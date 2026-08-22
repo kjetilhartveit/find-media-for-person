@@ -120,12 +120,17 @@ Since stk.st heavily protects itself with Cloudflare, web search is often the mo
 **Domains that work reliably:**
 - `porngals4.com`, `babes.plus`, `lemmecheck.com`, `eroticbeauties.net`, `pornpics.vip`, `babe.today`, `im9.eu`, `pinimg.com`, `max.porn`, `babepedia.com`
 - `wallhaven.cc` works but blocks direct curl requests (returns 0 bytes)
+- `atkmodels.com`, `atkingdom.com` / `content.atkingdom.com` — ATK Exotics (Maya Bijou content)
+- `babes.plus` — works with `--insecure` flag for SSL
+- `boomba.club` — works well
+- `meanmassage.com` — works
 
 **Domains that FAIL:**
-- `pics.jjgirls.com` — returns empty/HTML (blocks automated requests)
+- `pics.jjgirls.com` — NXDOMAIN (DNS doesn't resolve)
 - `vip.pornstar.gallery` — returns empty/HTML
-- `vip.sexhd.pics` — network unreachable (DNS issues noted in general pitfalls)
+- `vip.sexhd.pics` — NXDOMAIN (DNS doesn't resolve)
 - `wallhaven.cc` — blocks curl (0 bytes)
+- **babes.plus** — DNS resolves but connection times out (SSL/TLS issue)
 - Search result thumbnail titles and the actual images on the linked pages often don't match. Thumbnails may show one person while the page content shows another.
 - **s.yimg.com URLs**: The Yahoo image CDN sometimes returns 400 when the URL contains `/http?ssl=1` as part of the path (a stk.st quirk). These URLs need manual reconstruction.
 - **Encoded filenames**: URLs with `%20` (spaces), `:large` (Twitter), or complex query params need URL-decoding for clean file names.
@@ -151,3 +156,23 @@ Since stk.st heavily protects itself with Cloudflare, web search is often the mo
 - **"Rekha" name collision**: Indian actress Rekha (Bollywood veteran), NCW chief Rekha Sharma, Telugu actress Rekha Boj, and Rekha Mona Sarkar ("Rekha Bhabhi") are all frequently confused on stk.st pages. Always check the actual image source URL and filename for context.
 - **News article images are NOT adult content**: Times of India, Indian Express, Hindustan Times, Economic Times, etc. images are mainstream news photos that may match name searches. Most are NOT about the person you're looking for.
 - **"Bhabhi" keyword generates generic content**: Pages like `/naked+bhabhi+pics`, `/bhabhi+nude+image` are for generic Indian "bhabhi" porn, not specifically about "Rekha Bhabhi" (Rekha Mona Sarkar). These are NOT person-specific results.
+
+### Known stk.st article URLs by person — Maya Bijou
+
+**Main page**: `stk.st/maya+bijou` — bio page with search result thumbnails (title: "Maya bijou - Maya Bijou Biography - Biographyans")
+- Returns 13 images on the main page (includes Pinterest, eBay, bio images, Teamskeet, MyConfinedSpace, Babepedia)
+- Auto-generates 9 individual post links: `/maya+bijou+naked`, `/maya+bijou+escort`, `/maya+bijou+gif`, `/maya+bijou+leaked`, `/maya+bijou+full+video`, `/family+therapy+maya+bijou`, `/maya+bijou+selfie`, `/maya+bijou+property`, `/maya+bijou+free+onlyfans`, `/maya+bijou+atk`
+- **IMPORTANT**: Cloudflare challenge (4815 bytes) is bypassed using **playwright** — `cloudscraper` returns 4815 bytes even with TLS 1.2. Use `sync_playwright` with `wait_until="domcontentloaded"` then `page.wait_for_timeout(10000)` for ~170KB of content.
+- Content comes from adult gallery sites: ATK Exotics, Babepedia, Porngals4, Redlight Girls, Mean Massage, Club Tug, PornPics VIP, Boomba Club, Elite Babes, MyConfinedSpace, TeamSkeet Classics
+
+**Additional search variations found**: `/search?query=maya` (too broad), `/search?query=maya+maya` (redundant)
+
+### Additional domain findings (2026-08-22)
+
+**New working domains found**: megatube.xxx, camsoda.com, mypornstarbook.net, clubtug.com, meanmassage.com, redlight-girls.com, xporn.tv, bigtits.vip, myconfinedspace.com, teamsskeetclassics, elitebabes.com, erocurves.com
+
+**DNS-unreachable domains (confirmed)**: `vip.sexhd.pics` (NXDOMAIN), `pics.jjgirls.com` (NXDOMAIN) — these appear in stk.st image lists but cannot be resolved from this environment
+
+**SSL/TLS issues**: `babes.plus` — DNS resolves but connection times out (possibly due to specific TLS config), `yespornpics.com` — redirects HTTP 302 to HTML page rather than image
+
+**Video domains confirmed working**: `vcmdiawe.com` (gallery CDN), `bkcdn.net` (video CDN) — stk.st can reference adult video players from these domains for embedded content
