@@ -108,6 +108,14 @@ Cache API responses as JSON files keyed by tweet ID (e.g., `.data/x-api-cache/{t
 - **Verify handles before bulk downloads.** When suggested URLs don't work, test a single URL first before running large batch downloads.
 - **Searched results cross all sources.** Search finds tweets from multiple authors mentioning the person, not just the person's own tweets. Expect some non-author content mixed in.
 
+## Handle discovery — PornHub profile as source
+
+PornHub adult star profiles list their official X/Twitter handle in the profile links section. Use this to confirm the correct handle:
+
+1. Go to `pornhub.com/pornstar/[name]`
+2. Look for "Twitter" link in the profile sidebar/about section
+3. Cross-reference with OnlyFans reviews (theporndude.com) which also list social media handles
+
 ## Pitfalls
 
 - **gallery-dl needs auth cookies for X/Twitter timelines.** Without configured browser cookies, `gallery-dl` will return `AuthRequired` error for user timelines and search results. Use aggregator sites or direct tweet URLs as fallback.
