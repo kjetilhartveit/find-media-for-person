@@ -24,52 +24,41 @@ Make sure to read the `shared-find-media-guidelines` skill before using this ski
 
 # Recommendations on how to download
 
-**Both gallery-dl and yt-dlp work for TikTok profile scraping.** Gallery-dl's item_list API returns 0 items on page 1 but yields 15+ items per page on subsequent pages. yt-dlp discovers videos via HTML page parsing and has worked reliably. Use either based on convenience.
+**Primary method: yt-dlp** — reliable for full profile downloads. Use `--download-archive` with an archive file in `/tmp/` (no spaces in path) to track already-downloaded videos and resume across sessions. Requires multiple batch calls for large accounts (583+ videos needs ~6+ batch runs).
 
-**gallery-dl** — extracts avatar + videos successfully. Use `--config` file with slow sleep settings. Downloads 15-20 videos per page across multiple pages.
+**gallery-dl** — extracts avatar successfully but less reliable for full profile video downloads on very large accounts. Use for single avatar image extraction.
 
-**yt-dlp** — works well for profiles with `--max-files` to limit total downloads. Use `--output "%(id)s_%(title)s.%(ext)s"` for filename safety.
+## Recommended yt-dlp workflow
 
-1. Write a temporary config file:
+1. **Check profile first** to see how many videos:
+   ```bash
+   yt-dlp --simulate "https://www.tiktok.com/@{username}" 2>&1 | grep -c "Playlist"
+   ```
 
-```json
-{
-  "extractor": {
-    "base-directory": "<output-dir>/tiktok",
-    "directory": [],
-    "sleep-request": [5, 12],
-    "sleep-429": 60
-  }
-}
-```
+2. **Archive file** (in `/tmp/` without spaces):
+   ```bash
+   echo "" > /tmp/tiktok_archive.txt
+   ```
 
-2. Download:
+3. **Download in batches** (each batch needs ~15 min timeout):
+   ```bash
+   # First: extract existing IDs from already-downloaded files
+   for f in /path/to/tiktok/*.mp4; do basename "$f" .mp4; done > /tmp/tiktok_archive.txt
 
-```bash
-# Profile — avatar + all discoverable videos
-mkdir -p <output-dir>/tiktok
-gallery-dl \
-  --config /tmp/gallery-dl-config.json \
-  --no-mtime \
-  -d <output-dir>/tiktok \
-  "https://www.tiktok.com/@{username}/"
+   # Run yt-dlp (each call downloads ~80-150 videos)
+   yt-dlp -S "res:1080,ext" \
+     --download-archive /tmp/tiktok_archive.txt \
+     --output "/path/to/tiktok/%(id)s.%(ext)s" \
+     --sleep-interval 5 \
+     --max-sleep-interval 12 \
+     "https://www.tiktok.com/@{username}"
+   ```
 
-# Single video
-gallery-dl \
-  --config /tmp/gallery-dl-config.json \
-  --no-mtime \
-  -d <output-dir>/tiktok \
-  "https://www.tiktok.com/@{username}/video/{id}"
-```
+4. **Clean up**: Remove `.m4a` and `.mp3` files (from carousel posts that contain audio). Keep only `.mp4` and `.jpg` files.
 
-3. Verify results:
+5. **Repeat** until `yt-dlp` reports "Finished downloading playlist".
 
-```bash
-find <output-dir>/tiktok -type f | wc -l
-du -sh <output-dir>/tiktok
-```
-
-**Important:** Use `-d <path>` to set the output directory. Do NOT use `-o "directory=..."` (gallery-dl splits characters into nested folders). Create the subfolder first with `mkdir -p`.
+**Output filename**: Use `%(id)s.%(ext)s` to avoid filesystem issues with space-containing titles. For gallery-dl avatar files, IDs are used without spaces.
 
 # Pitfalls
 
@@ -77,6 +66,7 @@ du -sh <output-dir>/tiktok
 - **Small/inactive accounts** may have very few or no videos. Check profile stats (followers, likes, videoCount) before investing time. A signature of "Ikke i bruk" (Not in use) indicates an abandoned account.
 - **Accounts with 0 posted videos**. Some verified/celebrity accounts exist on TikTok but have no public videos posted (0 in videoCount). The account exists and is public, but the user has never posted content. Use `yt-dlp --simulate` to quickly check: if it returns "This account does not have any videos posted", stop before wasting time. The account @tyla is an example — only 238 followers, 0 videos, not verified.
 - **Alternative usernames** may not exist (e.g., @username vs @username). Try variations if needed.
+- **Private/unavailable accounts**: Some accounts may be private or have embedding disabled (`[tiktok:user] This user's account is either private or has embedding disabled`). These won't be accessible — stop before wasting time. Example: @thereallaylajenner (different from @thelaylajenner) returned this error.
 - **TikTok search via gallery-dl is not supported** — no extractor for TikTok's search/discover. Use `yt-dlp --simulate` on a profile URL to preview what would be downloaded.
 - **Long downloads need long timeouts**. Profile downloads can take 10+ minutes even for large accounts. Set bash timeout to at least `900000`ms (15 min).
 - **Videos are 9:16 portrait** (typically 540x960 or 720x1280). Low resolution is normal for TikTok.

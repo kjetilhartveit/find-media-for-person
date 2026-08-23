@@ -83,10 +83,11 @@ When gallery-dl is unavailable or fails:
 
 ## Search Term Variants
 
-- **Try multiple search term formats**: If `search?q=name+surname` returns no results, try `search?q=NameSurname` (no space), `search?q=Name_Surname` (underscore), or `search?q=name` (just first name). Different variants return different/overlapping results.
-  - Example: For "Layla Jenner", `search?q=layla+jenner` returned 0 results, but `search?q=LaylaJenner` returned 1 album and `search?q=Layla_Jenner` returned 3 albums.
-- Verify albums match the target person: check tags (e.g., `['layla', 'jenner']`) and album title before downloading. Avoid albums from general mass-uploaders (e.g., users with 500+ albums of various people) unless confirmed to be the correct person.
-
+- **Space-separated queries often return 0 results**: `search?q=name+surname` frequently returns no results even when content exists. Try compact (`NameSurname`), underscore (`Name_Surname`), or hyphen (`Name-Surname`) versions instead.
+  - Verified case: "Layla Jenner" — `search?q=layla+jenner` returned 0 results; `search?q=layla_jenner` and `search?q=layla-jenner` both returned 3 albums (same albums, same order).
+  - Also try just the first name alone for very popular people (e.g., `search?q=layla`).
+- When the same set of albums is returned by multiple search variants, they are duplicates — don't download twice. Use deduplication or download only one variant + known album IDs.
+- Verify albums match the target person: check tags (e.g., `['layla', 'jenner']`) and album title before downloading. Avoid albums from general mass-uploaders unless confirmed.
 ## Download Filtering Tips
 
 - After downloading, filter files by checking filename for the person's name.
