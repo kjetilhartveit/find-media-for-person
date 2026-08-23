@@ -19,6 +19,8 @@ Download images from Fapello (https://fapello.com), a massive aggregator of leak
 ## URL Patterns
 
 - Profile: `https://fapello.com/{slug}/` (e.g., `fapello.com/emily-ratajkowski/`)
+- **Domain note:** Only `fapello.com` is the active profile site. The `fapello.is` domain redirects unknown slugs to the homepage.
+- Country-specific TLDs exist: `cz.fapello.com`, `de.fapello.com`, `es.fapello.com`, `fr.fapello.com`, `gr.fapello.com`, `hu.fapello.com`, `it.fapello.com`, `jp.fapello.com`, `nl.fapello.com`, `pl.fapello.com`, `pt.fapello.com`, `ro.fapello.com`, `ru.fapello.com`, `se.fapello.com`, `tr.fapello.com`. These are mirrors, not separate content.
 - Pagination: `https://fapello.com/{slug}/page-{N}/` (~33-34 items per page, newest first)
 - Profiles can have many pages (50+ for large profiles with 1,500+ items).
 - Item page: `https://fapello.com/{slug}/{id}/`
@@ -129,3 +131,9 @@ Thumbnails on profile pages use a similar pattern with `_300px.jpg` suffix (e.g.
 - Alternatively, stop when you've seen the same set of IDs twice.
 - Example: Maya Bijou (maya-bijou-1) has IDs 1-111 (missing 38 = 110 items). Pages 1-4 have different IDs; pages 5+ cycle the same 32 items.
 - This cycling pattern means scanning the full 50 pages of a small profile without deduplication is wasteful.
+
+### Multiple Slugs for Same Person
+
+- Multiple profile slugs may exist for the same person with DIFFERENT content (not just duplicates). Example: `laylajenner` (135 images, IDs 63-197) and `thelaylajenner` (6 images, IDs 1-6) — both for the same person, different l1/l2 URL paths (`l/a` vs `t/h`), completely non-overlapping images.
+- After downloading from one slug, try alternate slugs (e.g., prefixed with `the`) by checking the profile page title for alternate names. The title often lists alternate display names (e.g., "laylajenner / thelaylajenner Nude Leaks OnlyFans - Fapello").
+- When checking alternate slugs, use the correct l1/l2 path segments derived from the alternate slug's first two letters. Small profiles (<20 items) don't have videos.

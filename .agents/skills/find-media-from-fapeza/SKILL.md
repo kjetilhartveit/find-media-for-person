@@ -26,8 +26,9 @@ Download images from Fapeza (https://fapeza.com), an aggregator site of leaked/n
 - Multiple profile slugs can exist for the same person under different aliases (e.g., "Megan" appeared as both `megan` and `megan-thee-stallion-1`).
 - **Multiple slugs may have DIFFERENT content, not just duplicates:** (e.g., Collien Fernandes has both `collien-fernandes` with 6 posts and `collien-ulmen-fernandes` with 19 posts — different images on each, not overlapping). Kylie Jenner has both `kylie-jenner` (785 images, IDs 29-5826 with gaps) and `kyliejenner` (6 images, IDs 2-18) — distinct images, no overlap. Always check all discovered slugs and combine unique images.
 - **Important:** Always use the non-www domain (`fapeza.com`). The `www.` domain triggers a Cloudflare JS challenge (returns 401).
-- Country-specific TLDs also exist: `cz.fapeza.com`, `de.fapeza.com`, `es.fapeza.com`, `fr.fapeza.com`, etc.
+- Country-specific TLDs also exist: `cz.fapeza.com`, `de.fapeza.com`, `es.fapeza.com`, `fr.fapeza.com`, etc. (Found: cz, de, es, fr, gr, hu, it, jp, nl, pl, pt, ro, ru, se, tr, cn, in, kr, ua, eg, vn, th, bg, dk, rs, sk). These are mirrors.
 - Profile slug may not match the exact display name. Try variations: full name, shortened name, underscore vs hyphen.
+  - **Name ending in "Jenner":** Use no-hyphen slug (e.g., `laylajenner` works, but `layla-jenner` returns 404). Try the no-hyphen version first if the hyphenated version fails.
 
 ## Direct image URL pattern (bypass post pages)
 
@@ -54,11 +55,12 @@ Download images from Fapeza (https://fapeza.com), an aggregator site of leaked/n
 
 ## Pagination
 
-- Profile pages use `https://fapeza.com/{slug}/page-N/` for pagination, but **pagination is often non-functional** — pages either return 404 or show the same content as page 1.
+- Profile pages use `https://fapeza.com/{slug}/page-N/` for pagination, but **pagination is often non-functional** — pages either return 404, return the same content as page 1 (cycling), or show the same post IDs.
 - Page 1 (no `/page-N/`) shows the posts for the profile.
-- Use cloudscraper to check pages 2 and 3; if they return 404 or same post IDs, pagination is broken and you can stop.
+- Use cloudscraper to check pages 2 and 3; if they return 404 or same post IDs as page 1, pagination is broken and you can stop.
 - If pagination works, each page shows ~20 images.
 - Profile pages typically show the ~20 most recent posts; older posts require checking by post ID.
+- **Small profiles may have very few posts** (1-20). In such cases, all images are on page 1. Use the post ID range to determine if there might be more posts at higher IDs (check ID 100+ to see if it returns 404).
 
 ## Individual post URLs
 

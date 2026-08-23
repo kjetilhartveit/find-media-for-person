@@ -23,6 +23,8 @@ Download images and videos from FapMenu (https://fapmenu.com), a large aggregato
 - Profile: `https://fapmenu.com/{slug}/` — try the person's name first (e.g., `halle-hayes/`)
 - Suffix aliases: When multiple profiles exist, slugs use a numeric suffix (e.g., `megan-thee-stallion-3/`, `megan-thee-stallion-4/`). Try searching for the person first.
 - Aliases: Some profiles exist under multiple slugs — if one returns empty, try alternatives (e.g., `hallehayes1`, `hallehayesvip`, `the_real_halle_hayes`). These aliases may be referenced on the profile or via their social media bio links.
+- Slug hyphenation varies by site: FapMenu may require hyphens (`layla-jenner-4`) while Fapello/Fapeza may require no-hyphen (`laylajenner`). Always try the most common slug format first, then fall back to search if 404.
+- **Suffix aliases are common:** When multiple profiles exist, slugs use a numeric suffix (e.g., `layla-jenner-4`). The base slug without a number often returns 404. Try the search endpoint to find the correct profile slug.
 - Names with common first names may match the wrong person (e.g., `sofie/` matches "Sofie Ivars" not "Sofie Eikeland"). Always verify the profile name and aliases listed on the page to ensure it's the correct person.
 - **Alias co-occurrence**: Media page alt text may list multiple names (e.g., "Megan Vale / Lupe Burnett nude photo #0004"). This suggests content may include multiple models on the same gallery page — verify each image to ensure it's the target person.
 
@@ -67,6 +69,7 @@ A Python script is recommended for reliable multi-model, multi-page scraping. Us
 - Format is WEBP (modern, good compression with quality)
 - File sizes range from ~50KB to ~500KB+ per image
 - Videos may be present but are less common than images
+- **No videos have been found on FapMenu profiles** (confirmed on large profiles with 700+ images).
 
 ## Pitfalls
 
@@ -76,5 +79,7 @@ A Python script is recommended for reliable multi-model, multi-page scraping. Us
 - **Small profiles may have no pagination** — page 2 returns 404, meaning the entire gallery fits on one page. Check if pagination exists.
 - Some sequential IDs may not exist (gaps) — handle gracefully
 - **Content items have individual media URLs** at `/{slug}/media/{NNNN}` — these can be used for direct access to individual items but don't affect download logic.
+- **Large profiles may have 700+ images** across 30+ pages (e.g., `layla-jenner-4` with 746 consecutive IDs: 1-746, 32 pages). IDs are typically sequential with no gaps, 24 images per page.
+- When collecting IDs, deduplicate across pages by checking for cycling (same ID set as previous page means stop).
 - WEBP format requires conversion for some viewers — consider converting to JPG if needed
 - Rate limiting is important; aggressive scraping may trigger Cloudflare/bot protection
