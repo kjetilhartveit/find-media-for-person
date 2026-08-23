@@ -46,3 +46,5 @@ echo '{"extractor": {"threads": 2}}' > ~/.config/gallery-dl/gallery-dl.conf
 - Image count: typically 16-20 per gallery
 - Example from Arya Fae search: 1,659 images across ~100 galleries
 - **Model page limitation**: `gallery-dl "https://www.pornpics.com/pornstars/{name}/"` may download only 1 image per gallery for some models. When this happens, use the query search `gallery-dl "https://www.pornpics.com/?q={name}"` instead, which returns full galleries with all images.
+- **Search is very broad**: The pornstar page downloads ALL brunette/teen galleries, not just the target model. Filter galleries AFTER download by checking names for the model name or known aliases (e.g., "Veronica" for Amber Hardin). Remove galleries with clearly different model names (e.g., "Kelly Carson", "Alice", "Brigitte D") to avoid clutter.
+- Gallery IDs can be cross-referenced with other sites to identify the same gallery (e.g., gallery ID 99762708 appears on both pornpics and sexygirlspics for the same Amber Hardin gallery).
