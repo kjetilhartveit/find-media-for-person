@@ -92,11 +92,11 @@ Since stk.st heavily protects itself with Cloudflare, web search is often the mo
 - **Use TLS 1.2 (`--tls-max 1.2`)** with curl when fetching stk.st pages — some pages behind Cloudflare challenge pages are more reliably fetched with TLS 1.2
 - **Focus on individual post URLs** (e.g., `/joon+mali+naked`) rather than search pages for cleaner, more relevant results
 
-## Known limitations & pitfalls (2026-08-22 update)
+## Known limitations & pitfalls (2026-08-23 update)
 
-- **stk.st is NOW fully blocked by Cloudflare from headless/automated environments**: All previous bypass methods (curl + `--tls-max 1.2`, cloudscraper, playwright headless) now return either 4811-4815 bytes (Cloudflare challenge page with SHA256 computation) or empty pages. The site uses JavaScript-based Cloudflare challenge that requires real browser execution.
-- **Only playwright with `headless=False` (visible browser) + X server (xvfb-run) can bypass the current Cloudflare**: `xvfb-run -a python3 -c "from playwright.sync_api import sync_playwright; ... p.chromium.launch(headless=False) ..."` and wait ~20s for the JS challenge to complete.
-- **stk.st has NO pages for many adult actresses**: e.g., Amber Hardin tested with 8+ aliases (amber+hardin, veronica, veronika, alanova, amalia, kylie, polina, vasilisa, veronica+pink, kelly+carson) — all returned Cloudflare challenge. Google search for `site:stk.st "amber hardin"` also returns zero indexed pages. This is because stk.st matches keywords against its own database and may not have content about every person.
+- **Cloudflare access varies by individual/person**: Some stk.st pages are fully accessible via curl with `--tls-max 1.2` (e.g., Layla Jenner returns 155-194KB of content), while others return Cloudflare challenges (e.g., Amber Hardin returns 4815 bytes challenge page). This means Cloudflare protection may be per-page or per-query, not site-wide.
+- **stk.st is blocked by Cloudflare for SOME adult actresses**: e.g., Amber Hardin tested with 8+ aliases (amber+hardin, veronica, veronika, alanova, amalia, kylie, polina, vasilisa, veronica+pink, kelly+carson) — all returned Cloudflare challenge. Google search for `site:stk.st "amber hardin"` also returns zero indexed pages. This is because stk.st matches keywords against its own database and may not have content about every person.
+- **Only playwright with `headless=False` (visible browser) + X server (xvfb-run) can bypass stubborn Cloudflare**: `xvfb-run -a python3 -c "from playwright.sync_api import sync_playwright; ... p.chromium.launch(headless=False) ..."` and wait ~20s for the JS challenge to complete.
 - The Cloudflare challenge at stk.st now uses a synchronous SHA256 JavaScript computation (visible in the challenge page HTML), making it harder to bypass without full JS execution.
 
 ## Pitfalls
@@ -175,9 +175,51 @@ Since stk.st heavily protects itself with Cloudflare, web search is often the mo
 
 **Additional search variations found**: `/search?query=maya` (too broad), `/search?query=maya+maya` (redundant)
 
+### Known stk.st article URLs by person — Layla Jenner
+
+**Adult actress** born June 17, 2004. Works with major studios: Jules Jordan, HardX, New Sensations, PassionHD, NYMPHO. Has 232+ videos on Pornhub.
+
+**Main search pages** return substantial content (~161KB HTML):
+- `stk.st/layla+jenner` — main search results page
+- `stk.st/search?query=layla+jenner` — search endpoint (~103KB)
+
+**Individual post URLs** (all return 155-194KB of content, accessible via curl):
+- `/layla+jenner+eddie+jaye` — Naughty America collaboration
+- `/layla+jenner+fuck` — general content
+- `/layla+jenner+full+vid` — video content
+- `/layla+jenner+interracial` — interracial content
+- `/layla+jenner+naughtyamerica` — Naughty America content
+- `/layla+jenner+new` — recent content
+- `/layla+jenner+perfect+fucking+strangers` — Naughty America Perfect Fucking Strangers series
+- `/layla+jenner+porn` — general porn content
+- `/layla+jenner+porn+interview` — interview content
+- `/layla+jenner+porn+star` — porn star content
+- `/search?query=layla+jenner+facial` — facial content
+- `/search?query=layla+jenner+nude` — nude content
+- `/search?query=layla+jenner+cum` — cum content
+- `/search?query=layla+jenner+faci` — facial content
+
+**High-value image sources from stk.st for Layla Jenner**:
+- **cum4k.pornstar-scenes.com** — explicit cum/cumshot content (Layla + Sexy Gift series, 2023)
+- **content.jjupdates.com** — Jules Jordan updates
+- **content6.spicybabe.net** — PassionHD content
+- **images1.naughtycdn.com / images5.naughtycdn.com** — Naughty America scenes
+- **hostv3.site** — Naughty America Perfect Fucking Strangers gallery thumbnails
+- **cdn.ultra4kporn.com** — Ultra4K porn gallery (BBC scenes, natural brunette)
+- **cdn.fleshbot.com** — Fleshbot gallery (babysitter series, Jenner/Jaye)
+- **www.babepedia.com** — multiple babepedia pics (Layla Jenner, Layla Jenner3-12)
+- **pornpics.vip** — Naughty America galleries
+- **imggen.eporner.com / static-ca-cdn.eporner.com** — Eporner gallery thumbnails
+- **babes.plus / vip.yespornpics.com** — cumshot galleries
+
+**Known for Layla Jenner on stk.st**:
+- Other "Layla" names appear in results: Layla Roo, Layla London (Fidelity VR), Layla Moore, Layla Ray, Layla King, Layla Austin — filter carefully
+- **stk.st IS accessible for Layla Jenner via curl** (contrast with Amber Hardin who returns Cloudflare challenge) — indicates accessibility varies by individual
+- Images come from adult gallery sites, NOT Reddit/Twitter/Imgur for Layla Jenner content
+
 ### Additional domain findings (2026-08-22)
 
-**New working domains found**: megatube.xxx, camsoda.com, mypornstarbook.net, clubtug.com, meanmassage.com, redlight-girls.com, xporn.tv, bigtits.vip, myconfinedspace.com, teamsskeetclassics, elitebabes.com, erocurves.com
+**New working domains found**: megatube.xxx, camsoda.com, mypornstarbook.net, clubtug.com, meanmassage.com, redlight-girls.com, xporn.tv, bigtits.vip, myconfinedspace.com, teamsskeetclassics, elitebabes.com, erocurves.com, soysuper.com, cdn.eroticbeauties.net, cdn.erocurves.com, adultindustry.news, pornsexerotica.com, teengirlsfucked.com, harrycrane.com, www.porn-star.com, content.badgirlsusa.com, vrnaughtyamerica.vr-scenes.com
 
 **DNS-unreachable domains (confirmed)**: `vip.sexhd.pics` (NXDOMAIN), `pics.jjgirls.com` (NXDOMAIN) — these appear in stk.st image lists but cannot be resolved from this environment
 
