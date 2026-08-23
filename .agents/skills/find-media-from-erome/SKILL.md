@@ -81,6 +81,12 @@ When gallery-dl is unavailable or fails:
 - **Totalporn**: Posts oral-themed content (e.g., "Arya Fae takes all seed in her mouth").
 - **S0494**: Posts Spanish-language photo collections, often with generic titles in Spanish (e.g., "Mi top de caritas mas lecheables del porno"). May include both images and occasional videos.
 
+## Search Term Variants
+
+- **Try multiple search term formats**: If `search?q=name+surname` returns no results, try `search?q=NameSurname` (no space), `search?q=Name_Surname` (underscore), or `search?q=name` (just first name). Different variants return different/overlapping results.
+  - Example: For "Layla Jenner", `search?q=layla+jenner` returned 0 results, but `search?q=LaylaJenner` returned 1 album and `search?q=Layla_Jenner` returned 3 albums.
+- Verify albums match the target person: check tags (e.g., `['layla', 'jenner']`) and album title before downloading. Avoid albums from general mass-uploaders (e.g., users with 500+ albums of various people) unless confirmed to be the correct person.
+
 ## Download Filtering Tips
 
 - After downloading, filter files by checking filename for the person's name.

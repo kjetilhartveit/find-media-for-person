@@ -24,11 +24,11 @@ Make sure to read the `shared-find-media-guidelines` skill before using this ski
 
 # Recommendations on how to download
 
-**Primary method for profile scraping: yt-dlp** — more reliable than gallery-dl for TikTok profiles. Gallery-dl's item_list API frequently returns 0 items on active accounts.
+**Both gallery-dl and yt-dlp work for TikTok profile scraping.** Gallery-dl's item_list API returns 0 items on page 1 but yields 15+ items per page on subsequent pages. yt-dlp discovers videos via HTML page parsing and has worked reliably. Use either based on convenience.
 
-**gallery-dl** — works for avatar extraction but NOT for video downloads. Use `gallery-dl` to get avatar + then yt-dlp for videos.
+**gallery-dl** — extracts avatar + videos successfully. Use `--config` file with slow sleep settings. Downloads 15-20 videos per page across multiple pages.
 
-**Fallback single video: yt-dlp** — works well for individual TikTok video URLs.
+**yt-dlp** — works well for profiles with `--max-files` to limit total downloads. Use `--output "%(id)s_%(title)s.%(ext)s"` for filename safety.
 
 1. Write a temporary config file:
 
