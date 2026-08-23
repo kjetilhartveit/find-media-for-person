@@ -91,6 +91,13 @@ Since stk.st heavily protects itself with Cloudflare, web search is often the mo
 - **Use TLS 1.2 (`--tls-max 1.2`)** with curl when fetching stk.st pages — some pages behind Cloudflare challenge pages are more reliably fetched with TLS 1.2
 - **Focus on individual post URLs** (e.g., `/joon+mali+naked`) rather than search pages for cleaner, more relevant results
 
+## Known limitations & pitfalls (2026-08-22 update)
+
+- **stk.st is NOW fully blocked by Cloudflare from headless/automated environments**: All previous bypass methods (curl + `--tls-max 1.2`, cloudscraper, playwright headless) now return either 4811-4815 bytes (Cloudflare challenge page with SHA256 computation) or empty pages. The site uses JavaScript-based Cloudflare challenge that requires real browser execution.
+- **Only playwright with `headless=False` (visible browser) + X server (xvfb-run) can bypass the current Cloudflare**: `xvfb-run -a python3 -c "from playwright.sync_api import sync_playwright; ... p.chromium.launch(headless=False) ..."` and wait ~20s for the JS challenge to complete.
+- **stk.st has NO pages for many adult actresses**: e.g., Amber Hardin tested with 8+ aliases (amber+hardin, veronica, veronika, alanova, amalia, kylie, polina, vasilisa, veronica+pink, kelly+carson) — all returned Cloudflare challenge. Google search for `site:stk.st "amber hardin"` also returns zero indexed pages. This is because stk.st matches keywords against its own database and may not have content about every person.
+- The Cloudflare challenge at stk.st now uses a synchronous SHA256 JavaScript computation (visible in the challenge page HTML), making it harder to bypass without full JS execution.
+
 ## Pitfalls
 
 - WordPress content farm generates pages for ANY query, even non-matching ones
