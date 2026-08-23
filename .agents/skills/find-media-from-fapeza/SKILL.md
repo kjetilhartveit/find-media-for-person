@@ -78,6 +78,7 @@ Download images from Fapeza (https://fapeza.com), an aggregator site of leaked/n
 - Some posts (e.g., id 22) may live in a different folder (e.g., `1000`) than the recent ones (`2000`). Always use the direct URL from the page source.
 - cloudscraper works reliably; no bot protection issues encountered.
 - **Post ID 1000 on profile pages contains "related/recommended posts" from OTHER creators**, not profile content. When collecting images from profile pages, filter to only keep images with the profile's slug prefix (e.g., `megan_0021.jpg` not `jennierubyjane_0164.jpg`).
+- Some models simply do not have content on Fapeza. For example, "Megan Vale" search returned 0 results. Always verify by searching the site first (`fapeza.com/search/?s=NAME`) before assuming a profile won't exist.
 - Some individual post pages have only 1 image instead of the typical 2 (e.g., posts 38, 449, 453).
 - Similar-looking slugs may be different people (e.g., "megan-stallion" vs "megan-thee-stallion-1") — verify by checking the page title before downloading.
 - On profile pages, post links include full URLs: `<a href="https://fapeza.com/{slug}/{post_id}/">`. Extract the slug from these full URLs when building download paths.

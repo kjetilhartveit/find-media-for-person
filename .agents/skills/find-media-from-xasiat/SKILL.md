@@ -64,6 +64,7 @@ Search for name variations (e.g., hyphenated vs underscored). Always verify by c
 - **Search results contain many false positives**: Search queries often return content from multiple models with similar names. Always filter by exact model name matches.
 - **Both videos and albums may return empty**: The async endpoints return `There is no data in this list.` when no content matches, for both video and album searches.
 - **Model profile pages return 403/404**: The `/albums/models/MODEL/` format does not work for model profiles. They return 403 (Forbidden) or 404. Only search URLs and individual video/album pages are accessible.
+- **Some adult performers simply have no content on Xasiat**: E.g., "Megan Vale" returned 404 for async endpoint with no content. Always try the search first before assuming the model is absent.
 
 ## Thumbnails and preview
 

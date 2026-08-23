@@ -48,6 +48,10 @@ The search with `?s=QUERY` parameter appears to not always return relevant resul
 
 gallery-dl does NOT support modelsearcher as an extractor. Must use web scraping tools.
 
+### Notable Findings - Persons Not Listed
+
+- **Megan Vale (adult actress)**: ModelSearcher search for "Megan Vale" returns no profile. The site primarily tracks OnlyFans content creators and may not have mainstream/legacy adult film stars who are not active OnlyFans creators.
+
 ## Tips
 
 - Not all models have profiles here - it's OnlyFans-specific

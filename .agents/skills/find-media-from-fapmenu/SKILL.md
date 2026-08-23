@@ -24,6 +24,7 @@ Download images and videos from FapMenu (https://fapmenu.com), a large aggregato
 - Suffix aliases: When multiple profiles exist, slugs use a numeric suffix (e.g., `megan-thee-stallion-3/`, `megan-thee-stallion-4/`). Try searching for the person first.
 - Aliases: Some profiles exist under multiple slugs — if one returns empty, try alternatives (e.g., `hallehayes1`, `hallehayesvip`, `the_real_halle_hayes`). These aliases may be referenced on the profile or via their social media bio links.
 - Names with common first names may match the wrong person (e.g., `sofie/` matches "Sofie Ivars" not "Sofie Eikeland"). Always verify the profile name and aliases listed on the page to ensure it's the correct person.
+- **Alias co-occurrence**: Media page alt text may list multiple names (e.g., "Megan Vale / Lupe Burnett nude photo #0004"). This suggests content may include multiple models on the same gallery page — verify each image to ensure it's the target person.
 
 ## Image URL Patterns
 
@@ -41,6 +42,7 @@ Download images and videos from FapMenu (https://fapmenu.com), a large aggregato
 - Search form uses field name `searchVal`
 - Results contain profile links like `/slug/`
 - Search is client-side rendered; use curl POST, not GET
+- **Search endpoint reliability**: The search endpoint does not always return results even when content exists on the profile. Direct profile URL is more reliable — try the slug first, then fall back to search.
 
 ## Primary download method — Manual scraping of paginated profile (Python script recommended)
 
@@ -54,7 +56,7 @@ A Python script is recommended for reliable multi-model, multi-page scraping. Us
     - Full-size URL pattern: `https://fapmenu.com/models/{1st}/{2nd}/{slug}/{model_num}/full/{slug}_nude_XXXX.webp`
     - Each page typically has ~24–30 images
 3. **Pagination**: Iterate page numbers. Each page usually has 24–25 images. Stop when a page has no images.
-   - Skip model number 1 (avatar) which appears on every page as a duplicate — only scrape gallery models (typically model 2+)
+   - Skip model number 1 (avatar) which appears on every page as a duplicate — **however, some small profiles have their actual content in model 1** (e.g., Megan Vale has 4 images in model 1). Check if model 1 images are unique to the profile and not avatars.
    - Deduplicate across pages since the same image numbers may appear in different model folders
 4. **Download images**: Use wget/curl to fetch each URL. Save as `.webp`. Files are typically WEBP format.
 5. **Rate limiting**: Sleep 0.3–0.5s between requests. Respect the site's anti-bot measures.
@@ -71,6 +73,8 @@ A Python script is recommended for reliable multi-model, multi-page scraping. Us
 - Multiple alias slugs may exist for the same person — search is the best way to find all profiles
 - The primary slug without a number (e.g., `megan-thee-stallion/`) may return 404 and won't work
 - Profile may return 200 with no media items — this means the profile either doesn't exist for that person or is private
+- **Small profiles may have no pagination** — page 2 returns 404, meaning the entire gallery fits on one page. Check if pagination exists.
 - Some sequential IDs may not exist (gaps) — handle gracefully
+- **Content items have individual media URLs** at `/{slug}/media/{NNNN}` — these can be used for direct access to individual items but don't affect download logic.
 - WEBP format requires conversion for some viewers — consider converting to JPG if needed
 - Rate limiting is important; aggressive scraping may trigger Cloudflare/bot protection

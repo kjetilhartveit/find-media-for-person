@@ -102,6 +102,7 @@ Thumbnails on profile pages use a similar pattern with `_300px.jpg` suffix (e.g.
 - The Fapello internal search (`fapello.com/search_v2/{query}/`) does not return results even when content exists. The search page loads but shows 0 items.
 - **Use external search instead**: Google or Bing site search (`site:fapello.com "{name}"`) to find the correct profile URL.
 - Search results show the full profile title (display names + tags) in the page title, which helps identify the correct profile.
+- **Alternate/primary names**: Profile titles may show an alternate primary name followed by the searched name (e.g., "Lupe Burnett / Megan Vale Nude Leaks"). The slug uses the searched name but the primary display name may differ.
 
 ### Video Items
 
@@ -119,6 +120,7 @@ Thumbnails on profile pages use a similar pattern with `_300px.jpg` suffix (e.g.
 - For small profiles, pagination may return the same items on all pages — deduplication is still needed, but you'll quickly see the profile is small.
 - Small profiles have no videos and only one page of real items.
 - Profile URL slug variations: try `{first}{last}` (no hyphen, e.g., `kyliejenner`), `{first}-{last}`, and `{name}-1`.
+- **Non-sequential IDs in small profiles**: Even small profiles may have non-sequential IDs (e.g., IDs 1-4 and 1000). Always check item pages for actual content rather than assuming sequential density means completeness.
 
 ### Pagination Cycling (Medium Profiles)
 
