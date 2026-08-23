@@ -27,7 +27,9 @@ Download media from AZNude (https://www.aznude.com), a celebrity nude content si
 
 ## Recommendations on how to download
 
-- **Slug variations** — try lowercase concatenated words (e.g., `megantheestallion`) and hyphenated (e.g., `megan-thee-stallion`). For Indian models whose display name is "X Bhabhi", try variations like `xname`, `x-name`, `xname-sarkar`, `x-name-sarkar`. Not all celebs have a page — some will 404.
+- **Slug variations** — try lowercase concatenated words (e.g., `megantheestallion`) and hyphenated (e.g., `megan-thee-stallion`). For Indian models whose display name is "X Bhabhi", try variations like `xname`, `x-name`, `xname-sarkar`, `x-name-sarkar`. For adult performers who go by stage names, also try their real name format (e.g., `layla-fenner` for "Layla Jenner").
+- **Page existence** — Not all celebs have a page on AZNude. Many popular performers (especially newer adult film actresses) may not have dedicated pages. If the celeb page 404s, search will also return 0 results. Not all celebrities are on AZNude.
+- **Search limitations** — The search results are rendered client-side via JavaScript. The search page shows skeleton loaders initially — actual content loads via JS. `curl`/`grep` only works for pages loaded server-side (celeb/story/movie pages directly). Search queries will return 0 results for performers not indexed by AZNude.
 - **Stories** — celeb pages have story links loaded via JS. Extract story URLs with: `curl | grep -o 'href="/view/story/m/[a-z0-9-]*\.html'`. Then fetch each story URL to get its images from `user-uploads.aznude.com/data/azncdn/`.
 - **Movie pages** — celeb pages list linked movie pages with additional images. Extract movie URLs with `grep -oP 'href="/view/movie/[a-z0-9-]+\.html'`. Movie pages use `largeCelebPage-4.jpg` and `gigantic-4.jpg` for their images, not the patterns used on celeb pages.
 - **Extract media URLs** using `curl | grep`:
@@ -51,3 +53,4 @@ Download media from AZNude (https://www.aznude.com), a celebrity nude content si
 - **Biopic images** on the page may include thumbnails for _other_ celebs (sidebar/related). Download only images whose URL path contains the target celeb's slug.
 - **Movies vs celeb pages** — movie pages use `-largeCelebPage-4.jpg` and `-gigantic-4.jpg` image patterns, not the `/slug/` path pattern. The grep for `largeCelebPage` images must exclude `boxpic/` (movie cover) and `vtt/` (subtitles) from the URL paths.
 - **Stories loaded via JS** — story links on the celeb page are rendered client-side. Use curl/grep to discover story URLs, then process each individually.
+- **Search is JS-rendered** — direct `curl` requests to `/search.html?q=...` won't return actual search results. A celeb page may not exist even for well-known performers; verify by trying direct URL access first.
