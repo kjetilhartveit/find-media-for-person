@@ -102,6 +102,12 @@ return mp4s[0]?.url;
 
 Cache API responses as JSON files keyed by tweet ID (e.g., `.data/x-api-cache/{tweetId}.json`) to avoid redundant calls.
 
+## Troubleshooting suspended handles
+
+- **Adult content creators are frequently suspended.** If a known handle returns `NotFoundError: User is suspended`, try alternative handle variations. If all attempts fail, use X/Twitter **search** (`x.com/search?q=...`) as a reliable fallback — it finds media from all sources without requiring a specific profile URL.
+- **Verify handles before bulk downloads.** When suggested URLs don't work, test a single URL first before running large batch downloads.
+- **Searched results cross all sources.** Search finds tweets from multiple authors mentioning the person, not just the person's own tweets. Expect some non-author content mixed in.
+
 ## Pitfalls
 
 - **gallery-dl needs auth cookies for X/Twitter timelines.** Without configured browser cookies, `gallery-dl` will return `AuthRequired` error for user timelines and search results. Use aggregator sites or direct tweet URLs as fallback.
