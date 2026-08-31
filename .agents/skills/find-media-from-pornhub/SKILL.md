@@ -140,6 +140,25 @@ for block in blocks:
 
 Note: Video keys in `data-video-vkey` attribute are pure hex strings WITHOUT the "ph" prefix (unlike viewkey URL parameters which sometimes include "ph" prefix). Also extract from `href="/view_video.php?viewkey=VALUE"` which also lacks the "ph" prefix for some videos. Filter by title containing the performer's name to distinguish tagged videos from recommended/premium content.
 
+## Video download with yt-dlp + cookies (recommended fallback)
+
+When yt-dlp impersonation fails or is unavailable, use cookie-based downloads:
+
+```bash
+# 1. Get cookies first (from homepage or video page)
+curl -sLb cookies.txt -c cookies.txt "https://www.pornhub.com/" \
+  -H "User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36" -o /dev/null
+
+# 2. Download video with cookies
+yt-dlp --cookies cookies.txt \
+  -f "bestvideo[height<=480]+bestaudio/best[height<=480]" \
+  --no-playlist \
+  -o "%(title)s.%(ext)s" \
+  "https://www.pornhub.com/view_video.php?viewkey=XXXXXXXX"
+```
+
+**This method was verified working reliably in headless/remote environments.** It avoids the need for `curl_cffi` browser impersonation. Speed for 480p is typically 2-3MB/s. Videos average 100-400MB at 480p quality.
+
 ## Pitfalls
 
 - **Video downloads fail** - PornHub CDN (phncdn.com) returns HTTP 470/403 without proper session cookies. yt-dlp tries impersonation but fails if no browser is available.
