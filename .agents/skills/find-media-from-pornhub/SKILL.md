@@ -26,6 +26,7 @@ PornHub profile, gallery, album, and video page URLs.
 - **Single video**: `pornhub.com/view_video.php?viewkey={phXXXXX}`
 - **Search**: `pornhub.com/video/search?searchterm={query}` (newer format; older `view_video.php?searchkey=` still works but may return unrelated results)
 - **Playlists**: `pornhub.com/pornstar/{name}/videos?o=mr&page=N` - pagination for model pages
+- **Video search with most viewed**: `pornhub.com/video/search?search=melissa+stratton&o=mv` - most viewed first
 
 ## Primary method — gallery-dl (for images)
 
@@ -92,6 +93,50 @@ curl -sL -H "User-Agent: Mozilla/5.0" \
 4. Video URLs require session cookies from the main PornHar site - download in sequence after profile fetch
 5. Images in galleries are typically high-res (1080p+)
 6. Gallery images can be downloaded without authentication
+7. Use `pornstar/{name}/videos` with pagination (=page=N) to enumerate all tagged videos for a pornstar
+8. Each profile page shows 47 videos (mix of recommended/premium + tagged videos)
+
+## HTML scraping - extracting video URLs from pornstar profile pages
+
+When you need to extract video URLs from a pornstar profile page (for paginated scraping):
+
+```bash
+# 1. Download profile page
+curl -sL "https://www.pornhub.com/pornstar/{name}/videos" \
+  -H "User-Agent: Mozilla/5.0" > profile.html
+
+# 2. Extract all video data attributes with Python
+python3 -c "
+import re, sys
+html = sys.stdin.read()
+
+# Video items are in <li class='pcVideoListItem...> blocks
+blocks = re.findall(r'<li[^>]*class=\"pcVideoListItem[^\"]*\"[^>]*>.*?</li>', html, re.DOTALL)
+
+for block in blocks:
+    vkey = re.search(r'data-video-vkey=\"([0-9a-f]+)\"', block)
+    vkey = vkey.group(1) if vkey else None
+    
+    # Title extraction
+    title_m = re.search(r'title=\"([^\"]+)\" class=\"thumbnailTitle', block)
+    if not title_m:
+        title_m = re.search(r'alt=\"([^\"]+)\"', block)
+    title = re.sub(r'<[^>]+>', '', title_m.group(1) if title_m else 'N/A')
+    # Clean HTML entities
+    title = title.replace('&#39;', \"'\").replace('&amp;', '&').replace('&quot;', '\"')
+    
+    # Duration
+    dur = re.search(r'>(\d+:\d+)<', block)
+    
+    # URL link
+    link = re.search(r'href=\"/view_video\.php\?viewkey=([a-f0-9]+)', block)
+    
+    if vkey and title:
+        print(f'{vkey}|{title}|{dur.group(1) if dur else ""}|view_video.php?viewkey={link.group(1) if link else ""}')
+" < profile.html
+```
+
+Note: Video keys in `data-video-vkey` attribute are pure hex strings WITHOUT the "ph" prefix (unlike viewkey URL parameters which sometimes include "ph" prefix). Also extract from `href="/view_video.php?viewkey=VALUE"` which also lacks the "ph" prefix for some videos. Filter by title containing the performer's name to distinguish tagged videos from recommended/premium content.
 
 ## Pitfalls
 
@@ -125,3 +170,7 @@ curl -sL -H "User-Agent: Mozilla/5.0" \
 - **Search queries with aliases find relevant content** - When a pornstar uses multiple aliases (e.g., "Amber Hardin" also known as "Veronica", "Alanova"), search queries combining the main name with aliases (e.g., "Amber Hardin Veronica") can find videos even when no dedicated pornstar profile exists for the alias.
 - **GIF searches return other models with similar names** - GIF search for names like "Amber" returns content of other models (e.g., "Britney Amber", "Amber Jayne"). Filter results by checking titles for the exact performer name and alias.
 - **Some search result videos are premium-only** - Videos appearing in search results may require premium to view. These return HTTP errors when checking via yt-dlp's `--dump-json` flag. Extract the page HTML and check for "Upgrade now" text to detect premium content.
+- **pornstar/{name}/videos pagination** - Profile video pages are paginated with 47 videos per page. Page 1 mixes recommended/premium videos first, then shows "Tagged Videos" section. Pages 2+ show older tagged videos. Use `?page=N` to paginate. Check the page title to verify if a profile exists (should be "{Name} Porn Videos" not "Top Pornstars").
+- **pornstar/profile video search with `?o=mv|tr|lg`** - Sorting options: `o=mr` (most recent, default), `o=mv` (most viewed), `o=tr` (top rated), `o=lg` (longest). These change order but same videos appear.
+- **yt-dlp "already downloaded" detection fails** - When verifying if a video file exists before downloading, yt-dlp reports "already downloaded" even though the file exists. This happens because the sanitized filename in the skip-check doesn't match yt-dlp's output filename (e.g., different special character handling). Don't rely on yt-dlp's skip detection; use your own file existence check instead.
+- **Video download speeds vary widely** - Pornhub HLS playlists have 150+ fragments at ~200KB each. Download speed ranges from 350KB/s to 7MB/s. At 720p, videos average 100-400MB. 10+ minute videos can be 60-150MB, while 30+ minute videos can be 300-700MB+.
