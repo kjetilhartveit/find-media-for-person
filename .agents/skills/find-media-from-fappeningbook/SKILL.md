@@ -71,8 +71,9 @@ TheFappeningBlog has a **forum section** where users post image sets and linked 
 ## Recommendations on how to download
 
 ### Fappeningbook
-- Extract thumbnail URLs using the specific pattern `/photos/.../{id}t.jpg`. Avoid broad `*.jpg` grep which matches avatars and site assets.
-- IDs are sequential per page (typically 1–26). Thumbnails appear in reverse order in HTML (highest ID first). Check for pagination links.
+- Extract full-size URLs from `data-orig` attributes in `<a>` tags: `data-orig="https://fappeningbook.com/photos/{l1}/{l2}/{slug}/1000/{id}.jpg"` (no `t` suffix = full-size). Also extract thumbnails from `src` attributes: `/photos/{l1}/{l2}/{slug}/1000/{id}t.jpg`. Avoid broad `*.jpg` grep which matches avatars and site assets.
+- IDs are sequential per page. Thumbnails appear in reverse order in HTML (highest ID first). Page 1 typically has 50 images; additional pages follow. Image IDs are not always contiguous (some gaps).
+- Pagination: Page 2+ URLs include a `#photos` anchor: `https://fappeningbook.com/{slug}-nude/{page}/#photos`. Look for `class="pages-dv"` in the HTML to find pagination links (e.g., `Previous`, `Next`, `Page X of Y`).
 - Rate limiting: sleep 0.3–0.5s between requests.
 - Validate downloaded files are > 10KB.
 
