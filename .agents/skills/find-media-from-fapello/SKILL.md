@@ -63,7 +63,8 @@ Thumbnails on profile pages use a similar pattern with `_300px.jpg` suffix (e.g.
 
 ## Quality
 
-- Images range from ~240KB to ~900KB per image (most ~100-400KB), at 600x800 resolution.
+- Images range from ~50KB to ~400KB per image (most ~55-250KB), at 600x800 resolution.
+- Smaller profiles (under ~150 items) tend to have smaller file sizes in the 50-100KB range and lack videos.
 - Videos are typically 150KB - 12MB MP4 files in ftyp/isom format.
 - Success rate is >99% — most sequential IDs resolve (Tyla: 1/1,576 missing in IDs 1-2000 range).
 - Large profiles can have 1,500+ items spanning 50+ pages.
@@ -80,6 +81,8 @@ Thumbnails on profile pages use a similar pattern with `_300px.jpg` suffix (e.g.
 - Prioritize undownloaded ID ranges in follow-up sessions.
 - HEAD requests to video CDN `.mp4` URLs typically fail (404) even when the video exists. Use GET requests instead.
 - Profile pagination may yield overlapping IDs between pages — deduplicate when collecting IDs.
+- **Phantom ID 1000**: Some profiles include item `1000` in pagination URLs (e.g., `mia-miley-1/1000/`) but the actual content never resolves (always 404). This occurs because the profile page displays `mia-miley-1/1000/` as a link in some context (related content, template artifact, etc.) but the item genuinely does not exist. When scanning IDs, verify by trying to download — skip 404 images gracefully.
+- **Thread safety with cloudscraper**: `cloudscraper.create_scraper()` sessions are not thread-safe. When using parallel downloads, create a fresh session per thread (`cloudscraper.create_scraper()` called inside the worker function), not one shared session.
 
 ## Cloudflare Protection
 
