@@ -242,3 +242,31 @@ Since stk.st heavily protects itself with Cloudflare, web search is often the mo
 **SSL/TLS issues**: `babes.plus` — DNS resolves but connection times out (possibly due to specific TLS config), `yespornpics.com` — redirects HTTP 302 to HTML page rather than image
 
 **Video domains confirmed working**: `vcmdiawe.com` (gallery CDN), `bkcdn.net` (video CDN) — stk.st can reference adult video players from these domains for embedded content
+
+### stk.st page accessibility — Amia Miley (adult actress) (2026-08-31)
+
+- **Adult actress** born November 23, 1990 in Satellite Beach, Florida. Also uses aliases: Miss Moretti, Amia Moretti, Amea Moretti, Abbey, Ileana, Amia. Active 2009-2022, 371+ films per IAFD.
+- ALL stk.st pages for Amia Miley are **blocked by Cloudflare** — all queries return 4815 byte challenge page via curl, cloudscraper, and urllib:
+  - `stk.st/miley+amia` — 4815 bytes (Cloudflare)
+  - `stk.st/teacher+amia+miley` — "Amia Miley Is Getting Banged In The Classroom" (EPORNER) — 4815 bytes
+  - `stk.st/amia+miley+full+onlyfans+videos` — 4815 bytes
+  - `stk.st/amia+miley+galleries` — 4815 bytes
+  - `stk.st/amia+miley+threesome` — 4815 bytes
+  - `stk.st/amia+miley+lesbian` — 4815 bytes
+  - `stk.st/amia+miley+babysitter` — 4815 bytes
+  - `stk.st/amia+miley+full+videos` — 4815 bytes
+  - `stk.st/amia+miley's+winter+holiday` — 4815 bytes
+  - `stk.st/skiny+pornstars` — 4815 bytes
+- **However**, stk.st DOES index Amia Miley content — Google search for `site:stk.st "Amia Miley"` returns **18+ article URLs** (unlike Amber Hardin/Melissa Stratton who have 0 or very few indexed pages)
+- Image sources found via Google search snippets (i3.wp.com proxy):
+  - **thenewsgod.com** — bio/image images
+  - **thelordofporn.com** — adult gallery content
+  - **boombo.biz** (hot.boombo.biz) — noodlemagazine/amia-miley Desi adult content
+  - **xvideos-cdn.com / cdn77-pic.xvideos-cdn.com** — video thumbnails
+  - **phncdn.com** (Pornhub ei.phncdn.com) — video thumbnails
+  - **camsoda.com** (desk1/desk0.camsoda.com) — screenshot images
+  - **babepedia.com** — gallery images
+  - **images.uncyc.org** (Desciclopédia) — bio image
+- **Google search snippets** are the most reliable way to discover stk.st image URLs for Amia Miley — use `site:stk.st "Amia Miley"` to find indexed pages and extract image URLs from search result highlights
+- **Name collision risk**: "Amia" also matches "Amia Millar" (different person) — verify results
+- **stk.st IS accessible for Amia Miley via Google cache snippets** (Google sometimes caches pages before Cloudflare blocks) — search for `site:stk.st "Amia Miley"` to find indexed content
