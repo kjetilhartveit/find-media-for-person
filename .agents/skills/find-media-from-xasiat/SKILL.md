@@ -35,7 +35,9 @@ Videos on the search page may include both the target model's content AND relate
 ### gallery-dl
 
 - **XasiatSearchExtractor**: `https://www.xasiat.com/search/QUERY/`
-  - Works for search results. Uses the async block endpoint successfully.
+  - Uses the async block endpoint at `?mode=async&function=get_block&block_id=list_albums_albums_list_search_result`.
+  - **May return 403/404** for certain queries (e.g., Western models like "Amia Miley"). The HTML search page renders correctly but the async API fails.
+  - **Fallback**: When gallery-dl fails, scrape the HTML search page directly with `curl` and grep for `/videos/` and `/albums/` links.
   - Note: Returns ALL content matching the query - filter results for the target model.
 - **XasiatAlbumExtractor**: `https://www.xasiat.com/albums/ALBUM_ID/TITLE/`
   - Downloads album images. Works with `i-acctoken` authentication.
@@ -48,6 +50,20 @@ yt-dlp falls back to the generic extractor and fails due to the KVS player engin
 ### gallery-dl does NOT support individual video URLs
 
 The `XasiatSearchExtractor` and `XasiatAlbumExtractor` work for search results and albums (downloading images). However, individual video URLs like `/videos/12345/` are not supported by gallery-dl.
+
+### Scraping search pages when gallery-dl fails
+
+When gallery-dl's search extractor returns 403/404, the HTML search page may still contain results. Use `curl` + grep:
+
+```bash
+# Get all video links from search page
+curl -s "https://www.xasiat.com/search/QUERY/" | grep -oP 'href="https://www\.xasiat\.com/videos/\d+/[^"]+"' | sort -u
+
+# Get all album links from search page  
+curl -s "https://www.xasiat.com/search/QUERY/" | grep -oP 'href="https://www\.xasiat\.com/albums/\d+/[^"]+"' | sort -u
+```
+
+Then verify each match by checking the video/album title contains the model name. Check the video page via its HTML title tag to confirm it features the target model.
 
 ## Searching and verification
 
@@ -80,6 +96,7 @@ Direct download URLs require browser fingerprinting (Cloudflare protection). Use
 ```python
 from curl_cffi import requests as cffi_requests
 import re
+import os
 
 s = cffi_requests.Session(impersonate='chrome')
 resp = s.get('https://www.xasiat.com/videos/VIDEO_ID/TITLE/')
@@ -90,9 +107,25 @@ alt_match = re.search(r'video_alt_url:\s*["\x27]([^"\x27\r\n]+)["\x27]', resp.te
 sd_match = re.search(r'video_url:\s*["\x27]([^"\x27\r\n]+)["\x27]', resp.text)
 
 vurl = alt_match.group(1) if alt_match else sd_match.group(1)
-vresp = s.get(vurl, stream=True, timeout=300)
 
-with open('output.mp4', 'wb') as f:
+# Support resume for interrupted downloads
+out_path = 'output.mp4'
+current_size = os.path.getsize(out_path) if os.path.exists(out_path) else 0
+
+headers = {}
+if current_size > 0:
+    headers['Range'] = f'bytes={current_size}-'
+    mode = 'ab'
+else:
+    mode = 'wb'
+
+vresp = s.get(vurl, stream=True, timeout=600, headers=headers)
+if vresp.status_code == 206:
+    print("Resumed download")
+elif vresp.status_code == 200:
+    current_size = 0  # Fresh download
+
+with open(out_path, mode) as f:
     for chunk in vresp.iter_content(chunk_size=65536):
         f.write(chunk)
 ```
