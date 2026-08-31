@@ -22,7 +22,9 @@ Download media from AZNude (https://www.aznude.com), a celebrity nude content si
 - Celebrity page: `https://www.aznude.com/view/celeb/{initial}/{slug}.html` — first letter + lowercase slug
 - Story pages: `https://www.aznude.com/view/story/{initial}/{slug}{story-description}.html`
 - Images from CDN: `cdn2.aznude.com/{slug}/{category}/{filename}.jpg`
-- User uploads (full-size): `user-uploads.aznude.com/data/azncdn/{hash}/{name}.jpg`
+- User uploads (full-size via user-uploads): `user-uploads.aznude.com/data/azncdn/{hash}/{name}.jpg`
+- User uploads (full-size via cdn2): `cdn2.aznude.com/{hash}/{hash}.jpg` — 32-char hex hash, both URL segments identical
+- Full-size CDN images (from celeb page): `cdn1.aznude.com/{slug}/{category}/{filename}.jpg` — referenced via `href` attribute
 - Video thumbnails: `cdn2.aznude.com/antibandit/{slug}/{category}/thumb3_{name}.jpg`
 
 ## Recommendations on how to download
@@ -34,16 +36,19 @@ Download media from AZNude (https://www.aznude.com), a celebrity nude content si
 - **Movie pages** — celeb pages list linked movie pages with additional images. Extract movie URLs with `grep -oP 'href="/view/movie/[a-z0-9-]+\.html'`. Movie pages use `largeCelebPage-4.jpg` and `gigantic-4.jpg` for their images, not the patterns used on celeb pages.
 - **Extract media URLs** using `curl | grep`:
   - Download full-size images from `user-uploads.aznude.com/data/azncdn/` paths (not `data/thumbs/`).
-  - Download `cdn2.aznude.com/{slug}/` images (not `/antibandit/` thumbnails).
+  - Download full-size images from `cdn2.aznude.com/{hash}/{hash}.jpg` (32-char hex, both segments same).
+  - Download full-size CDN images from `cdn1.aznude.com/{slug}/` (referenced via `href` in celeb page).
+  - Download `cdn2.aznude.com/{slug}/` category images (not `/antibandit/` thumbnails).
   - Filter out `/images/categories/` (category icons), `/sparkthumbs/`, and biopic images of unrelated celebs.
 - **No auth required.** Rate limit: sleep 0.3–0.5s between requests.
 - Some celeb pages may have 404 if no content exists — try slug variations.
 
 ## Quality
 
-- Images: ~100KB–3MB for CDN images, ~150KB–300KB for user-upload images. User uploads tend to be higher quality.
+- Images: CDN images (~30KB–150KB), hash-based uploads (~15–30KB), user-uploads via azncdn (~150KB–300KB+). CDN images may be lower compression but still reasonable quality. Hash-based uploads on cdn2 may be compressed versions.
 - Content: mix of leaked photos, bikini/swimwear, scene stills from movies/TV, red carpet, and social media.
 - Moderate value per celeb. Content may be sourced from other aggregators (reposted).
+- Some celeb pages have no stories or movies — only a handful of images from collections. Check the `categories` section to gauge content volume.
 
 ## Pitfalls
 
