@@ -217,6 +217,22 @@ Since stk.st heavily protects itself with Cloudflare, web search is often the mo
 - **stk.st IS accessible for Layla Jenner via curl** (contrast with Amber Hardin who returns Cloudflare challenge) — indicates accessibility varies by individual
 - Images come from adult gallery sites, NOT Reddit/Twitter/Imgur for Layla Jenner content
 
+### stk.st page accessibility — Melissa Stratton (2026-08-31)
+
+- **Adult actress** (aka "KittyBaby"): Twitter @KittyBaby_Cam, Instagram @melissastrattonxo, OnlyFans @MelissaStratton ($9.99/mo, 1550+ photos, 100K+ fans) and @freemelissastratton (free, 1845+ photos)
+- Works with major studios: Jules Jordan, Mile High Media, Wicked, Moms Boy Toy
+- **ALL stk.st pages for Melissa Stratton are blocked by Cloudflare** — all queries tested return 4815 byte challenge page:
+  - `stk.st/melissa+stratton` (no direct URL exists)
+  - `stk.st/melissa+stratton+porn+pics` — 4815 bytes (Cloudflare)
+  - `stk.st/melissa+stratton+onlyfans` — 4815 bytes (Cloudflare)
+  - `stk.st/search?query=melissa+stratton` — 4815 bytes (Cloudflare)
+  - `stk.st/melissa+statton` (typo alias) — 4815 bytes (Cloudflare)
+- Only stk.st content found via Google search snippets, which revealed images from:
+  - **babepedia.com** — confirmed working (14 user-upload images, 43-422KB each)
+  - **bioofy.com** — failed (HTTP 0, connection refused)
+- Unlike Layla Jenner (stk.st fully accessible), Melissa Stratton has a complete block — Cloudflare protection may be per-person or per-page, not site-wide
+- Image downloads from babepedia.com directly work: `babepedia.com/user-uploads/Melissa%20Stratton{2-15}.jpg`
+
 ### Additional domain findings (2026-08-22)
 
 **New working domains found**: megatube.xxx, camsoda.com, mypornstarbook.net, clubtug.com, meanmassage.com, redlight-girls.com, xporn.tv, bigtits.vip, myconfinedspace.com, teamsskeetclassics, elitebabes.com, erocurves.com, soysuper.com, cdn.eroticbeauties.net, cdn.erocurves.com, adultindustry.news, pornsexerotica.com, teengirlsfucked.com, harrycrane.com, www.porn-star.com, content.badgirlsusa.com, vrnaughtyamerica.vr-scenes.com
