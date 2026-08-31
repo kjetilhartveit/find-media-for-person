@@ -38,11 +38,12 @@ ModelSearcher is a directory/aggregator of OnlyFans creators across categories (
 
 ### Cloudflare Protection
 
-The site uses Cloudflare with JavaScript challenges. Direct curl access fails. Use `web_fetch` with markdown format which bypasses Cloudflare.
+- Cloudflare JavaScript challenge blocks ALL automated access. Both `curl` and `webfetch` return 403 errors.
+- Workaround: Search for ModelSearcher pages via general web search engines (Google/Bing), then access them through a real browser session if media is needed.
 
 ### Search Behavior
 
-The search with `?s=QUERY` parameter appears to not always return relevant results - the site often shows general OnlyFans profiles regardless of query. The internal search may not work well for specific names.
+The search with `?s=QUERY` parameter does not always return relevant results - the site often shows general OnlyFans profiles regardless of query. The internal search may not work well for specific names.
 
 ### gallery-dl Support
 
@@ -51,18 +52,20 @@ gallery-dl does NOT support modelsearcher as an extractor. Must use web scraping
 ### Notable Findings - Persons Not Listed
 
 - **Megan Vale (adult actress)**: ModelSearcher search for "Megan Vale" returns no profile. The site primarily tracks OnlyFans content creators and may not have mainstream/legacy adult film stars who are not active OnlyFans creators.
+- **Amia Miley**: Despite having an OnlyFans account (@amiamiley), she does NOT have a profile on ModelSearcher. The site does not index all OnlyFans creators - it seems to only list selected/promoted creators.
+- Thai adult performers/pornstars (like Joon Mali) often NOT listed - focus on OnlyFans content creators, not mainstream adult film stars
 
 ## Tips
 
-- Not all models have profiles here - it's OnlyFans-specific
+- Not all models have profiles here - it's OnlyFans-specific and selective
 - The site primarily links to paid OnlyFans subscriptions
 - Images on the site are teaser/thumbnail images from OnlyFans
-- Thai adult performers/pornstars (like Joon Mali) often NOT listed - focus on OnlyFans content creators, not mainstream adult film stars
+- Use web search engines to find ModelSearcher profiles rather than direct scraping
 
 ## Pitfalls
 
 - Do NOT rely on this source for original high-quality media - it only shows OnlyFans teasers
-- Cloudflare blocks automated curl requests
+- Cloudflare blocks all automated access (curl, webfetch, etc.)
 - Search functionality may not return accurate results for specific names
 - The site is focused on adult/OnlyFans content - may not have mainstream influencers
-- ModelsSearcher is NOT a comprehensive directory of all adult performers; many models are not listed
+- ModelSearcher is NOT a comprehensive directory of all OnlyFans creators or adult performers
