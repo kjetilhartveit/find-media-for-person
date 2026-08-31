@@ -26,9 +26,9 @@ Make sure to read the `shared-find-media-guidelines` skill before using this ski
 # Gallery Structure
 
 - Each model page shows 15-16 gallery thumbnails per page
-- **Pagination does NOT add new galleries** — all pages show the same 15-16 galleries
+- **Pagination adds new content** — pages 1, 2, 3+ show different gallery sets. Check all available pages.
 - Each gallery contains 10-33 individual images
-- Total: typically 16 galleries × 15-20 images = ~250-320 images per model page
+- Total: typically 16 galleries × 15-20 images per page × 2-3 pages = ~500-1000+ images total
 
 ## Image URL Pattern
 
@@ -79,7 +79,7 @@ grep -oP 'src="https?://x\.jjj\.cam/pics/[^"]*\.jpg"' gallery.html | grep -oP 'h
 
 # Pitfalls
 
-- **No pagination benefit**: Pages 2, 3, 4+ of a model's gallery show the SAME 15-16 galleries as page 1 — no additional content
+- **Pagination does add new galleries**: Pages 2, 3, 4+ of a model's gallery show DIFFERENT galleries with additional content. Always check multiple pages.
 - **Gallery image filenames collide**: The same `hd-model-1.jpg` appears in many different galleries — **always use source/prefix naming**
 - **Alias pages are mostly unrelated**: Checking alias pages (e.g., "veronica") may return many images but very few (often zero) are actually tagged with the target model's "amber-hardin" alias
 - **Only download images tagged with the target alias**: Use `grep 'amber-hardin'` to filter relevant images from alias pages
