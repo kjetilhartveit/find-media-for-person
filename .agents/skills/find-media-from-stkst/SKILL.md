@@ -126,7 +126,7 @@ Since stk.st heavily protects itself with Cloudflare, web search is often the mo
 ### Image domain accessibility for Arya Fae stk.st content
 
 **Domains that work reliably:**
-- `porngals4.com`, `babes.plus`, `lemmecheck.com`, `eroticbeauties.net`, `pornpics.vip`, `babe.today`, `im9.eu`, `pinimg.com`, `max.porn`, `babepedia.com`
+- `porngals4.com`, `babes.plus`, `lemmecheck.com`, `eroticbeauties.net`, `pornpics.vip`, `babe.today`, `im9.eu`, `pinimg.com`, `max.porn`, `babepedia.com` (requires `Referer: https://www.babepedia.com/` header)
 - `wallhaven.cc` works but blocks direct curl requests (returns 0 bytes)
 - `atkmodels.com`, `atkingdom.com` / `content.atkingdom.com` — ATK Exotics (Maya Bijou content)
 - `babes.plus` — works with `--insecure` flag for SSL
@@ -149,6 +149,7 @@ Since stk.st heavily protects itself with Cloudflare, web search is often the mo
 - **pictoa.com**: may return HTTP 403 Forbidden (tested on stk.st `/inna+nudes` — returned 17 bytes, not the image). Strip `&ssl=1` from URLs but direct download may still fail.
 - **titis.org**: Russian adult site — images may be low-quality or mislabeled regarding the person featured. Also `boomba.club` (VK-based) — similar concerns.
 - **i.redd.it (Reddit)**: images from Reddit may not be actually about the person the stk.st post title suggests. Verify by checking the Reddit post content.
+- **babepedia.com**: requires `Referer: https://www.babepedia.com/` header for downloads to work. Without referer, returns 0 bytes. Use wget or curl with `--header="Referer: https://www.babepedia.com/"`.
 - **Some image domains are blocked/unreachable**:
   - `people.com` returns HTTP 400 Bad Request (blocks automated requests, likely requires specific referer header)
   - `essence.com` returns HTTP 403 Forbidden
@@ -164,6 +165,18 @@ Since stk.st heavily protects itself with Cloudflare, web search is often the mo
 - **"Rekha" name collision**: Indian actress Rekha (Bollywood veteran), NCW chief Rekha Sharma, Telugu actress Rekha Boj, and Rekha Mona Sarkar ("Rekha Bhabhi") are all frequently confused on stk.st pages. Always check the actual image source URL and filename for context.
 - **News article images are NOT adult content**: Times of India, Indian Express, Hindustan Times, Economic Times, etc. images are mainstream news photos that may match name searches. Most are NOT about the person you're looking for.
 - **"Bhabhi" keyword generates generic content**: Pages like `/naked+bhabhi+pics`, `/bhabhi+nude+image` are for generic Indian "bhabhi" porn, not specifically about "Rekha Bhabhi" (Rekha Mona Sarkar). These are NOT person-specific results.
+
+### Known stk.st article URLs by person — Jenaveve Jolie
+
+- **Main search page** (blocked by Cloudflare): `stk.st/jenevee+jolie` (note the typo alias "jenevee" instead of "jenaveve")
+- **Auto-generated typo aliases** (all blocked): `stk.st/jenevee+jolie`, `stk.st/jenevieve+jolie`, `stk.st/jeneveve+jokie`, `stk.st/janaveve+jolie`, `stk.st/jeaneve+jolie`, `stk.st/jeanveve+jolie`, `stk.st/jenaveave+jolie`
+- **Adult content articles**:
+  - `stk.st/doctor+jenaveve+jolie` — Doctor Adventures series (babe.today images)
+  - `stk.st/jenaveve+jolie+soapy+massage` — Soapy Massage video content
+  - `stk.st/porn+2011` — NewBrazz "Porn Store Pornstar 2011" (content.newbrazz.com image)
+- **Mainstream pages** (mixed with adult content):
+  - `stk.st/pictures+of+jenaveve+jolie` — IMDb, Flickr, Pinterest, Tumblr images
+- **Content comes from**: babe.today, content.newbrazz.com, 64.media.tumblr.com, babepedia.com, i.pinimg.com, m.media-amazon.com, live.staticflickr.com, thumbnails.yayimages.com, images.mubicdn.net
 
 ### Known stk.st article URLs by person — Maya Bijou
 
@@ -232,6 +245,38 @@ Since stk.st heavily protects itself with Cloudflare, web search is often the mo
   - **bioofy.com** — failed (HTTP 0, connection refused)
 - Unlike Layla Jenner (stk.st fully accessible), Melissa Stratton has a complete block — Cloudflare protection may be per-person or per-page, not site-wide
 - Image downloads from babepedia.com directly work: `babepedia.com/user-uploads/Melissa%20Stratton{2-15}.jpg`
+
+### stk.st page accessibility — Jenaveve Jolie (adult actress) (2026-08-31)
+
+- **Adult actress** active 1990s–2000s. Digital Playground staple (Pirates series). Known for mainstream crossover appeal.
+- **ALL stk.st pages for Jenaveve Jolie are blocked by Cloudflare** — all queries tested return 4815 byte challenge page:
+  - `stk.st/jenaveve+jolie` (main, note: stk.st auto-generates typo alias `jenevee+jolie`)
+  - `stk.st/search?query=jenaveve+jolie` — 4815 bytes (Cloudflare)
+  - `stk.st/jenevee+jolie` — typo alias used by stk.st, also 4815 bytes
+  - `stk.st/doctor+jenaveve+jolie` — Doctor Adventures series, 4815 bytes (Cloudflare)
+  - `stk.st/jenaveve+jolie+soapy+massage` — 4815 bytes (Cloudflare)
+  - `stk.st/jenevee+jolie+nude` — 4815 bytes (Cloudflare)
+  - `stk.st/jenevee+jolie+gallery` — 4815 bytes (Cloudflare)
+  - `stk.st/jenevee+jolie+onlyfans` — 4815 bytes (Cloudflare)
+  - **Multiple typo aliases exist on stk.st**: `jenevee+jolie`, `jenevieve+jolie`, `jeneveve+jokie`, `janaveve+jolie`, `jeaneve+jolie`, `jeanveve+jolie`, `jenaveave+jolie` — all 4815 bytes
+- **stk.st DOES index Jenaveve Jolie** — Google search for `site:stk.st "jenaveve jolie"` returns 10+ article URLs
+- **Image sources found via Google search snippets** (i3.wp.com proxy):
+  - **babe.today** — adult content, Doctor Adventures series (confirmed working, 167KB)
+  - **content.newbrazz.com** — NewBrazz/Brazzers content (confirmed working, 445KB)
+  - **64.media.tumblr.com** — Tumblr selfie from @jenavevejolie_is_back (confirmed working, 167KB)
+  - **babepedia.com** — gallery images 1-15 (requires Referer header for download: `https://www.babepedia.com/`)
+  - **i.pinimg.com** — Pinterest (fashion, not adult)
+  - **m.media-amazon.com** — IMDb (mainstream)
+  - **live.staticflickr.com** — Flickr (mainstream)
+  - **thumbnails.yayimages.com** — ImageCollect/Digital Playground premiere photo (mainstream)
+  - **images.mubicdn.net** — MUBI cast member photo (mainstream)
+  - **xvideos-cdn.com** — video thumbnails (skip)
+  - **static-ca-cdn.eporner.com** — video gallery thumbnails (skip)
+- **Important**: Most stk.st articles about Jenaveve Jolie are mixed — IMDb/mainstream pages that also include adult content. Filter by source domain to identify actual adult content.
+- **Name collision risk**: stk.st auto-generates pages for "Angelina Jolie" when searching for "Jenaveve Jolie" — these are NOT the same person
+- **Google search snippets** are essential for discovering stk.st content for blocked actresses
+- Images from babepedia.com: URL pattern is `babepedia.com/user-uploads/Jenaveve%20Jolie{N}.jpg` where N is 1-15
+- **stk.st is blocked by Cloudflare for Jenaveve Jolie** — same category as Melissa Stratton/Amber Hardin (not like Layla Jenner where stk.st is accessible)
 
 ### Additional domain findings (2026-08-22)
 

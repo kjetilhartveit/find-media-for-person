@@ -21,10 +21,10 @@ Download images from Fapeza (https://fapeza.com), an aggregator site of leaked/n
 
 - Profile: `https://fapeza.com/{slug}/` (e.g., `fapeza.com/emily-ratajkowski/`)
 - Media items follow sequential ID pattern
-- Page title may contain alternate names: `Linda Lan / foodsandnood.s / lindarainbow Nude Leaks OnlyFans - Fapeza`. Try alternate names as additional slugs to check for more content.
+- Page title may contain alternate names: `Linda Lan / foodsandnood.s / lindarainbow Nude Leaks OnlyFans - Fapeza` or `Jenaveve / Jenaveve Joli / Jenaveve Jolie / Jeneveve Jolie / Jenevieve / Jolie / Olivia / https: / jenaveve.jolie.official / jenavevejolie69 Nude Leaks OnlyFans - Fapeza`. Try alternate names as additional slugs to check for more content.
 - **Note:** Some models never appear on Fapeza (e.g., Joon Mali — profile returned 404 on all slugs tried, site search returned 0 results in August 2026). Always verify by searching the site first (`fapeza.com/search?q=NAME`) before assuming a profile exists.
 - Multiple profile slugs can exist for the same person under different aliases (e.g., "Megan" appeared as both `megan` and `megan-thee-stallion-1`).
-- **Multiple slugs may have DIFFERENT content, not just duplicates:** (e.g., Collien Fernandes has both `collien-fernandes` with 6 posts and `collien-ulmen-fernandes` with 19 posts — different images on each, not overlapping). Kylie Jenner has both `kylie-jenner` (785 images, IDs 29-5826 with gaps) and `kyliejenner` (6 images, IDs 2-18) — distinct images, no overlap. Always check all discovered slugs and combine unique images.
+- **Multiple slugs may have DIFFERENT content, not just duplicates:** (e.g., Collien Fernandes has both `collien-fernandes` with 6 posts and `collien-ulmen-fernandes` with 19 posts — different images on each, not overlapping). Kylie Jenner has both `kylie-jenner` (785 images, IDs 29-5826 with gaps) and `kyliejenner` (6 images, IDs 2-18) — distinct images, no overlap. Jenaveve Jolie has both `jenaveve-jolie` (19 posts, IDs 116-162) and `jenavevejolie69` (14 posts, IDs 1-16) — distinct images, no overlap. Always check all discovered slugs and combine unique images.
 - **Important:** Always use the non-www domain (`fapeza.com`). The `www.` domain triggers a Cloudflare JS challenge (returns 401).
 - Country-specific TLDs also exist: `cz.fapeza.com`, `de.fapeza.com`, `es.fapeza.com`, `fr.fapeza.com`, etc. (Found: cz, de, es, fr, gr, hu, it, jp, nl, pl, pt, ro, ru, se, tr, cn, in, kr, ua, eg, vn, th, bg, dk, rs, sk). These are mirrors.
 - Profile slug may not match the exact display name. Try variations: full name, shortened name, underscore vs hyphen.
@@ -89,9 +89,9 @@ Download images from Fapeza (https://fapeza.com), an aggregator site of leaked/n
 
 ## Typical stats
 
-- Profile pages contain ~20 images (may be fewer for smaller profiles).
-- Total images per profile varies widely (e.g., Kate Hudson: 72 images, ~12MB total; Linda Lan: 17 images, ~2.6MB total; Eleonora Bertoli: 67 posts, 68 unique images, ~12MB total; Melissa Stratton: 77 images, ~18MB total).
-- Some models may have MULTIPLE profiles with different content (e.g., Kylie Jenner: `kylie-jenner` with 785 images ~121MB, and `kyliejenner` with 6 images).
+- Profile pages contain ~20 images (may be fewer for smaller profiles). Jenaveve Jolie main profile had 19 images; secondary profile had 14 images.
+- Total images per profile varies widely (e.g., Kate Hudson: 72 images, ~12MB total; Linda Lan: 17 images, ~2.6MB total; Eleonora Bertoli: 67 posts, 68 unique images, ~12MB total; Melissa Stratton: 77 images, ~18MB total). Jenaveve Jolie profiles total ~33 images, ~6MB.
+- Some models may have MULTIPLE profiles with different content (e.g., Kylie Jenner: `kylie-jenner` with 785 images ~121MB, and `kyliejenner` with 6 images). Jenaveve Jolie has `jenaveve-jolie` (19 images, ~2.3MB) and `jenavevejolie69` (14 images, ~4.0MB).
 - Image files range from ~11KB (cover) to ~760KB. Profile content ranges from hundreds of KB to over 100MB.
 - Post ID gaps can be very sparse — up to 67% of IDs in a range may not exist.
 - All verified downloads are JPEG format.
