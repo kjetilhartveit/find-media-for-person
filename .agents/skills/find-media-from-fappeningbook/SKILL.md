@@ -56,6 +56,18 @@ There are FOUR image patterns to extract:
 
 **Finding galleries:** Use `https://thefappeningblog.com/gallery/{slug}/` first. If that fails, try web search: `site:thefappeningblog.com "person name"` and scrape category pages: `https://thefappeningblog.com/category/{slug}-2/page/{N}/`. Check up to 6-7 pages.
 
+### Forum threads (TheFappeningBlog)
+TheFappeningBlog has a **forum section** where users post image sets and linked galleries about celebrities. This is valuable when no gallery/category page exists for a person.
+- Thread URL: `https://thefappeningblog.com/forum/threads/{slug}.{thread_id}/` (e.g., `/forum/threads/melissa-stratton.112003/`)
+- Find threads via web search: `site:thefappeningblog.com/forum "person name"`
+- Threads are paginated: `/forum/threads/{slug}.{thread_id}/page-{N}/`
+- Images embedded as attachments use pattern: `https://thefappeningblog.com/forum/data/attachments/{dir}/{id}-{hash}.jpg` — these are **publicly accessible** without login
+- Some forum attachments use `/forum/attachments/` URLs which **require login** to download (skipped if not available)
+- To extract attachment images from forum pages, regex search for `/forum/data/attachments/\d+/\d+-[a-f0-9]+\.jpg` in the HTML
+- The thread starter's posts often include external links (login-walled) and some uploaded attachments
+- Users reply with "More." posts and external image links — these are also login-walled
+- Downloaded forum attachment images are typically moderate quality (~200-350KB, resized for forum display)
+
 ## Recommendations on how to download
 
 ### Fappeningbook
@@ -68,6 +80,7 @@ There are FOUR image patterns to extract:
 - **Thumbnail transformation (unified):** For BOTH data directory and WordPress uploads, the full-size URL is obtained by simply removing `_350px` from the thumbnail URL: `name_350px.jpg` → `name.jpg`. This works with Python `.replace("_350px.jpg", ".jpg")`.
 - **Listing page HTML structure:** Uses `<div class="item_content">` → `<a href=".../gallery/{slug}/{N}/">` → `<div class="item_img">` → `<img src="THUMBNAIL">`. Extract gallery number from href and thumbnail from img src.
 - **Gallery pages:** Each individual gallery page shows ONE full-size image in `<a href="...jpg">`. Useful for verification or when listing pages are insufficient.
+- **Forum threads:** Extract attachment images via regex `/forum/data/attachments/\d+/\d+-[a-f0-9]+\.jpg`. These are publicly accessible. Paginate through all pages. Some `/forum/attachments/` URLs require login (skip these).
 - **cnt/ directory (OnlyFans):** Only extract if you explicitly want OnlyFans leak content of the person.
 - **Scraping:** For listing pages, extract thumbnails and apply the unified `_350px` → `.jpg` transformation. For individual gallery pages, extract from `<a>` tag in content area.
 - Rate limiting: sleep 0.3–0.5s between requests.
@@ -78,6 +91,7 @@ There are FOUR image patterns to extract:
 - **Fappeningbook images:** ~35KB–700KB (varies by content), 1000px wide thumbnails → full-size available at same URL minus `t`
 - **TheFappeningBlog images (WordPress):** Full-size images typically 1100–1920px wide, ranging from ~80KB to 700KB+ depending on content
 - **TheFappeningBlog images (data/):** Full-size ~800–1000px wide, ~35–230KB
+- **TheFappeningBlog forum attachments:** Moderate quality, typically ~25–35KB (forum-optimized), resized for display
 - Some WordPress images have embedded dimensions in filename (e.g., `-820x1024`) — these ARE the original saved size, not WordPress-resized
 - Generally good quality for an aggregator site
 
