@@ -102,7 +102,27 @@ gallery-dl \
   "https://www.instagram.com/reel/ABC123/"
 ```
 
-**Important:** Use `-d <path>` to set the output directory. Do NOT use `-o "directory=..."` or `"directory": [...]` in the config — gallery-dl creates nested folders per site/user by default, and `-d` is the reliable way to override this. If you need a subfolder per source, create it first (`mkdir -p <output-dir>/instagram`) and point `-d` there.
+**Important:** Use `-d <path>` to set the output directory. Do NOT use `-o "directory=..."` or `"directory": [...]` in the config. With `-d <path>`, gallery-dl still creates nested `instagram/username/` folders below the given path (e.g., `-d /tmp/output` → `/tmp/output/instagram/mstrattonx/`). To control the folder structure, use output template options instead:
+
+```bash
+# Flat structure with custom filename template
+gallery-dl \
+  --config /tmp/gallery-dl-config.json \
+  --no-mtime \
+  --cookies .data/cookies.txt \
+  --range 1-250 \
+  -d <output-dir> \
+  --extractor-args instagram:filename="{username}/{title}{extension}" \
+  "https://www.instagram.com/{username}/"
+```
+
+Alternative: download to a temp directory and organize manually:
+```bash
+mkdir -p <output-dir>/temp
+gallery-dl --config /tmp/gallery-dl-config.json --no-mtime --cookies .data/cookies.txt --range 1-250 -d <output-dir>/temp "https://www.instagram.com/{username}/"
+mv <output-dir>/temp/instagram/<username>/* <output-dir>/
+rmdir <output-dir>/temp/instagram/<username> <output-dir>/temp/instagram
+```
 
 4. Verify results:
 
@@ -154,6 +174,7 @@ Celebrity and public figure accounts frequently change handles. Search news sour
 - **Brand rebranding**: e.g., `@americanrivieraorchard` → `@aseverofficial`
 - **Official accounts discontinued**: e.g., `@sussexroyal` (stopped 2020) — still exists but has no new posts
 - **Old personal accounts deleted**: Old handles become available and may be re-registered
+- **Account deactivated, new account created**: Some creators deactivate old accounts and start fresh with a new handle. Old accounts may remain visible but with no posts. Example: `@melissastratton` was deactivated in 2024, replaced by `@mstrattonx` as the active account. Check both accounts when searching.
 
 When searching for media of a person, verify the current Instagram handle via web search, as the old one may no longer exist or may return NotFoundError.
 
