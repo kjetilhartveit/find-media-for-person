@@ -45,6 +45,8 @@ yt-dlp -f "best[height<=720]" --impersonate "Chrome-131:Android-14" \
   "https://www.pornhub.com/pornstar/halle-hayes"
 ```
 
+**Note on viewkey format**: The `data-video-vkey` HTML attribute contains raw hex (e.g., `6a72006dce335`). When using yt-dlp URL directly from this value, use it as-is (no `ph` prefix). Some search result links may include a `ph` prefix in the href — always strip it. Example of working URL: `view_video.php?viewkey=6a72006dce335` (not `ph6a72006dce335`).
+
 **Prerequisite**: Install `curl_cffi` for `--impersonate` to work (`pip install curl_cffi`).
 Verify available targets: `yt-dlp --list-impersonate-targets`.
 
@@ -55,8 +57,8 @@ Verify available targets: `yt-dlp --list-impersonate-targets`.
 When yt-dlp fails but the video page returns HTML, extract the HLS URL directly:
 
 ```bash
-# 1. Get the video page HTML
-curl -sL "https://www.pornhub.com/view_video.php?viewkey=phXXXXXXXX" \
+# 1. Get the video page HTML (use raw hex for viewkey, NO 'ph' prefix)
+curl -sL "https://www.pornhub.com/view_video.php?viewkey=XXXXXXXX" \
   -H "User-Agent: Mozilla/5.0" > page.html
 
 # 2. Extract the default quality HLS URL (use Python to unescape JSON)
