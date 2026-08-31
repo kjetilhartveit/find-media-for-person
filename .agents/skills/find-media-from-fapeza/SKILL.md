@@ -68,9 +68,10 @@ Download images from Fapeza (https://fapeza.com), an aggregator site of leaked/n
 - Post IDs are sequential (e.g., `kate-hudson/1002/`, `kate-hudson/1001/`, `kate-hudson/1000/`, etc.)
 - Individual post pages have **2 images each**: a common cover/ref image (shared across all posts in a profile) + the post-specific image. The shared image filename varies per profile (e.g., `_0006.jpg`, `_0012.jpg`, `_0016.jpg`). Consider skipping the shared cover to avoid duplicates.
 - On **individual post pages**, images are already full-size (no `_400px.` suffix) — the thumbnail conversion is only needed on profile/gallery pages.
-- **Filename padding for low IDs:** Posts with IDs < 1000 use zero-padded filenames in the URL (e.g., `kylie-jenner_0029.jpg`). Posts with IDs >= 1000 use non-padded (e.g., `kylie-jenner_1011.jpg`).
+- **Filename padding:** All post images use 4-digit zero-padded filenames: `{slug}_{ID:04d}.jpg` regardless of ID value (e.g., `melissa-stratton-5_0001.jpg`, `melissa-stratton-5_0115.jpg`). Both low and high IDs follow the same 4-digit padding.
+- **Dedup strategy on post pages:** The shared cover (e.g., `_0002.jpg` for `melissa-stratton-5`) appears on every post page. Skip it — the post-specific image can be identified as the one NOT matching the shared cover pattern.
 - Profile pages may show ~1-20 images depending on profile size; smaller profiles (like Collien Fernandes with 6-19 posts) appear as a single page.
-- Post IDs may have gaps — content can be very sparse in the lower ID range (e.g., IDs 29 and 32 exist but 30-31 don't).
+- **Post ID gaps can be very sparse:** Some profiles have high gap rates (e.g., 67% of IDs 1-115 were empty on one profile — only 77 of 115 IDs existed). When using direct URL pattern to download, expect many 404s and skip them. Do NOT assume contiguous ranges.
 
 ## Pitfalls
 
@@ -84,16 +85,17 @@ Download images from Fapeza (https://fapeza.com), an aggregator site of leaked/n
 - Some individual post pages have only 1 image instead of the typical 2 (e.g., posts 38, 449, 453).
 - Similar-looking slugs may be different people (e.g., "megan-stallion" vs "megan-thee-stallion-1") — verify by checking the page title before downloading.
 - On profile pages, post links include full URLs: `<a href="https://fapeza.com/{slug}/{post_id}/">`. Extract the slug from these full URLs when building download paths.
+- **Post ID ranges are sparse:** Never assume IDs 1-N are all populated. Always scan the range and filter 404s. Direct URL construction with 404 skipping is the most reliable method — no need to enumerate all valid IDs first.
 
 ## Typical stats
 
 - Profile pages contain ~20 images (may be fewer for smaller profiles).
-- Total images per profile varies widely (e.g., Kate Hudson: 72 images, ~12MB total; Linda Lan: 17 images, ~2.6MB total; Eleonora Bertoli: 67 posts, 68 unique images, ~12MB total).
+- Total images per profile varies widely (e.g., Kate Hudson: 72 images, ~12MB total; Linda Lan: 17 images, ~2.6MB total; Eleonora Bertoli: 67 posts, 68 unique images, ~12MB total; Melissa Stratton: 77 images, ~18MB total).
 - Some models may have MULTIPLE profiles with different content (e.g., Kylie Jenner: `kylie-jenner` with 785 images ~121MB, and `kyliejenner` with 6 images).
-- Image files range from ~11KB (cover) to ~760KB.
-- Profile content ranges from hundreds of KB to several MB (or 100+ MB for very large profiles).
+- Image files range from ~11KB (cover) to ~760KB. Profile content ranges from hundreds of KB to over 100MB.
+- Post ID gaps can be very sparse — up to 67% of IDs in a range may not exist.
 - All verified downloads are JPEG format.
-- No videos have been found on Fapeza profiles.
+- No videos have been found on Fapeza profiles (image-only content).
 </think>
 
 ## Tips on changing photos to high quality in the browser
