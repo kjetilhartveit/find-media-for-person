@@ -101,6 +101,7 @@ Thumbnails on profile pages use a similar pattern with `_300px.jpg` suffix (e.g.
 - Some people appear only via individual posts (web search for `site:fapello.com "{name}"`).
 - SEO landing pages may exist at alternative slugs (e.g., `fapello.com/elebertoli/`) but return 200 with no actual items — only the profile slug with content matters.
 - `/feed/{id}/` URLs are curated/featured feed pages linking to profiles, not standalone profiles themselves.
+- **Identity verification cues**: Profile and item pages carry no bio or description text (no meta description either). The slug, profile title, and the social links embedded in the profile page (e.g., an OnlyFans URL) are the main signals that the profile belongs to the right person. Cross-check those handles against external sources (web search, IMDb) before downloading.
 
 ### Fapello Internal Search Doesn't Work
 
@@ -126,6 +127,7 @@ Thumbnails on profile pages use a similar pattern with `_300px.jpg` suffix (e.g.
 - Small profiles have no videos and only one page of real items.
 - Profile URL slug variations: try `{first}{last}` (no hyphen, e.g., `kyliejenner`), `{first}-{last}`, and `{name}-1`.
 - **Non-sequential IDs in small profiles**: Even small profiles may have non-sequential IDs (e.g., IDs 1-4 and 1000). Always check item pages for actual content rather than assuming sequential density means completeness.
+- Item pages can reference item IDs not present in the profile page's own URL list (e.g., a direct `…/content/{l1}/{l2}/{slug}/…/{slug}_{ID}.jpg` reference in next/related UI). After scanning, probing a few IDs past the max confirmed ID is cheap insurance (1 GET each) and can find the last items of a profile.
 
 ### Pagination Cycling (Medium Profiles)
 
