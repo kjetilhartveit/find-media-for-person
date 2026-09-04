@@ -43,9 +43,11 @@ There are FOUR image patterns to extract:
 - Images: `https://thefappeningblog.com/wp-content/uploads/YYYY/MM/name.jpg`
 - Thumbnail: `https://thefappeningblog.com/wp-content/uploads/YYYY/MM/name_350px.jpg` (remove `_350px` for full-size)
 - **Same thumbnail transformation as data directory: remove `_350px` suffix** to get full-size URL. No `_thefappeningblog.com_` suffix needed.
-- Resized WordPress images have dimension suffixes like `-1024x576.jpg`, `-768x1024.jpg` — the actual full-size images do NOT have these dimension suffixes
-- All images may be listed in a single page HTML when visiting the gallery page directly (no individual gallery sub-pages needed for WordPress uploads)
+- Resized WordPress images have dimension suffixes like `-1024x576.jpg`, `-768x1024.jpg` — the base URL without a suffix is the originally uploaded file, **but it frequently returns 404** (original removed from the server while resized copies remain). Observed largest available variants: `-768x1152` (portrait content), `-1536x1536` (square), `-1024x683` (2:1 covers)
+- **Recommended full-size strategy:** collect ALL sized variants of each image from the article HTML (they are all present in `srcset` attributes), try the no-suffix original first, and on 404 fall back to the largest-suffix variant by pixel width
+- All images may be listed in a single page HTML when visiting the article/gallery page directly (no individual gallery sub-pages needed for WordPress uploads)
 - Some WordPress images have embedded filename dimensions (e.g., `Inna-Sexy20--826x1024.jpg`) — these ARE the full-size version; WordPress may serve the same file for both full and resized URLs
+- Article HTML also contains sidebar "related articles" images of OTHER people and ad assets (e.g. `/data/...`, `porndude.png`) — filter to image URLs containing the target person's name
 
 **Pattern 4 — cnt directory (OnlyFans leaks):**
 - Images at: `https://thefappeningblog.com/cnt/{l1}/{l2}/{slug}/{date-slug}/name.jpg`
@@ -54,7 +56,9 @@ There are FOUR image patterns to extract:
 
 **Gallery page structure:** Individual gallery pages show ONE full-size image per page. Gallery pages are numbered sequentially (1–N). The gallery listing page shows ALL galleries with thumbnails, numbered in reverse order (highest first). Gallery URLs may use different image formats (data directory vs. WordPress uploads).
 
-**Finding galleries:** Use `https://thefappeningblog.com/gallery/{slug}/` first. If that fails, try web search: `site:thefappeningblog.com "person name"` and scrape category pages: `https://thefappeningblog.com/category/{slug}-2/page/{N}/`. Check up to 6-7 pages.
+**Finding galleries/articles:** Use `https://thefappeningblog.com/gallery/{slug}/` first. If that fails (404), use web search `site:thefappeningblog.com "person name"` and scrape category pages: `https://thefappeningblog.com/category/{slug}-2/page/{N}/`. Check up to 6-7 pages.
+- Many porn stars/actresses have NO `/gallery/` page — their content lives in individual **articles** (e.g. `/{name}-nude-porn-collection-N-photos/`, `/{name}-{topic}-N-pics-video/`). Web search is the reliable way to find these.
+- Tag pages exist (`/tag/{slug}-naked/`) and list some articles, but can be incomplete — always cross-check with web search, and scrape every article found for image URLs.
 
 ### Forum threads (TheFappeningBlog)
 TheFappeningBlog has a **forum section** where users post image sets and linked galleries about celebrities. This is valuable when no gallery/category page exists for a person.
@@ -90,7 +94,7 @@ TheFappeningBlog has a **forum section** where users post image sets and linked 
 ## Quality
 
 - **Fappeningbook images:** ~35KB–700KB (varies by content), 1000px wide thumbnails → full-size available at same URL minus `t`
-- **TheFappeningBlog images (WordPress):** Full-size images typically 1100–1920px wide, ranging from ~80KB to 700KB+ depending on content
+- **TheFappeningBlog images (WordPress):** Full-size images typically 1100–1920px wide, ranging from ~80KB to 700KB+ depending on content. When the original is gone, the largest sized variant is usually ~768px wide (portrait) / ~1536px (square)
 - **TheFappeningBlog images (data/):** Full-size ~800–1000px wide, ~35–230KB
 - **TheFappeningBlog forum attachments:** Moderate quality, typically ~25–35KB (forum-optimized), resized for display
 - Some WordPress images have embedded dimensions in filename (e.g., `-820x1024`) — these ARE the original saved size, not WordPress-resized
@@ -105,3 +109,7 @@ TheFappeningBlog has a **forum section** where users post image sets and linked 
 - **Web search is the best way to find TheFappeningBlog galleries:** Use `site:thefappeningblog.com "person name"` to discover relevant galleries.
 - **OnlyFans leak galleries misclassified:** Some galleries labeled as a celebrity's "OnlyFans leaks" are actually from different creators. Check if the gallery URL contains names like `renee316` — skip these unless you want OnlyFans creator content.
 - **No videos on fappeningbook.com profiles** — only static images. TheFappeningBlog may occasionally host videos.
+- **WordPress originals 404:** The no-suffix `/wp-content/uploads/` URL often returns 404 while its sized variants work — do not stop at one 404, fall back to the largest sized variant (see Pattern 3).
+- **Missing images are permanently gone:** When an image is removed, all its variants 404 on the main domain AND mirror subdomains (`us.`, `ca.`, `the.`) — no need to retry mirrors repeatedly.
+- **Forum threads may be empty of attachments:** A thread about a person can have 0 public attachments across all its pages — still worth checking, but don't expect results.
+- **Video thumbnails:** Collection articles may include wide (`-768x502` etc.) images that are video thumbnails with `__thumb1.jpg` names in the HTML — these are the external video's cover, not a photo; skip unless you also want the video (videos are external/embedded, not hostable here).
