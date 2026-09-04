@@ -30,16 +30,25 @@ Create a JSON config file for fine-grained output control:
 ```json
 {
   "extractor": {
+    "base-directory": "<output-dir>",
+    "sleep-request": [0.4, 0.8],
     "pictoa": {
+      "directory": ["{album_id} {album_title}"],
       "filename": "{id}.{extension}"
     }
   }
 }
 ```
 
-Then run: `gallery-dl --config /path/to/config.json -d output_dir URL1 URL2 ...`
+Key variables for Pictoa: `album_id`, `album_title`, `id`, `extension`, `filename` (hash). Use `--restrict-filenames windows` for Windows-compatible filenames. The per-album `{album_id} {album_title}` subfolder keeps albums organized and avoids name collisions; drop the `directory` key to dump everything flat.
 
-Key variables for Pictoa: `album_id`, `album_title`, `id`, `extension`, `filename` (hash). Use `--restrict-filenames windows` for Windows-compatible filenames.
+### Batch-downloading many albums
+
+For a large number of albums:
+
+- Pass ALL album URLs in one `gallery-dl` invocation together with `--download-archive <file>.sqlite` so re-runs/continuations skip already-finished files.
+- Run it in the background (e.g. `nohup ... > batch.log 2>&1 &`) and poll the log — ~1000+ images with a 0.4-0.8s sleep finishes in ~5-10 min.
+- Verify afterwards: per-album file count vs the photo count shown on the search results page; a shortfall means the album is paginated (see fallback).
 
 ### gallery-dl known limitations for Pictoa
 
@@ -70,16 +79,16 @@ When `gallery-dl` is unavailable or fails:
 - Album pagination: `https://www.pictoa.com/albums/<title>-<id>-p2.html`, `https://www.pictoa.com/albums/<title>-<id>-p3.html`, etc.
 - Category URL pattern: `https://www.pictoa.com/c/<name>-<category-id>/` — category pages list multiple albums.
 - Search pagination: `https://www.pictoa.com/s/<query>/p2/` — NOTE: p2 pagination was observed NOT to work (returns 404). Only use first page of search results.
-- Image CDN: `t1.pictoa.com` — serves actual images (~15-35KB JPEG, up to ~48KB). Use these URLs as-is.
+- Image CDN: `t1.pictoa.com` — serves actual full-size images (commonly ~100-200KB JPEG). Use these URLs as-is.
 - NOTE: `s2.pictoa.com` previously served high-quality versions by swapping `t1` → `s2` in URLs. As of 2026-07-18 this CDN returns 404. Only `t1.pictoa.com` works.
 - Example image URL: https://t1.pictoa.com/media/galleries/164/015/164015593e5b1db71d5/2919079593e5b1dba2c5.jpg
 - **Image URL structure for filtering:** `https://t1.pictoa.com/media/galleries/<dir>/<gallery_id><random_hex>.<ext>`. The gallery ID (e.g., `132450`) appears as a prefix in the filename after the directory name (e.g., `1324505498958d9d727.jpg`). Filter related gallery images by checking the image URL contains the directory path (`/media/galleries/<dir>/`) AND the gallery ID in the filename. Directory path can be extracted from the album page title or matched via the gallery ID in the first path segment.
 
 ## Quality
 
-- Images range from ~15KB to ~150KB+ per file from the `t1` CDN (varies by gallery; newer galleries tend to be larger, e.g. 200KB-500KB).
-- Decent quality for thumbnails/gallery previews.
-- Note: gallery images from 2017+ tend to be larger (200-500KB) while older galleries (2015-2016) may be smaller (40-80KB).
+- The `t1` CDN serves actual full-size images (not thumbnails). A recent run averaged ~150KB/file at 683x1024.
+- File size varies by gallery; generally ~100-200KB JPEG per file.
+- This is the highest quality Pictoa offers — the `s2` high-res CDN is broken (see below).
 
 ## Pitfalls
 
@@ -99,3 +108,7 @@ When `gallery-dl` is unavailable or fails:
 - **Image filtering by gallery ID.** The gallery ID must be in the image URL path on the album page to filter out related gallery thumbnails. Album pages include `data-lazy-src` images from related/recommended galleries — only keep URLs containing the target gallery ID. Gallery IDs in image URLs may have extra characters appended (e.g., `102839` appears as `102839549719b9df82b` in the filename). Filter by checking the gallery ID also appears in the directory path of the CDN URL (`/media/galleries/<DIR>/<GALLERY_ID><random>.jpg`). Related gallery images will have a different directory number.
 - **gallery-dl does not support pagination URLs.** Passing `-p2.html`, `-p3.html` etc. to gallery-dl returns "Unsupported URL". The extractor only handles the main album URL (`-p1.html` implicitly). To download all images from paginated albums, use the manual extraction fallback method.
 - **Pagination may not add new unique images.** When filtering by gallery ID, pagination page images are often duplicates of page 1 images. Check page 1 first before downloading all pagination pages.
+- **One album can have multiple localized slugs — dedupe by album ID.** The same album ID appears under several title slugs in different languages (e.g. an English, Spanish and French slug all pointing to the same `-2646856.html` ID). Album pages even list their localized siblings. When building an album list, key on the numeric album ID, not the slug.
+- **Verify identity from metadata when you can't view images.** If your tooling has no image input, confirm an album is really the person by matching its meta tags (hair color, ethnicity, tattoos, "pornstar"/"latina" etc.) against known facts about the person, and by noting multi-model albums that pair the target with known performers — those shared shoots are a strong identity signal.
+- **CDN image filenames embed a hex Unix timestamp.** In `t1.pictoa.com` URLs, the 8 hex digits before the random suffix are a Unix timestamp (e.g. `58ca2f18` ≈ 2017-03-17) — decode it to estimate how old the source content is and sanity-check that an album matches the person's active era.
+- **Search result photo counts are usable as download-size estimates** (they live in small count spans next to each album block), but fetch the album page for the exact number (counts are often off by a few).

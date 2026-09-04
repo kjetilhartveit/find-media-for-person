@@ -40,6 +40,7 @@ In general a search for media from a source should include the following. But no
 - We don't want cum tributes by men NOR trannies.
 - Note: the content does not have to be leaked or "secret". It can be public/open images like from Instagram etc
 - Note 2: there might be irrelevant pictures/videos/media on the websites we are exploring/searching. We should make an effort to only download content/media of the person we are looking for.
+- Note 3: if you cannot view/download images for visual verification (your model has no image input), verify the person's identity from metadata instead: match the content's tags/descriptions (hair color, ethnicity, tattoos, body type, era) against known biographical facts, use multi-model content that includes known collaborators as an identity signal, and spot-check source timestamps when available.
 
 ## Technical Guidelines for finding and storing media
 
