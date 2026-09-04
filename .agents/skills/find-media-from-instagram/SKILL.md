@@ -178,6 +178,31 @@ Celebrity and public figure accounts frequently change handles. Search news sour
 
 When searching for media of a person, verify the current Instagram handle via web search, as the old one may no longer exist or may return NotFoundError.
 
+## Diagnosing "NotFoundError: Requested user could not be found"
+
+When gallery-dl fails with `[instagram][error] NotFoundError: Requested user could not be found`, the problem is NOT always the cookie. This error also occurs when the **target account** is disabled, banned, deleted, or age-gated by Instagram. To distinguish:
+
+1. Check whether the session cookie still works by querying a control account with the same request:
+
+```bash
+curl -s -A "Mozilla/5.0 (Windows NT 10.0; Win64; x64) ..." \
+  -H "x-ig-app-id: 936619743392459" \
+  "https://www.instagram.com/api/v1/users/web_profile_info/?username=nasa" \
+  -b .data/cookies.txt
+```
+
+   - Control resolves (returns `data.user` with username/followers) + target returns `data.user: null` → the **target account is unavailable** (disabled/deleted/renamed), not an auth problem. Document this and move on.
+   - Control also returns `data.user: null` or no JSON → the cookie/session is invalid or the IP is rate-limited; refresh the cookie.
+
+2. Rate-limit the diagnostic queries: a burst of quick `web_profile_info` calls triggers Instagram to return **empty (non-JSON) responses** for a while. Space checks at least ~20–30 s apart and pause a few minutes before retrying.
+
+3. HTML profile pages are NOT useful for this diagnosis — profile pages (and old post URLs of a disabled account) 302-redirect to the homepage in both normal login-wall situations and disabled-account situations. Rely on the API check above.
+
+4. Before concluding, rule out a handle rename:
+   - Check the person's own link-in-bio hub (link.me, linktr.ee, beacons, etc.) — it usually links the current profile.
+   - Web-search for the person's current handle (SEO bio sites and stats trackers like hafi.pro/socialveins show last known follower data; a stale "active" claim there may just be uncached data).
+   - Check handle variants (no suffix, underscores, "official" suffix, period placement). A squatter account with the "expected" handle but few hundred followers is not the real person.
+
 ## Pitfalls
 
 - **Handle may not match display name.** Content creators use different names/handles on Instagram vs. display names shown on aggregator sites. Search for aliases found on other platforms. Try variations with underscores, periods, and different capitalizations.
@@ -194,3 +219,4 @@ When searching for media of a person, verify the current Instagram handle via we
 - **Session cookie may expire during long downloads.** Profile downloads can take 10+ minutes, and the session cookie may expire mid-download. Look for `[instagram][error] HTTP redirect to home page` in the output — this indicates the cookie expired. If you see this, refresh the cookie and re-run gallery-dl (it will skip already downloaded files).
 - **Tagged posts create subdirectories with other accounts.** Using `-o include=posts` also fetches posts where the user appears (fan accounts, tagged posts, etc.). These are saved in `instagram/<other_account>/` subdirectories. After download, extract the target's files: `mv /output/instagram/<username>/* /output/` and remove empty subdirs. Content from non-target accounts (especially videos needing yt-dlp) may fail or be empty.
 - **yt-dlp must be installed for reliable video downloads.** Videos without direct MP4 URLs require yt-dlp. Without it, videos silently fail with `[downloader.ytdl][error] Cannot import yt-dlp or youtube-dl`. Install with `pip install yt-dlp` or equivalent. Verify with `yt-dlp --version`.
+- **Adult content creators' accounts are frequently disabled or age-gated.** For adult creators, "Requested user could not be found" is much more common than for mainstream creators, even for very large accounts. See the diagnosis section above; when confirmed unavailable, note exactly what was and was not resolvable and pursue other sources (aggregators, other platforms) instead of retrying the profile.
