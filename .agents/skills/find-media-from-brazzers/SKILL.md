@@ -21,7 +21,8 @@ Brazzers is accessible via standard HTTP scraping tools (curl, cloudscraper).
 
 - **Profile**: `brazzers.com/pornstar/{id}/{name}`
 - **Video**: `brazzers.com/video/{id}/{title}`
-- **Search**: `brazzers.com/search?query={query}`
+- **Search**: `brazzers.com/search?query={query}` (unreliable - see Pitfalls)
+- **Actor full video list**: `brazzers.com/videos/models/{actorId}/{slug}/` with `?page=2`, `?page=3`, ... pagination (24 videos/page). The "View all" links under *Latest Videos* / *Top Rated Videos* on a profile point here. Page params beyond the last page repeat the last page - stop when the first video link repeats.
 
 ## Download Method — curl with regex extraction
 
@@ -57,20 +58,24 @@ curl -sL -A "Mozilla/5.0" \
 
 1. Use `curl` with a proper `User-Agent` header - no Cloudflare protection
 2. Cloudscraper works but is not needed - site responds to standard requests
-3. Extract poster images from video cards on profile pages
-4. For full-size images/videos, visit individual video pages and parse their HTML
-5. Poster thumbnails are typically 1080x1920 (vertical format)
+3. Get the actor's complete scene catalog from `/videos/models/{actorId}/{slug}/?page=N`, not just the profile page (profile shows ~24 cards mixed with *recommended* videos of other performers)
+4. Verify a scene actually features the performer: the HTML `<title data-rh="true">` lists the full cast ("Title With Performer A, Performer B" or "Page Not Found | Brazzers")
+5. Visit individual video pages to parse metadata - they embed everything server-side (no API needed)
 
-## Tips
+## Video page metadata (best source)
 
-- **Two poster hash variants**: `m=eaSaaTbWx/.../poster/poster_01.jpg` (main video posters, ~150KB) and `m=eyzaevFb/.../poster/poster_01.jpg` (gallery thumbnails, ~40-60KB). Different pages may use different hash prefixes for their posters.
-- **Profile images** from `image-service-ht.project1content.com` with `model/profile_001.jpg` — may have query parameters like `width=600&aspectRatio=3x4&imageVersion=...` that can be modified (e.g., `width=1200`).
-- **Video page posters include cross-references** — poster URLs from other performers appear on a video page. Filter to the performer's hash prefix(es) to get only relevant posters.
-- **Search may not find all performers** — some profiles exist but aren't returned by site search. Use Google: `site:brazzers.com "{performer name}"` to find profiles.
+- **VideoObject JSON-LD** (`<script type="application/ld+json">`) per video page contains: `name`, `description` (full scene synopsis), `thumbnailUrl` (poster), `uploadDate`. Best per-scene metadata on the site.
+- **Scene tags** are SSR'd as links `/videos/tags/{id}/{slug}/` on the video page. Tag sets differ per scene and can be used to e.g. find `Facial` (tag id 66), `Cumshot` tagged scenes. Note: in multi-performer scenes the tag describes the scene, not necessarily the target performer.
+- The first `<img src=".../poster/poster_01.jpg">` on a video page is the scene's own poster; the rest are related/cast videos.
+- **Two poster hash variants**: `m=eaSaaTbWx/.../poster/poster_01.jpg` (main video posters, **1280x720 landscape, ~100-150KB** - highest quality obtainable) and `m=eyzaevFb/.../poster/poster_01.jpg` (gallery thumbnails, ~40-60KB). The `m=` transform hashes are signed - you cannot add `?width=` or swap them for larger renditions.
+- **Profile images** from `image-service-ht.project1content.com` with `model/profile_001.jpg` — the `width=600` parameter can be bumped up (e.g. `width=1200` → 1200x1599 portrait). Usually only `profile_001` exists.
+- **Search may not find all performers/videos** — site search (`/search?query=`) returns fuzzy results mixed with popular videos; it may not even list the performer's profile. Use Google: `site:brazzers.com "{performer name}"` to find profiles.
 
 ## Pitfalls
 
-- **Video downloads** - full videos require parsing video page HTML for stream URLs
+- **"Page Not Found" string appears in the embedded JSON of every page** (SSR fallback template) - do not use it to detect 404s; check `<title data-rh="true">` instead.
+- **Profile page is mostly a shell** - the actor's bio/tags/videos are SSR'd, but there is no separate "photos" section; free images = profile photo + one poster per scene.
+- **Video/trailer streams require login** - no public m3u8/mp4 in the page HTML; `canDownloadGallery`/`canViewGallery` flags are for premium only.
 - **Poster URLs may be encoded** - the path segments are URL-encoded hash prefixes
 - **Content may be behind paywall** - Some galleries are only available to premium users
 - **Images may be watermarked** - Check if full-size images include branding
