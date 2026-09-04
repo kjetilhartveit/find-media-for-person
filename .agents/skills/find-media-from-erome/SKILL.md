@@ -83,9 +83,10 @@ When gallery-dl is unavailable or fails:
 
 ## Search Term Variants
 
-- **Space-separated queries often return 0 results**: `search?q=name+surname` frequently returns no results even when content exists. Try compact (`NameSurname`), underscore (`Name_Surname`), or hyphen (`Name-Surname`) versions instead.
+- **Query format results vary per person**: `search?q=name+surname` frequently returns no results even when content exists, but not always — some people (e.g., "Lela Star") return results for ALL of space/compact/underscore/hyphen variants. Always try multiple variants and merge unique album IDs.
   - Verified case: "Layla Jenner" — `search?q=layla+jenner` returned 0 results; `search?q=layla_jenner` and `search?q=layla-jenner` both returned 3 albums (same albums, same order).
   - Also try just the first name alone for very popular people (e.g., `search?q=layla`).
+- **Creator handles as search terms work**: A creator's primary social handle (e.g. their OnlyFans handle) often returns dedicated albums on Erome in addition to the display-name results. Search the handle (compact form, no spaces) as its own query and merge the union.
 - When the same set of albums is returned by multiple search variants, they are duplicates — don't download twice. Use deduplication or download only one variant + known album IDs.
 - Verify albums match the target person: check tags (e.g., `['layla', 'jenner']`) and album title before downloading. Avoid albums from general mass-uploaders unless confirmed.
 ## Download Filtering Tips
@@ -106,9 +107,12 @@ When gallery-dl is unavailable or fails:
 - gallery-dl `-d` destination argument can create nested directory structures (`erome/erome/`) in certain invocation patterns — flatten after download.
 - When using `gallery-dl -i` with an input file of URLs, the download destination parameter may create a nested `erome/` directory that needs flattening.
 - **EromeUserExtractor may return 404**: The `EromeUserExtractor` (for `https://www.erome.com/USER`) can return 404 even when the user page exists and has content. The API endpoint it uses (`/{user}?t=posts&page=1`) may not be accessible. In such cases, fall back to parsing the page manually to extract `/a/{album_id}` links and download album-by-album. Also try the username variant (e.g., `natalia-bukowiecka` vs `nataliaakaczmarek`).
+- **Checking whether a handle exists as an Erome user**: `curl -o /dev/null -w "%{http_code}" https://www.erome.com/{username}?t=posts&page=1` returns 200 for existing users and 404 for non-existing ones (the SPA shell returns 200 for valid profiles, 404 otherwise; `/u/{username}` pages also 404 for non-existing users). If the user exists but has no public posts, `gallery-dl -J https://www.erome.com/{username}` returns `[]` (not an error) and the 200 page renders "No posts".
+- **User/handle pages rarely matter for celebrity searches**: Known creator handles (OnlyFans/Instagram) usually do NOT exist as Erome accounts — content is almost always posted by third-party fans/aggregators and found via search queries. Don't spend much time enumerating handle variants on user pages; invest in search query variants instead.
 - Video downloads can be slow due to file sizes; consider rate-limiting for large batches.
 - Gallery-dl search downloads handle all albums at once; individual album downloads can be used for targeted fetching.
 - gallery-dl output file structure varies: some albums create `USERNAME/FILENAME` (flat), others `USERNAME/ALBUM_ID Filename` (nested). Handle both patterns when moving files.
+- With `directory: []` (or `-o "directory=[]"`), gallery-dl (1.32.x) writes files **flat** with names like `ALBUMID Title N.ext` (e.g., `HIWcSN2b Lela Star 47.mp4`) — album provenance is preserved in the filename, which makes flattening and filtering safe.
 
 ## Pitfalls
 
@@ -116,7 +120,7 @@ When gallery-dl is unavailable or fails:
 - **Search terms that return NO results for "Rekha Bhabhi" / "Rekha Mona Sarkar"**: "Rekha Bhabhi", "Rekhabhabi", "Rekha Mona", "Rekha Mona Sarkar", "mona_rekha", "Rekha+Ullu", "Rekha+Kooku" all return zero results on Erome. This suggests Erome does not have content specifically tagged for this person.
 - **False positives from similar names**: Search for "rekha" (lowercase) returns albums about completely unrelated people (e.g., "Réka 23 Hungary" by user Miketzo, or Spanish-language content with "#REKA" tag). Carefully inspect album titles before downloading.
 - Album pages may be behind Cloudflare protection in some cases.
-- Erome filenames are random IDs — no semantic naming for downloaded files.
+- Raw Erome media file IDs are random (no semantic naming) — when downloading manually, prefix filenames with album IDs. `gallery-dl` names files with an album-ID prefix (see above), so manual renaming is only needed for hand-scraped URLs.
 - Search results per person can be very large (48+ albums), leading to timeouts; download in batches.
 - Some albums may have duplicate images shared across albums.
-- Erome filenames are random IDs — no semantic naming for downloaded files.
+- Multi-model "mega" compilation albums (tagged with many models' names) require per-image identity verification before keeping; a single title match does not mean every image in the album is of the target person.
