@@ -26,6 +26,7 @@ Download images and videos from FapMenu (https://fapmenu.com), a large aggregato
 - Slug hyphenation varies by site: FapMenu may require hyphens (`layla-jenner-4`) while Fapello/Fapeza may require no-hyphen (`laylajenner`). Always try the most common slug format first, then fall back to search if 404.
 - **Suffix aliases are common:** When multiple profiles exist, slugs use a numeric suffix (e.g., `layla-jenner-4`). The base slug without a number often returns 404. Try the search endpoint to find the correct profile slug.
 - Names with common first names may match the wrong person (e.g., `sofie/` matches "Sofie Ivars" not "Sofie Eikeland"). Always verify the profile name and aliases listed on the page to ensure it's the correct person.
+- **Identity verification signals**: the profile bio + meta description list the person's aliases (often their social handles), the bio text may state a post count that matches the gallery size, and the page may contain direct links to their social platforms (e.g. Instagram/OnlyFans) — cross-check those handles against the target person.
 - **Alias co-occurrence**: Media page alt text may list multiple names (e.g., "Megan Vale / Lupe Burnett nude photo #0004"). This suggests content may include multiple models on the same gallery page — verify each image to ensure it's the target person.
 
 ## Image URL Patterns
@@ -58,10 +59,12 @@ A Python script is recommended for reliable multi-model, multi-page scraping. Us
     - Full-size URL pattern: `https://fapmenu.com/models/{1st}/{2nd}/{slug}/{model_num}/full/{slug}_nude_XXXX.webp`
     - Each page typically has ~24–30 images
 3. **Pagination**: Iterate page numbers. Each page usually has 24–25 images. Stop when a page has no images.
+   - Pagination hrefs have **no trailing slash**: `href="/slug/page/2"`. Both `.../page/N/` and `.../page/N` work (redirect), but when detecting the next-page link in HTML, match the no-slash form (`/slug/page/{N+1}`) — checking for a trailing slash makes you stop prematurely.
+   - **Final page detection**: the last page's HTML contains no link to `/slug/page/{N+1}` at all.
    - Skip model number 1 (avatar) which appears on every page as a duplicate — **however, some small profiles have their actual content in model 1** (e.g., Megan Vale has 4 images in model 1). Check if model 1 images are unique to the profile and not avatars.
    - Deduplicate across pages since the same image numbers may appear in different model folders
 4. **Download images**: Use wget/curl to fetch each URL. Save as `.webp`. Files are typically WEBP format.
-5. **Rate limiting**: Sleep 0.3–0.5s between requests. Respect the site's anti-bot measures.
+5. **Rate limiting**: Sleep 0.3–0.5s between requests. Respecting that, modest parallelism (e.g. 3 workers with ~0.15s per-worker delay) downloaded 894 images without bot protection kicking in (~2 min).
 
 ## Quality
 
