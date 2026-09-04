@@ -48,7 +48,7 @@ Request `https://xhamster.com/search/{name}` with normal User-Agent. Contains:
 - Separate `"videosList"` section with `"props"` containing another `videoThumbProps` array
 - Search results are the **primary source** for finding all videos of a person, as profile pages may show trending/irrelevant content.
 
-Thumbnail URLs are at `https://ic-vt-nss.xhcdn.com/` with quality suffixes like `s(w:1280,h:720),webp` and paths like `/005/748/041/v2/2560x1440.268.webp`. These directly downloaded thumbnails return 403 Hotlink Forbidden — use individual video page og:image instead, or fetch with a Referer header.
+Thumbnail URLs are at `https://ic-vt-nss.xhcdn.com/` with quality suffixes like `s(w:1280,h:720),webp` and paths like `/005/748/041/v2/2560x1440.268.webp`. The `imageURL` field (`s(w:1280,h:720)` variant) downloads fine directly with plain requests — no Referer needed. Only the small variants (`s(w:350,h:620)`, `s(w:526,h:298)`) return 403 Hotlink Forbidden.
 
 ## YouTube-dl download (videos)
 
@@ -62,7 +62,7 @@ Best quality is 1080p MP4. Videos average 170-200MB but some reach 600-800MB+. y
 ## Technical Tips
 
 - Use User-Agent: `Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36`
-- Video thumbnails: `https://ic-vt-nss.xhcdn.com/` (with proper Referer)
+- Video thumbnails: `https://ic-vt-nss.xhcdn.com/` (no Referer needed for the `s(w:1280,h:720)` `imageURL` variant)
 - Photo images: `https://ic-ph-nss.xhcdn.com/`
 - Avatar/profile images: `https://ic-tt-nss.xhcdn.com/`
 - Short video trailers: `https://thumb-v*.xhcdn.com/`
@@ -70,26 +70,16 @@ Best quality is 1080p MP4. Videos average 170-200MB but some reach 600-800MB+. y
 - The `imageURL` field often has higher resolution than `thumbURL`
 - Profile pornstar pages often link to user channels (e.g., "Thai Swinger") that host the same content under a different uploader
 
-## Method 2 — Search page (broader discovery)
+Search results are paginated (up to 22+ pages for popular stars, each page ~47 videos). Pagination details:
 
-Request `https://xhamster.com/search/{name}` with normal User-Agent. Contains:
+- Extract ALL `videoThumbProps` array occurrences per page (regex for `"videoThumbProps"\s*:\s*` and bracket-counting each) and merge by `id` — the first occurrence may be a shared trending/related block that is identical across pages, which silently breaks pagination if you only take the first array.
+- Pagination is driven by a `pagination` JSON block: `{"active":1,"next":2,...,"maxPages":N,"pageLinkTemplate":"https://xhamster.com/search/{query}?page={#}"}`. **Use the URL from `pageLinkTemplate` for pages 2..maxPages** — the template uses `+`-encoded query names (e.g. `lela+star`). Requesting `?page=N` against a differently-encoded slug (e.g. `lela-star`) is silently ignored and returns page 1 repeatedly.
+- The search `total` field should equal the profile's `videoCount` — a good completeness check.
+- Compare video IDs against the profile list to find extras. Search results may include videos where the model is featured but the name is not in the title (only ~1/2 of results mention the name in title/URL, the rest match via tags).
 
-- `videoThumbProps` array in embedded JSON (~47 videos per page, paginated)
-- Separate smaller array for "Related/Relevant Short videos"
-- Direct HTML links to videos and galleries in the results grid
+## Method 3 — Individual video pages
 
-Search results are paginated (up to 22+ pages for popular stars). Each page returns ~47 videos. Compare video IDs against the profile list to find extras not covered by the profile page. Search results may include videos where the model is featured but not the main pornstar page title.
-
-## Method 3 — Individual video pages (best thumbnails)
-
-Request `https://xhamster.com/videos/{slug}-{id}` for each video. The `og:image` meta tag contains a high-quality thumbnail (1280x720 or 2560x1440 webp). Extract with:
-
-```python
-og_match = re.search(r'<meta[^>]*property=["\']og:image["\'][^>]*content=["\']([^"\']+)["\']', html)
-thumb_url = urllib.parse.unquote(og_match.group(1)) if og_match else None
-```
-
-The og:image URL points to ic-vt-nss.xhcdn.com and returns the best available quality thumbnail.
+Request `https://xhamster.com/videos/{slug}-{id}`. The `og:image` meta tag contains the same high-quality thumbnail URL as the JSON `imageURL` field (1280x720 webp from 2560x1440 source) — verified identical. So to collect thumbnails for hundreds of videos, use `imageURL` from the profile/search JSON directly instead of fetching every video page (saves one HTTP request per video).
 
 ## Method 4 — Photo galleries
 
@@ -112,7 +102,7 @@ Methods 1-4 work with plain `requests` — no browser automation needed for thum
 - **Profile page shows trending videos**: The `/pornstars/{name}` page often shows "best trending" videos, not the pornstar's own content. The `videoThumbProps` array may only include a few relevant videos. Always use search (`/search/{name}`) as the primary discovery method.
 - **JSON escaping**: Embedded JSON in HTML has all `/` escaped as `\/` — must unescape before parsing
 - **Limited video list on profile**: The `videoListProps` array on the main profile page only includes the first page of videos. Search page discovery finds additional videos not in the profile list
-- **Thumbnail hotlink protection**: Thumbnail URLs from profile JSON (`imageURL`, `thumbURL`) return 403 when fetched directly without proper Referer headers. Extract high-quality thumbnails from individual video pages via `og:image` meta tag, or download them along with videos
-- **Pagination**: Search results have many pages (e.g., 22+ pages). Use video IDs for deduplication across pages
+- **Thumbnail hotlink protection (partial)**: Small thumbnail variants (`s(w:350,h:620)`, `s(w:526,h:298)`) return 403 Hotlink Forbidden when fetched directly, but `imageURL` (`s(w:1280,h:720)`) downloads fine without a Referer — same quality as video page og:image. No need to fetch per-video pages for thumbnails.
+- **Pagination**: Search results have many pages (e.g., 22+ pages for popular stars). Use the `pageLinkTemplate` URL from the page's `pagination` JSON (it uses `+`-encoded query names) for `?page=N` — other encodings can silently return page 1 repeatedly. Deduplicate by video ID. Search `total` should equal the profile `videoCount`
 - **Placeholder thumbnails**: Some og:image URLs are generic placeholders — verify by checking if the URL or title references the target person
 - **Aliases**: Search using known aliases — a model may appear under different names (e.g., "Lera" appears in "Amber Hardin" search results)
