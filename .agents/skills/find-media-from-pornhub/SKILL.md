@@ -21,6 +21,8 @@ PornHub profile, gallery, album, and video page URLs.
 
 - **Profile**: `pornhub.com/pornstar/{name}` or `pornhub.com/pornstar/{name}/videos`
 - **Model profile**: `pornhub.com/model/{name}` - may have additional galleries/albums not shown on pornstar page
+- **Photos page (own albums)**: `pornhub.com/pornstar/{name}/photos` (title "{Name} Porn Pics & Nude Photos") - has a **"{Name}'s Photo Albums"** section with "Showing 1-N of N albums" counter; "See All" URL: `pornhub.com/pornstar/{name}/photos/public`
+- **GIFs page**: `pornhub.com/pornstar/{name}/gifs` - "GIFs From {Name} Videos" section, paginated
 - **Album**: `pornhub.com/album/{id}`
 - **Photo gallery**: `pornhub.com/album/viewphotos?albumId={id}`
 - **Single video**: `pornhub.com/view_video.php?viewkey={phXXXXX}`
@@ -31,6 +33,19 @@ PornHub profile, gallery, album, and video page URLs.
 ## Primary method — gallery-dl (for images)
 
 Extractors: `PornhubPhotosExtractor`, `PornhubGalleryExtractor`
+
+Works reliably on album URLs (verified):
+
+```bash
+# List URLs only
+gallery-dl --get-urls "https://www.pornhub.com/album/{id}"
+
+# Download (custom filename; {extension} does NOT include the leading dot)
+gallery-dl --directory "$DST/albums/{id} {title}" \
+  -o 'filename="{num:03d}.{extension}"' "https://www.pornhub.com/album/{id}"
+```
+
+Note: the option is `-o 'filename=...'` (there is no `--filename-fmt` flag).
 
 ## Alternative method — yt-dlp (for videos)
 
@@ -195,3 +210,10 @@ yt-dlp --cookies cookies.txt \
 - **pornstar/profile video search with `?o=mv|tr|lg`** - Sorting options: `o=mr` (most recent, default), `o=mv` (most viewed), `o=tr` (top rated), `o=lg` (longest). These change order but same videos appear.
 - **yt-dlp "already downloaded" detection fails** - When verifying if a video file exists before downloading, yt-dlp reports "already downloaded" even though the file exists. This happens because the sanitized filename in the skip-check doesn't match yt-dlp's output filename (e.g., different special character handling). Don't rely on yt-dlp's skip detection; use your own file existence check instead.
 - **Video download speeds vary widely** - Pornhub HLS playlists have 150+ fragments at ~200KB each. Download speed ranges from 350KB/s to 7MB/s. At 720p, videos average 100-400MB. 10+ minute videos can be 60-150MB, while 30+ minute videos can be 300-700MB+.
+- **Album ownership verified via album page title** - Album page titles read `"{Album Title} - {Owner}'s Albums"`. This is the fast, reliable way to confirm an album belongs to the target before downloading (sidebar/"Recent Albums" links from pornstar profile pages are mostly recommended albums from random users).
+- **/model/{name} and /model/{name}/photos 301-redirect to the pornstar main page** - When a model page does not exist for an account, `/model/{name}` and `/model/{name}/photos` redirect (HTTP 200 after follow) to `/pornstar/{name}` (the main profile page), NOT to `/pornstars` (which is the no-profile redirect). Use `pornstar/{name}/photos` for the real photo-albums listing.
+- **"{Name}'s Uploaded Videos" section = premium/PPV uploads** - Profile pages have a "{Name}'s Uploaded Videos" section whose items carry `data-entrycode="VidPg-premVid"` (premium PPV content). The "See All" link (`/pornstar/{name}/videos/upload`) renders a generic premium recommendation feed when fetched without a logged-in session - it is NOT a reliable list of her uploads headlessly. Counters like "Showing 1-40 of N" on that page refer to that feed.
+- **Video page og:image = direct static 640x360 thumbnail** - `view_video.php?viewkey={vkey}` pages contain `og:image` meta with a direct thumbnail URL (ei/pix phncdn.com). Works without cookies and also for premium videos. Best way to batch-download video thumbnails (name files by vkey + title). Some og:images point at .mp4 preview paths yet serve static JPEGs - check file type and fix extensions.
+- **/user/{username} and /user/{id} return 404 for pornstar accounts** - The account's user profile page is not reachable via `/user/{slug}` or numeric user id for verified pornstar accounts; do not rely on it to enumerate an account's albums.
+- **Albums can be geo-blocked** - Album pages may return HTTP 200 with `<title></title>` and H1 "This content is unavailable in your country." Treat as skipped (not failed).
+- **Pornstar profile pages have no banner image** - Profile pages only carry the avatar (e.g. `pics/users/{...}/avatar{ts}/(...)200x200.jpg`, actually ~150x150px). No larger original exists (other sizes 401). The best "profile images" of active models are her own photo albums.
