@@ -72,7 +72,7 @@ Since stk.st heavily protects itself with Cloudflare, web search is often the mo
 1. **Fetch the page**: `curl -s --tls-max 1.2 -A "Mozilla/5.0 ..." "https://stk.st/{query}" > page.html`
    - Use `--tls-max 1.2` flag to bypass Cloudflare challenges on some pages
    - Use `-k` flag if HTTPS verification fails
-   - **Note**: stk.st now frequently uses JavaScript-based Cloudflare challenges that block curl, headless browsers (playwright), and other automated tools. Expect 4815 byte responses or empty pages.
+   - **Note**: stk.st frequently uses JavaScript-based Cloudflare challenges that block curl and cloudscraper. Expect 4815 byte responses or empty pages. **Playwright (even headless, with `--disable-blink-features=AutomationControlled`) can pass the challenge** — see "Bypassing Cloudflare" below.
 2. **Extract image URLs** from the page HTML (focus on `entry-content` area of individual post pages):
    - Find `<img>` tags with `class="...wp-image-\d+..."` — these are the article's actual images
    - Strip `https://i3.wp.com/` prefix to get original URL
@@ -96,8 +96,22 @@ Since stk.st heavily protects itself with Cloudflare, web search is often the mo
 
 - **Cloudflare access varies by individual/person**: Some stk.st pages are fully accessible via curl with `--tls-max 1.2` (e.g., Layla Jenner returns 155-194KB of content), while others return Cloudflare challenges (e.g., Amber Hardin returns 4815 bytes challenge page). This means Cloudflare protection may be per-page or per-query, not site-wide.
 - **stk.st is blocked by Cloudflare for SOME adult actresses**: e.g., Amber Hardin tested with 8+ aliases (amber+hardin, veronica, veronika, alanova, amalia, kylie, polina, vasilisa, veronica+pink, kelly+carson) — all returned Cloudflare challenge. Google search for `site:stk.st "amber hardin"` also returns zero indexed pages. This is because stk.st matches keywords against its own database and may not have content about every person.
-- **Only playwright with `headless=False` (visible browser) + X server (xvfb-run) can bypass stubborn Cloudflare**: `xvfb-run -a python3 -c "from playwright.sync_api import sync_playwright; ... p.chromium.launch(headless=False) ..."` and wait ~20s for the JS challenge to complete.
-- The Cloudflare challenge at stk.st now uses a synchronous SHA256 JavaScript computation (visible in the challenge page HTML), making it harder to bypass without full JS execution.
+- The Cloudflare challenge at stk.st uses a JavaScript computation (visible in the challenge page HTML), making it harder to bypass without full JS execution.
+
+### Bypassing Cloudflare (2026-09-04 update)
+
+- **Headless Playwright works now** (verified 2026-09-04, Lela Star — all 20 pages fetched, none challenged after the first):
+  ```python
+  b = p.chromium.launch(headless=True, args=["--disable-blink-features=AutomationControlled"])
+  ctx = b.new_context(user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36")
+  pg = ctx.new_page()
+  pg.goto(url, wait_until="domcontentloaded", timeout=30000)
+  pg.wait_for_timeout(10000)  # wait out the JS challenge on the first page
+  html = pg.content()  # ~130-170KB when successful (challenge page is 4815 bytes)
+  ```
+  The CF clearance cookie persists for the session, so after the first page subsequent pages load fast (add a 1-2s gap). Try this before falling back to any X-server approach.
+- **Fallback if headless is refused**: playwright with `headless=False` (visible browser) + X server (xvfb-run) and wait ~20s for the JS challenge to complete.
+- **Verification**: check `len(html) > 60000` and `"Just a moment" not in html` to confirm you passed the challenge.
 
 ## Pitfalls
 
@@ -108,7 +122,10 @@ Since stk.st heavily protects itself with Cloudflare, web search is often the mo
 - Some post URLs may redirect to homepage (4815 byte response)
 - Direct path queries like `stk.st/username` often 301 redirect to `/` (homepage) — use `/search?query=` instead
 - Many posts use embedded video thumbnails (pornhub, xhamster, etc.) rather than Reddit/Twitter/Imgur images
-- **topfapgirls.com images**: the CDN URL structure no longer works — direct `img.topfapgirls.com/...` returns 301 redirect to homepage, and i3.wp.com proxies return HTML instead of images
+- **pbs.twimg.com (X/Twitter) images**: stk.st stores them with a `:large` suffix in the path (e.g., `pbs.twimg.com/media/XXXX.jpg:large`) — KEEP the `:large` suffix when downloading to get the full-resolution original (strip it from filenames). Deleted or protected tweets return 403.
+- **X-video "get_image" source links** (`x-video.tube/get_image/.../sources/2000/NNNN/ID.jpg`) serve high-res (2000px) originals — prefer these over `preview.jpg` when both are present.
+- **`vip.*.pics` CDNs are dead from this environment**: `vip.sexhd.pics`, `vip.xxxporn.pics`, `vip.yespornpics.com`, `vip.pornstar.gallery` all fail (NXDOMAIN or HTML redirects) even though stk.st references them.
+- **topfapgirls.com images**: the CDN no longer works — direct `img.topfapgirls.com/...` returns 403 (2026-09-04; previously 301 to homepage), and i3.wp.com proxies return 400/HTML. Skip these sources.
 - **fapello.com images**: may expire or return 404 if content was removed from the source site
 - The search page includes advertisement posts at the top (check for `category-automotive` or other unrelated categories) — these are not actual search results
 - Image downloads may require checking HTTP status codes — 403 can appear, and some domains block automated requests
@@ -315,3 +332,33 @@ Since stk.st heavily protects itself with Cloudflare, web search is often the mo
 - **Google search snippets** are the most reliable way to discover stk.st image URLs for Amia Miley — use `site:stk.st "Amia Miley"` to find indexed pages and extract image URLs from search result highlights
 - **Name collision risk**: "Amia" also matches "Amia Millar" (different person) — verify results
 - **stk.st IS accessible for Amia Miley via Google cache snippets** (Google sometimes caches pages before Cloudflare blocks) — search for `site:stk.st "Amia Miley"` to find indexed content
+
+### stk.st page accessibility — Lela Star (adult actress) (2026-09-04)
+
+- **Adult actress** (aka Kim Kardashian lookalike). Handles: Instagram @lelastartm, X @LelaStarTM, OnlyFans getlela. Works with Brazzers (incl. Best Of Brazzers), Bangbros, Reality Kings, NewBrazz.
+- **All direct fetches blocked by curl (`--tls-max 1.2`) and cloudscraper** — every query returned the 4815-byte Cloudflare challenge (`/lela+star`, `/lelastartm`, `/getlela`, `/search?query=lela+star`, and ~20 individual post URLs).
+- **Headless Playwright bypassed the challenge** (see "Bypassing Cloudflare") — all ~20 pages fetched at 129-170KB in one session.
+- **No facial/cum-on-face pages found** via `site:stk.st "lela star" facial|cumshot|cum` — no dedicated facial articles exist on stk.st for this person.
+- Main article URLs (identity-verified by handle or name in title):
+  - `/getlela+onlyfans+leaked`, `/getlela+onlyfans`, `/getlela+onlyfans+leaks` — OF leak galleries (Fapello, TopFapGirls, TheFappeningblog, MasterFap, X-video previews)
+  - `/lela+star+pics`, `/lela+star+bio` — mixed: X account posts (pbs.twimg.com), Reddit, Pinterest, bio-site images
+  - `/lela+star+clips`, `/lela+star+full+movie`, `/lela+star+full+videos+onlyfans`, `/lela+star+onlyfans+video` — Bangbros/Reality Kings/Brazzers scenes + OF video frames (eporner, 3movs, xozilla)
+  - `/lela+star+premium+snap` — premium Snapchat promo (twimg + cam site previews)
+  - `/lelastartm+porn` — Brazzers/Tube8 frames, DynastySeries (Alfred Liebl photos), Fapello `lelastarfree` images
+  - `/sean+lawless+lela+star`, `/lela+star+porn+star`, `/lela+star+porn+2022` — Brazzers scenes (Luna Star / Sean Lawless collabs — filter Luna Star frames carefully)
+  - `/mick+blue+porn+star` — contains a high-res i.xozilla.com Lela Star scene preview in an unrelated-person article
+- **High-value image sources (confirmed working 2026-09-04)**:
+  - **content.newbrazz.com / content.realitysluts.com** — studio photos (~167-445KB)
+  - **ei.phncdn.com, fi1-ph.ypncdn.com, ei-ph.rdtcdn.com, ei-ph.t8cdn.com** — `.../original/N(m=...)(mh=...).jpg` full-resolution video frames (NOT the 480x270 thumbnails shown on the page)
+  - **imggen.eporner.com** (`NNNNNNN/1920/1080/N.jpg`), **static-ca-cdn.eporner.com**, **img.3movs.com / i.xozilla.com / www.xozilla.xxx** (`preview.jpg` is full-res), **x-video.tube** (incl. 2000px `/get_image/.../sources/2000/` originals)
+  - **www.megatube.xxx** (`videos_sources/.../screenshots/N.jpg` full-res frames), **camstreams.tv, cdn.camwhores.tv, nenyda.com, thotbay.com, xcum.com, www.pornwex.tv** — Xozilla-family previews
+  - **fapachi.com** (`/models/x/x/getlela/1/full/getlela_NNNN.jpeg` full-size), **fapodrop.com, fapellino.com, celebrities-small.porndig.com, static.fanleaks.club, fapello.com** (1000px; 404 when source deleted — fapello `lelastarfree` images mostly 404, `getlela`/`lela-star` some work)
+  - **pbs.twimg.com** — her real @LelaStarTM posts + verified fan accounts (`:large` for full res)
+  - **cdn.fleshbot.com, www.pornpics.vip / pornpics.vip, www.babe.today, titis.org, boomba.club / sex.boomba.club / hot.boombo.biz, imgcloud.pw, ohgeekz.com, femdom-pov.me, thefappeningblog.com/wp-content/uploads (older uploads), fap.thefappening.one, live.staticflickr.com (her lelastartm blog), i.redd.it, i.pinimg.com, i.ytimg.com, cdn.yostagram.com**
+  - **www.mypornstarbook.net, www.babesandstars.com, static.pornhat.com, img3.hotnessrater.com, img.goodfon.com, www.porn-star.com** — work (`mypornstarbook.net` needs `Referer: https://www.mypornstarbook.net/` header)
+- **Domain quirks confirmed for this person**:
+  - **cdn.yostagram.com** — URLs ending in `.jpg` (e.g. `/2023/12/lela-star-146.jpg`) return an HTML post page, NOT an image; the real image is inside at `yostagram.com/wp-content/uploads/...`. Parse the page's first content `<img>`.
+  - **dynastyseries.com** — `/lela-star-lelastartm-x-alfred-liebl/...-NNNNN/` (dir URL) is an HTML page; the real image is `dynastyseries.com/wp-content/2019/02/Lela-Star-@lelastartm-x-Alfred-Liebl-NNNNN.jpg`.
+  - **imggen.eporner.com / thefappeningblog.com `/cnt/` / thothd.com** — frequent per-image 404s (upstream content deleted); treat as dead links, not domain blocks.
+  - **NXDOMAIN/unreachable**: `cambro.tv`, `media.wankbus.com`, `vip.xxxporn.pics`, `pics.jjgirls.com`, `vip.sexhd.pics` — skip these.
+  - **Name collision risk**: "Luna Star" (frequently co-stars in the same Brazzers scenes as Lela Star) and bio-site images of unrelated "Lela" — verify via URL path/alt text containing lelastartm/getlela/Lela Star.
