@@ -22,7 +22,8 @@ Brazzers is accessible via standard HTTP scraping tools (curl, cloudscraper).
 - **Profile**: `brazzers.com/pornstar/{id}/{name}`
 - **Video**: `brazzers.com/video/{id}/{title}`
 - **Search**: `brazzers.com/search?query={query}` (unreliable - see Pitfalls)
-- **Actor full video list**: `brazzers.com/videos/models/{actorId}/{slug}/` with `?page=2`, `?page=3`, ... pagination (24 videos/page). The "View all" links under *Latest Videos* / *Top Rated Videos* on a profile point here. Page params beyond the last page repeat the last page - stop when the first video link repeats.
+- **Actor full video list**: `brazzers.com/videos/models/{actorId}/{slug}/` (default = newest first) and `brazzers.com/videos/models/{actorId}/{slug}/sortby/rating/`. The "View all" links under *Latest Videos* / *Top Rated Videos* on a profile point here.
+- **Pagination**: `?page=2` works, but SSR seems clamped at 2 pages (24 vids/page) per sort order - higher pages just repeat. To get a more complete catalog, union the default and `sortby/rating` listings (plus the ~24 cards on the profile page) and dedupe; some older scenes only appear in one of the two sorts.
 
 ## Download Method — curl with regex extraction
 
