@@ -14,6 +14,15 @@ description: Use when you need to download media from websites using gallery-dl,
 
 `gallery-dl` is a versatile CLI tool for downloading media from many websites including Instagram, TikTok, Erome, Reddit, Fapello, and [100+ more](https://github.com/morfius/gallery-dl#supported-services).
 
+## Parsing `gallery-dl -J` output with jq
+
+`gallery-dl -J` prints one JSON array of `[type, data]` tuples per media/album item. When piping to `jq`, do NOT use the `-s` (slurp) flag — the output is already a single array, and slurping wraps it in a nested array so top-level `.[]` filters silently match nothing (empty results with no error). Filter directly:
+
+```bash
+gallery-dl -J --no-download URL 2>/dev/null > /tmp/out.json
+jq -r '.[] | select(.[0]==2) | .[1] | .title' /tmp/out.json
+```
+
 ## Prerequisites
 
 - Install: `pip install gallery-dl` or `pipx install gallery-dl`
