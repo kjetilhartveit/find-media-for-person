@@ -167,6 +167,16 @@ Use `-o "include=..."` to control what content types are downloaded from a profi
 - `sleep-request: [8, 16]` — wait 8–16 seconds between requests. **Do not reduce** — Instagram will 429 or invalidate the cookie.
 - `sleep-429: 120` — wait 120 seconds on rate limit response.
 
+## Time Budget — Always Wrap Up
+
+**Never wait hours on an Instagram download.** Instagram rate limits (429s, empty responses, redirect-to-home) can make gallery-dl crawl or stall for a very long time. Enforce a hard time budget:
+
+- Set a bash timeout of **900000ms (15 min) max per gallery-dl invocation**. If a download is that big, split it into multiple smaller `--range` runs.
+- **Max two attempts** per profile/URL. If gallery-dl fails, returns 401/429s repeatedly, or downloads almost nothing after two tries, **stop and wrap up**: record what was downloaded (possibly nothing), note the failure reason, and move on to other sources.
+- If rate-limit waits (`sleep-429`) accumulate for more than ~10 minutes total in one attempt, abort the attempt early.
+- A stalled run (no progress for ~10 min) should be killed (`pkill -f gallery-dl` for the specific run) and treated as a failed attempt — do not restart it a third time.
+- Report the outcome (0 files / partial / full) with failure reason so the orchestrator can plan follow-up (e.g., fresh cookies, different IP) instead of silently blocking the whole run.
+
 ## Common Account Name Changes
 
 Celebrity and public figure accounts frequently change handles. Search news sources to find the current handle:

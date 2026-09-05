@@ -50,6 +50,11 @@ In general a search for media from a source should include the following. But no
 - Prefer to avoid duplicates, but if in doubt then fetch the media.
 - We should avoid naming collisions of media files. If a file with the same name already exists in the folder then add a suffix like ` (1)`, ` (2)` etc.
 - Scraping best practices: When scraping we should make sure not to spam their webservers with a huge number of simultaneous requests. We should limit to 1-3 scraping requests/downloads at the same time and also add a short delay between the requests.
+- **Time budget — never wait hours.** Enforce a hard time budget per source and per command:
+  - Any single download/scrape command should time out at **900000ms (15 min) max**. For very large profiles, split into smaller `--range`/pagination runs rather than one long-running command.
+  - Make **at most two attempts** per source/URL. If the tool fails, returns repeated rate-limit (429) responses, or makes almost no progress after two tries, **stop, record the failure, and move on**. Do not retry indefinitely.
+  - If a run is stalled (no progress for ~10 min) or rate-limit waits accumulate for >10 min, kill it (`pkill -f gallery-dl` etc.) and treat it as a failed attempt.
+  - A failed or partial source is fine — report exactly what was persisted, what failed, and why. The orchestrator will plan follow-up (fresh cookies, different IP, different tool) instead of a single source silently blocking the whole run for hours.
 
 ## Tools
 
