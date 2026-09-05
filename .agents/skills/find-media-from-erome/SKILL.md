@@ -32,6 +32,8 @@ Download images and videos from Erome (https://www.erome.com), a user-hosted adu
 
 `gallery-dl` handles Erome natively with 3 extractors: `EromeAlbumExtractor`, `EromeUserExtractor`, `EromeSearchExtractor`. It resolves all media URLs, filters thumbnails, and downloads files with no auth required.
 
+- Raw `curl`/HTML scraping of search and user pages is unreliable: pages are an SPA shell with an age-verification overlay and album links are not in the raw HTML — always list albums via `gallery-dl -J --no-download <search|album URL>` instead.
+
 ## Fallback download method — Manual parsing and download
 
 When gallery-dl is unavailable or fails:
@@ -119,6 +121,7 @@ When gallery-dl is unavailable or fails:
 - **"Desi-rekha" persona confusion**: User `RITUHINA` frequently posts content tagged as "Desi-rekha" — this is a generic Desi adult persona, NOT necessarily any specific real person. Search for "Rekha" on Erome returns mostly RITUHINA content that is unrelated to the Indian actress/model Rekha Mona Sarkar (known for Ullu/Kooku web series). When you see "Desi-rekha" in titles, it's almost certainly NOT the real person.
 - **Search terms that return NO results for "Rekha Bhabhi" / "Rekha Mona Sarkar"**: "Rekha Bhabhi", "Rekhabhabi", "Rekha Mona", "Rekha Mona Sarkar", "mona_rekha", "Rekha+Ullu", "Rekha+Kooku" all return zero results on Erome. This suggests Erome does not have content specifically tagged for this person.
 - **False positives from similar names**: Search for "rekha" (lowercase) returns albums about completely unrelated people (e.g., "Réka 23 Hungary" by user Miketzo, or Spanish-language content with "#REKA" tag). Carefully inspect album titles before downloading.
+- **Alias queries can collide with a different real person**: A subject's alias/maiden name may belong to another, well-known person (e.g. "Andrea Rincón" is both an adult-era alias of Colombian TV host Andrea Espada AND a separate Argentine vedette/actress born 1985 — Erome is mostly stocked with albums of the Argentine). Prefer the distinctive surname or full name as the primary query, and disambiguate candidates with country/nationality tags in the album metadata (e.g. `argentina`, `argentine`, national-emoji titles) before downloading. If metadata alone is inconclusive, the ambiguity usually resolves to the more prominent same-name person — flag such albums instead of downloading.
 - Album pages may be behind Cloudflare protection in some cases.
 - Raw Erome media file IDs are random (no semantic naming) — when downloading manually, prefix filenames with album IDs. `gallery-dl` names files with an album-ID prefix (see above), so manual renaming is only needed for hand-scraped URLs.
 - Search results per person can be very large (48+ albums), leading to timeouts; download in batches.
