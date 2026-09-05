@@ -46,7 +46,7 @@ Thumbnails on profile pages use a similar pattern with `_300px.jpg` suffix (e.g.
 ## Recommendations on how to download
 
 1. **Cloudscraper for scraping**: Use Python `cloudscraper` package to bypass Cloudflare. This is the most reliable method — `gallery-dl` consistently returns 403 for Fapello. Alternatively, a headless browser (e.g., playwright, puppeteer) can also bypass Cloudflare.
-2. **Manual method (primary)** — Fetch the profile page to discover the ID range. Sequential IDs appear in URLs like `/{slug}/{id}/`.
+2. **Manual method (primary)** — Fetch the profile page to discover the ID range. Item links are ABSOLUTE URLs in the HTML (`https://fapello.com/{slug}/{id}/`), so extract IDs with a regex like `fapello\.com/{slug}/(\d+)/` — a relative-path regex (`/^\{slug\}/\d+/`) finds nothing. ~32 items per page.
 3. Check for pagination — follow `/page-2/`, `/page-3/`, etc. until pages return empty or 404. Some profiles have 50+ pages (1,500+ items).
 4. Collect all unique IDs across pages. Some IDs may be missing (e.g., ID 26 on Tyla profile returned 404).
 5. Download images directly using the URL formula above — no need to visit individual item pages.
@@ -63,7 +63,7 @@ Thumbnails on profile pages use a similar pattern with `_300px.jpg` suffix (e.g.
 
 ## Quality
 
-- Images range from ~50KB to ~400KB per image (most ~55-250KB), at 600x800 resolution.
+- Images range from ~25KB to ~400KB per image (most ~55-250KB). Resolution varies: older items ~600x800, newer uploads often full-size ~1080px (e.g. 681x1024, 864x1080, 1080x1079).
 - Smaller profiles (under ~150 items) tend to have smaller file sizes in the 50-100KB range and lack videos.
 - Videos are typically 150KB - 12MB MP4 files in ftyp/isom format.
 - Success rate is >99% — most sequential IDs resolve (Tyla: 1/1,576 missing in IDs 1-2000 range).
@@ -142,3 +142,4 @@ Thumbnails on profile pages use a similar pattern with `_300px.jpg` suffix (e.g.
 - Multiple profile slugs may exist for the same person with DIFFERENT content (not just duplicates). Example: `laylajenner` (135 images, IDs 63-197) and `thelaylajenner` (6 images, IDs 1-6) — both for the same person, different l1/l2 URL paths (`l/a` vs `t/h`), completely non-overlapping images.
 - After downloading from one slug, try alternate slugs (e.g., prefixed with `the`) by checking the profile page title for alternate names. The title often lists alternate display names (e.g., "laylajenner / thelaylajenner Nude Leaks OnlyFans - Fapello").
 - When checking alternate slugs, use the correct l1/l2 path segments derived from the alternate slug's first two letters. Small profiles (<20 items) don't have videos.
+- **Multi-alias combined slugs**: Fapello also hosts slugs that combine several aliases of the same person with word separators (e.g. `{handle}-{alias1}-o-{alias2}`), mirroring naming used by FapMenu/Fapeza. These can contain additional content that is entirely non-overlapping with the per-alias slugs. Check such combined slugs when a person is known under multiple names, and always dedupe by hash across all slugs.
