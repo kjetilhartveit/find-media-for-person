@@ -63,6 +63,14 @@ ModelSearcher is a directory/aggregator of OnlyFans creators across categories (
 
 The search with `?s=QUERY` parameter does not always return relevant results - the site often shows general OnlyFans profiles regardless of query. The internal search may not work well for specific names.
 
+### Checking whether a person is listed at all
+
+To confirm absence without a browser, do a bulk Wayback CDX scan for any archived page whose URL contains the person's name:
+
+- `curl -s "http://web.archive.org/cdx/search/cdx?url=modelsearcher.com*&filter=original:.*NAME.*&fl=timestamp,original,statuscode&limit=20"`
+- An empty result means no snapshot of any page for that name exists - a strong (not absolute) signal the person is not listed. Note: CDX name filters only catch name-based slugs; a profile slug that is just a handle variant would only surface if handle variants were also archived.
+- The sitemap (`https://modelsearcher.com/sitemap.xml`) is also Cloudflare-blocked (403) - no value in trying it.
+
 ### gallery-dl Support
 
 gallery-dl does NOT support modelsearcher as an extractor. Must use web scraping tools.
