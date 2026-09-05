@@ -17,6 +17,7 @@ description: Use when you need to find and download media from XNXX (xnxx.com), 
 
 - Individual video: `https://www.xnxx.com/video-{id}/{slug}`
   - Example: `https://www.xnxx.com/video-1adt33b1/sexy_busty_babe_joon_mali_posed_and_played_with_her_wet_pussy`
+  - The full slug is required: `https://www.xnxx.com/video-{id}` alone returns 404. yt-dlp accepts either.
 
 ## Pornstar profile pages
 
@@ -53,6 +54,10 @@ yt-dlp -f "hls-1080p" \
 - Videos are served as HLS m3u8 streams in MP4 format.
 - Available formats: `hls-250p`, `hls-360p`, `hls-480p`, `hls-720p`, `hls-1080p`
 - Each 1080p video is typically ~115-120MB.
+- **Old webcam-era videos have NO `hls-*` quality formats.** Pre-~2014 uploads (often short webcam/web-series clips) only expose `low` / `high` direct MP4 formats (sometimes plus `hls-250p`/`hls-360p`). A format like `-f "hls-720p"` then fails with `Requested format is not available`. Use a fallback chain instead:
+  ```bash
+  yt-dlp -f "hls-720p/hls-480p/high/low/best" --merge-output-format mp4 --user-agent "..." <url>
+  ```
 
 ## Scraping tips
 
@@ -62,7 +67,9 @@ yt-dlp -f "hls-1080p" \
     grep -oP 'href="(\/video[^"]+)"' | sed 's/href="//;s/"$//' | sort -u
   ```
 - Search results may contain videos of people with similar names. Filter manually by checking if the title contains the target person's name.
+- Multi-word names are matched loosely (any single word, e.g. "selena-spice" returns "Selena Vega", "Tania Spice", "Selena Gomez"). Run one search per full alias variant (first-last, nickname, alternate stage names) and merge matches; her content can appear deep (page 4-5) of a variant that doesn't look like the right one.
 - Pagination: search URLs are paginated with `/1`, `/2`, `/3` etc. The last page number appears in the footer. Relevance degrades with page depth — deep pages return only generic keyword matches (e.g. searching "lela star" eventually returns "Luna Star", "Sara Star", "Star Wars", unrelated performers). Scan pages in batches and stop when the target name in titles stops appearing.
+- Video pages fetched with curl contain a generic keyword tag cloud (cum/facial/creampie/etc. appear on EVERY video page) — do not use keyword presence on the page to infer content value. The `meta description` is just `"{title}, free sex video"`. Title, page mentions of the alias, and duration are the usable identity/value signals.
 - The `/video-streams/{query}` URL pattern returns "Not found" - use `/search/{query}/` instead.
 - Common surnames in search results: Search terms like "Fernandes" may return videos of unrelated performers (e.g., many Brazilian models named "Fernandes"). Always verify by checking titles or extracting video URLs and comparing against known results.
 - Some models may not have videos on XNXX even if they appear on other sites (e.g., XHamster). If the search returns no matches for the person's name, they may not have content on XNXX.
