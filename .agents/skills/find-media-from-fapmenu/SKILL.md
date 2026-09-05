@@ -46,6 +46,8 @@ Download images and videos from FapMenu (https://fapmenu.com), a large aggregato
 - Results contain profile links like `/slug/`
 - Search is client-side rendered; use curl POST, not GET
 - **Search endpoint reliability**: The search endpoint does not always return results even when content exists on the profile. Direct profile URL is more reliable — try the slug first, then fall back to search.
+- One person often has **multiple alias profiles**, each with its own separate image numbering and non-overlapping galleries. Run every known alias/handle (real name, social handle, past professional aliases) through the search endpoint and collect ALL profile links (`href="/slug"`) from the result pages — profiles are frequently discoverable only via search, not via guessing slugs.
+- Search POSTs can occasionally hang even when a direct page fetch is fast — always use a per-request timeout (e.g. `curl -m 25`) when polling the search endpoint.
 
 ## Primary download method — Manual scraping of paginated profile (Python script recommended)
 
@@ -84,5 +86,8 @@ A Python script is recommended for reliable multi-model, multi-page scraping. Us
 - **Content items have individual media URLs** at `/{slug}/media/{NNNN}` — these can be used for direct access to individual items but don't affect download logic.
 - **Large profiles may have 700+ images** across 30+ pages (e.g., `layla-jenner-4` with 746 consecutive IDs: 1-746, 32 pages). IDs are typically sequential with no gaps, 24 images per page.
 - When collecting IDs, deduplicate across pages by checking for cycling (same ID set as previous page means stop).
+- Pages 1 and 2 can display the **same** ID set even though a `/page/2` link exists — dedupe by image ID, never by page count.
+- The same person's content is sometimes re-uploaded under different alias slugs (different filenames, sometimes different photos). If merging profiles, compare SHA-256 of downloaded files to detect actual duplicates, and treat different-numbered files as potentially unique content.
+- Same/real-name profiles can belong to a DIFFERENT person (e.g. a slug equal to the target's real name or alias, with a large unrelated gallery under a modern social handle). Before downloading, cross-check social links and alias co-occurrence alt text; verify alias profiles via the meta description / alt text listing the person's known alias set.
 - WEBP format requires conversion for some viewers — consider converting to JPG if needed
 - Rate limiting is important; aggressive scraping may trigger Cloudflare/bot protection
