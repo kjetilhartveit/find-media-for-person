@@ -82,6 +82,7 @@ gallery-dl \
   --range 1-250 \
   -d <output-dir>/instagram \
   -o "include=posts,reels,highlights" \
+  -o "user-strategy=web_profile_info" \
   "${timeout: 900000}" \
   "https://www.instagram.com/{username}/"
 
@@ -180,7 +181,11 @@ When searching for media of a person, verify the current Instagram handle via we
 
 ## Diagnosing "NotFoundError: Requested user could not be found"
 
-When gallery-dl fails with `[instagram][error] NotFoundError: Requested user could not be found`, the problem is NOT always the cookie. This error also occurs when the **target account** is disabled, banned, deleted, or age-gated by Instagram. To distinguish:
+When gallery-dl fails with `[instagram][error] NotFoundError: Requested user could not be found`, the problem is NOT always the cookie. This error can be caused by the **default user-resolution strategy** failing even for fully valid accounts, so first rule that out:
+
+- The default `user-strategy` is `search,web` — the `topsearch` endpoint frequently returns `{"message":"Server Error"}`, and the HTML-page strategy (`web`) hits the login wall, so both fail and gallery-dl (wrongly) concludes the user doesn't exist. Fix: pass `-o "user-strategy=web_profile_info"`, which uses `/api/v1/users/web_profile_info/?username=...` — the same endpoint as the curl control check. If the control check succeeds but gallery-dl says NotFoundError, this is almost always the cause.
+
+Beyond that, the error also occurs when the **target account** is disabled, banned, deleted, or age-gated by Instagram. To distinguish:
 
 1. Check whether the session cookie still works by querying a control account with the same request:
 

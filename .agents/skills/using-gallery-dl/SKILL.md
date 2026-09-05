@@ -78,6 +78,12 @@ Create a temporary config file for downloads (reusable across sources):
 - **`--range` counts posts, not files.** A carousel post with 5 images counts as 5 separate files. `--range 1-1000` can yield 2000–2500+ files for profiles with many carousels. Use `--range 1-250` to stay reasonable.
 - **"Trying fallback URL #1" messages are normal.** Videos often use fallback URLs; gallery-dl handles this automatically. These are informational, not errors.
 - **Long downloads need long bash timeouts.** Profile downloads can take 10+ minutes. Set bash timeout to at least `900000`ms.
+- **Very long downloads should be detached.** Multi-hour profile downloads exceed even large tool timeouts; agent shells often kill the whole process group on timeout, taking the background job with them. Launch truly detached and poll a log file instead:
+
+  ```bash
+  setsid nohup gallery-dl ... > /tmp/dl.log 2>&1 < /dev/null &
+  tail /tmp/dl.log   # poll periodically
+  ```
 - **Cookies may be needed.** Some sites (Instagram, private accounts) require authentication. Pass `--cookies .data/cookies.txt`.
 
 ## Supported Sites
