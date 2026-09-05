@@ -113,6 +113,8 @@ These sites maintain dedicated galleries per celebrity and are high-value source
 - **Pictoa** (pictoa.com): Adult photo album site. Album URLs: `/albums/{slug}-{id}.html`. Images at `https://t1.pictoa.com/media/galleries/{hash}/{album_id}{timestamp_hex}.jpg`. Album IDs contain a hex timestamp suffix. Multiple albums per celeb may exist. **NOTE**: gallery-dl supports Pictoa albums (`gallery-dl "https://www.pictoa.com/albums/{slug}-{id}.html"`). Search pages at `pictoa.com/s/{query}` return album URLs — extract with `curl -sL "pictoa.com/s/{query}" | grep -oP '/albums/[^"'"'"'<>]+\.html'`. Search pages return both `/albums/{name}-{id}.html` and `/albums/{name}-{id}/{hash}.html` variants.
 - **EroMe** (erome.com): User-hosted adult content sharing with albums. Album URLs: `https://erome.com/a/{albumId}`. Extract full-size image URLs by searching the HTML for `https://s{N}.erome.com/{id}/{albumId}/thumbs/{imgId}.jpg` and removing `/thumbs/` to get the full-size URL pattern `https://s{N}.erome.com/{id}/{albumId}/{imgId}.jpg`. Albums may contain many images across multiple server subdomains (s2, s10, s15, s19, s20, s22, s3, s41-s83, etc.). Use `curl | grep -oE` to extract thumbnail URLs, then `sed 's|/thumbs/|/|g'` to get full-size. Some albums have 50-100+ images. EroMe content is often tagged with the creator's alternate handles, aliases, or display names — search for content using multiple name variations.
 
+- **Blogspot-hosted celeb gallery sites** (e.g. sexymodelosfamosas.com): galleries at `/galeria-{id}-{slug}/` (or similar), all images hosted on `N.bp.blogspot.com` CDN with a size segment in the path. Extract `src` URLs, replace the size segment (e.g. `s250-c-rw-e365`) with `s1600` for full-size, download with `curl -H "User-Agent: Mozilla/5.0"` (0.5s delay). These often aggregate the person's own old-site photo feeds verbatim.
+
 ## Adult Star Photo Galleries
 
 These sites are high-value sources for specific adult film stars/models:
@@ -159,12 +161,34 @@ These sites host Indian celebrity/model content including web series photos and 
 - **Postcredit** (postcredit.tv): Indian movie/TV database with cast profiles. May have profile pictures.
 - **MXMaal** (mxmaal.com): Indian adult content directory. Model pages at `/model/` with A-Z listing. Check for profile images.
 
+## Reclaiming Dead Personal Sites via Wayback Machine
+
+For people who had their own personal/cam/official website (common for adult stars and models from the 2000s, e.g. `{name}.com/chat/foto/Fotografia-N.jpg` photo feeds, WordPress blogs under the person's domain), the archived site is often the single best source of original media.
+
+1. **List archived URLs** with the CDX API:
+
+    ```bash
+    curl -s "http://web.archive.org/cdx/search/cdx?url={domain}/&matchType=domain&output=text&collapse=urlkey&limit=5000"
+    ```
+
+    Each line: `key timestamp originalUrl mimetype statuscode digest length`. Filter for `image/jpeg` in field 4, and exclude `?`-suffixed thumbnails and site chrome (logos, banners).
+2. **Fetch the raw image** with the `im_` (images) snapshot mode, using **the timestamp from field 2**:
+
+    ```bash
+    curl -sL "http://web.archive.org/web/{timestamp}im_/{originalUrl}" -o out.jpg
+    ```
+
+    - If the file comes back as HTML (interstitial/404 redirect page), retry with a different raw mode: `http://web.archive.org/web/2011id_/{originalUrl}`.
+    - If `originalUrl` contains a port (`http://domain:80/path`), drop the `:80` before refetching.
+    - Older webcam sites often only have low-res versions (e.g. 320x240) — still worth keeping as period originals.
+3. **Blog galleries** (WordPress `wp-content/uploads`, Blogger): the archived `index.php/NN/` post pages enumerate per-post image paths — extract them from the archived HTML and fetch each image via its own `im_` snapshot.
+
 ## Quality Notes
 
 - News/reblog sites typically host resized images (600-1200px wide). They are copies of the original from the person's Instagram/social media.
 - Full-size originals are usually on the source platform (Instagram) and may require downloading from there directly.
 - Look for `data-orig`, `srcset`, or `data-src` attributes for higher quality variants.
-- **Blogger/Blogspot images**: Use `/s1280/` path segment for 1280px wide full-size vs `/s800/` or `/s400/` for smaller. `/s16000-rw/` is the Blogger CDN internal resize — not the URL path segment.
+- **Blogger/Blogspot images**: Use `/s1280/` path segment for 1280px wide full-size vs `/s800/` or `/s400/` for smaller. `/s16000-rw/` is the Blogger CDN internal resize — not the URL path segment. **Any size/resize segment can be swapped**: e.g. gallery sites hosting Blogger thumbs with `s250-c-rw-e365` (250px crop) yield ~1600px originals via `sed 's|/s250-c-rw-e365/|/s1600/|'` on the full `N.bp.blogspot.com/...` URL.
 
 ## Pitfalls
 
@@ -176,11 +200,15 @@ These sites host Indian celebrity/model content including web series photos and 
 - **Yahoo articles fail with `curl | grep`** — Yahoo (and other AOL-media sites) return zero image URLs via regex extraction, likely due to JavaScript-rendered images or external CDNs. When `curl | grep` returns nothing, fall back to `web_fetch` with markdown format or og:image extraction.
 - **Avoid complex download loops** — when downloading many images, prefer simple batch scripts with known URLs over inline URL construction with nested `curl` calls, which can create duplicate/badly-named files.
 - **403 Forbidden without User-Agent** — some sites (e.g. `eroticbeauties.net`, `babepedia.com`, `atkfan.com`) return 403 Forbidden for requests without a User-Agent header. Use: `curl -sL -H "User-Agent: Mozilla/5.0" URL` or Python with custom headers.
-- **Verify downloaded files are actual images** — some sites (e.g. `bodysizex.com`, `celebsta.com`, `famousages.com`) redirect `.jpg` URLs to HTML pages. After downloading, use `file <filepath>` to verify the content is an image (e.g. `JPEG image data`). Remove files that are HTML documents.
+- **Verify downloaded files are actual images** — some sites (e.g. `bodysizex.com`, `celebsta.com`, `famousages.com`) redirect `.jpg` URLs to HTML pages. After downloading, use `file <filepath>` to verify the content is an image (e.g. `JPEG image data`). Remove files that are HTML documents. Some CDNs return 200 on HEAD but serve an HTML 404 page on GET (intermittent) — retry with a referer header: `curl -sL -e "https://{parent-site}/" URL`.
+- **gallery-dl "database is locked"** — when a parallel gallery-dl process holds the default db, re-point it: `gallery-dl -o db.path=/tmp/galdb.sqlite3 -o cache.path=/tmp/galcache URL`. EroMe filename template key is `{album_id}` (`{id}` resolves to None).
 
 ## Video Extraction Tips
 
 - **XHamster** (xhamster.com): gallery-dl does NOT support xHamster video URLs (only has extractors for photo galleries and user gallery pages). Use `yt-dlp` directly with the video URL. Videos use HLS streaming (m3u8 manifests), so yt-dlp should work without extra tools. Video IDs are embedded in HTML URLs: `xhamster.com/videos/{title}-{id}`.
+- **XNXX**: `yt-dlp` 404s on bare video-ID URLs — it needs the full slug URL (`xnxx.com/video-{slug}_/{title}`), which search engines return.
+- **XVIDEOS playlist/favorite pages** (e.g. `xvideos.com/favorite/{id}/{name}_...`): lazy-load, no reliable direct extraction, and the listed videos duplicate mirror-tube originals (verify cross-site duplicates by matching CDN filename hashes). Prefer downloading from the mirror (XNXX/etc.) with working URLs.
+- **YouPorn tag pages** (`youporn.com/porntags/...`) mix in unrelated people with similar names — do not trust tag pages for identity; only use individually verified video URLs.
 - **Adult tubes generally**: Most tube sites deliver videos via HLS/m3u8. `yt-dlp` is reliable for these. Gallery-dl only supports a subset of sites for videos.
 - **Tube video posters via search/list pages**: Tube video detail pages are often JS-rendered and expose no og:image to `curl` (e.g. xHamster), but the high-res video poster URLs (e.g. xHamster `ic-vt-nss.xhcdn.com/.../2560x1440.208.webp`) appear directly in the HTML of related-video listings and search-engine result pages — extract and `curl` them for free facial/cumshot video stills. XNXX video pages, in contrast, do expose og:image to curl (`thumb-cdn77.xnxx-cdn.com/.../xn_N_t.jpg` thumbnails).
 
