@@ -33,12 +33,15 @@ Request `https://xhamster.com/pornstars/{name}` with a normal User-Agent. The re
 
 - Profile avatar in CSS: `landing-info__logo-image` with `background-image: url('...')` URL at `https://ic-tt-nss.xhcdn.com/.../avatar1.jpg`
 - **NOTE**: On many profile pages (e.g., Amber Hardin), the videoThumbProps array contains *"best trending"* videos, NOT the pornstar's own videos. Only a few may actually feature the person. Use search results (Method 2) for comprehensive video discovery.
-- `videoListProps` — contains `pageInfo.videoCount` and `videoThumbProps` array
-  - Each item has: `id`, `title`, `pageURL`, `views`, `thumbURL`, `imageURL`, `trailerURL`, `contentRating`, `duration`
+- `videoCount` — total video count for the pornstar (small field, easy to grep)
+- `videoThumbProps` appears multiple times; on profile pages the **first** large array (~36 items) is a site-wide "trending" block shared across pages, and a second, smaller array matching `videoCount` holds the pornstar's actual videos. Always take ALL arrays and dedupe by `id`.
+  - Each item has: `id`, `title`, `pageURL`, `created`, `duration` (seconds), `views`, `thumbURL`, `imageURL`, `trailerURL`
   - Filter by checking if the person's name or known aliases appear in `title` or `pageURL`
 - `momentsListComponent` — contains `videoThumbProps` for short videos/clips
 
-To extract: parse for `"videoThumbProps"`, find the opening `[`, count brackets to find array end. Use `.replace('\\/', '/')` then `json.loads()`.
+To extract reliably, use `json.JSONDecoder().raw_decode()` on each occurrence of `"videoThumbProps"\s*:\s*\[` (hand-rolled bracket counting is fragile on these payloads). No `\/` unescaping needed before `raw_decode`.
+
+**Multiple profiles for one person**: a performer with multiple stage names can have separate `/pornstars/` pages (each with its own `videoCount`). Search all known aliases and merge the lists; profiles also occasionally contain mis-categorized videos whose titles don't mention the person — verify by title before downloading.
 
 ## Method 2 — Search page (best for video discovery)
 
@@ -55,6 +58,11 @@ Thumbnail URLs are at `https://ic-vt-nss.xhcdn.com/` with quality suffixes like 
 Videos are served via HLS (m3u8). Use:
 ```bash
 yt-dlp -f "bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best" -o "output.mp4" "https://xhamster.com/videos/{slug}-{id}"
+```
+
+To cap quality (e.g. max 720p, to keep downloads small), a robust chain is:
+```bash
+yt-dlp -f "bestvideo[height<=720]+bestaudio[ext=m4a]/bestvideo[height<=720]+bestaudio/best[height<=720][ext=mp4]/best[ext=mp4]/best" ...
 ```
 
 Best quality is 1080p MP4. Videos average 170-200MB but some reach 600-800MB+. yt-dlp automatically applies `FixupM3u8` to fix MPEG-TS in MP4 containers. Each download takes roughly 2-5 minutes at typical bandwidth.
@@ -90,7 +98,7 @@ https://ic-ph-nss.xhcdn.com/a/{hash}/webp/000/517/456/852_1000.
 
 Filter out 32x32 tiny thumbnails. Look for URLs containing `1000`, `852`, `1280` which indicate full-size photos.
 
-Methods 1-4 work with plain `requests` — no browser automation needed for thumbnails and metadata. Use browser automation only for downloading full videos.
+Methods 1-4 work with plain `requests`/curl — no browser automation or cookies needed for thumbnails, metadata, OR full video downloads (yt-dlp handles the HLS streams fine). Note the search `total` can be misleadingly large (multi-word queries are loosely matched and return thousands of videos of unrelated people sharing the same first/last name); the profile `videoCount` is the figure to beat for completeness.
 
 ## Methods That Fail
 
