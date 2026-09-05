@@ -32,7 +32,7 @@ Make sure to read the `shared-find-media-guidelines` skill before using this ski
 
 1. **Check profile first** to see how many videos:
    ```bash
-   yt-dlp --simulate "https://www.tiktok.com/@{username}" 2>&1 | grep -c "Playlist"
+   yt-dlp --simulate --flat-playlist "https://www.tiktok.com/@{username}" 2>&1 | grep -c "Downloading item"
    ```
 
 2. **Archive file** (in `/tmp/` without spaces):
@@ -65,7 +65,7 @@ Make sure to read the `shared-find-media-guidelines` skill before using this ski
 TikTok "photo mode" posts (image slideshows) are NOT downloadable via yt-dlp — it only extracts the background audio and saves a small `.mp3`. The actual photos must be fetched manually:
 
 1. **Detect**: In yt-dlp output, a photo-mode post shows only an `audio` format. In the video page HTML, `video.duration` is `0` and the cover URL contains `photomode` (e.g. `tos-maliva-i-photomode-us/...~tplv-photomode-image.jpeg`).
-2. **Extract**: Fetch the video page (`https://www.tiktok.com/@{username}/video/{id}`) with a browser User-Agent and parse the `__UNIVERSAL_DATA_FOR_REHYDRATION__` script tag. Photos live at `__DEFAULT_SCOPE__` → `webapp.video-detail.itemInfo.itemStruct.imagePost.images[]`, each with `imageURL.urlList[]` (signed CDN URLs, typically full 1440x1920) and `imageWidth`/`imageHeight`.
+2. **Extract**: Fetch the video page (`https://www.tiktok.com/@{username}/video/{id}`) with a browser User-Agent and parse the `__UNIVERSAL_DATA_FOR_REHYDRATION__` script tag. Photos live at `__DEFAULT_SCOPE__` → `webapp.video-detail.itemInfo.itemStruct.imagePost.images[]`, each with `imageURL.urlList[]` (signed CDN URLs, full resolution — 1440x1920 up to 2160x2700 seen in practice) and `imageWidth`/`imageHeight`.
 3. **Download**: `curl` each URL (a browser User-Agent suffices) and save as `<videoid>_1.jpg`, `<videoid>_2.jpg`, ... . The signed URLs expire (`x-expires` param) — download them promptly while fresh.
 
 # Pitfalls
@@ -78,7 +78,7 @@ TikTok "photo mode" posts (image slideshows) are NOT downloadable via yt-dlp —
 - **Alternative usernames** may not exist (e.g., @username vs @username). Try variations if needed.
 - **Private/unavailable accounts**: Some accounts may be private or have embedding disabled (`[tiktok:user] This user's account is either private or has embedding disabled`). These won't be accessible — stop before wasting time. Example: @thereallaylajenner (different from @thelaylajenner) returned this error.
 - **TikTok search via gallery-dl is not supported** — no extractor for TikTok's search/discover. Use `yt-dlp --simulate` on a profile URL to preview what would be downloaded.
-- **Long downloads need long timeouts**. Profile downloads can take 10+ minutes even for large accounts. Set bash timeout to at least `900000`ms (15 min).
+- **Long downloads need long timeouts**. Profile downloads can take 10+ minutes even for large accounts. Set bash timeout to at least `900000`ms (15 min). Expect a 15-min call to be force-killed mid-playlist on large accounts — this is safe thanks to `--download-archive` (completed downloads are recorded per video); just re-run the same command and it continues where it left off. Throughput observed: ~90 videos (~5 MB avg) per 15-min batch with `--sleep-interval 5 --max-sleep-interval 12`.
 - **Videos are 9:16 portrait** (typically 540x960 or 720x1280). Low resolution is normal for TikTok.
 - **Region settings don't help**. Setting `"region": "NO"` in config does not change API behavior.
 - **Avatar images**: Extracted separately from the profile page. In the `user-detail` HTML schema the `user.avatarLarger`/`avatarLarge`/`avatarMedium`/`avatarThumb` fields are plain URL strings (signed, expiring) — take the first entry and `curl` it directly. The URL requests a 1080:1080 crop but the delivered file may be smaller (e.g. 400–440px wide); that's normal and the best available.
