@@ -71,6 +71,7 @@ curl -sL -A "Mozilla/5.0" \
 - **Two poster hash variants**: `m=eaSaaTbWx/.../poster/poster_01.jpg` (main video posters, **1280x720 landscape, ~100-150KB** - highest quality obtainable) and `m=eyzaevFb/.../poster/poster_01.jpg` (gallery thumbnails, ~40-60KB). The `m=` transform hashes are signed - you cannot add `?width=` or swap them for larger renditions.
 - **Profile images** from `image-service-ht.project1content.com` with `model/profile_001.jpg` — the `width=600` parameter can be bumped up (e.g. `width=1200` → 1200x1599 portrait). Usually only `profile_001` exists.
 - **Search may not find all performers/videos** — site search (`/search?query=`) returns fuzzy results mixed with popular videos; it may not even list the performer's profile. Use Google: `site:brazzers.com "{performer name}"` to find profiles.
+- **Detecting "performer does not exist on Brazzers"**: if a performer has no Brazzers content, site search still returns a full page (title `Page Not Found | Brazzers` in `<title data-rh="true">`) but it contains only generic popular videos/profiles — zero `/video/…` or `/pornstar/…` links and zero `<title>` cast mentions matching the query. Grepping the page HTML for the performer's name only hits the SSR `prev`-query navigation payload, not real results. Cross-check with a web search for `site:brazzers.com "{name}"` / `"{name}" brazzers`. If both are empty, the performer is not in the Brazzers catalog — stop and move to other sources instead of downloading anything.
 
 ## Pitfalls
 
