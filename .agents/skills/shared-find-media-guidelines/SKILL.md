@@ -75,6 +75,7 @@ When searching for content creators, the display name and social media handle ar
 - **Search for aliases**: Many creators use multiple handles across platforms. Look for their OnlyFans username, Instagram handle, Twitter/X handle, and any known aliases. Search aggregators for the display name AND various handle variations.
 - **Handle vs. display name**: On aggregator sites (Erome, etc.), content may be tagged with a creator's alternate handle or alias rather than their display name. Search using multiple variations found from other sources.
 - **Aggregator tagging patterns**: Content on sites like Erome is often tagged with the creator's primary social media handle. Searching for that handle on the aggregator can yield more results than searching the display name.
+- **AI bio sites are unreliable for aliases** — AI-generated biography sites (e.g. aiangels.io) fabricate or conflate details, including inventing adult careers, OF handles, or award wins for public figures. A bio that contradicts known biographical facts (wrong birth year, wrong body/ethnicity) is a sign the whole page is about a different person — verify alias claims against 2+ independent sources before using them.
 
 ## Update/create skills when gaining new insight or updated information when doing searches or downloading media
 
