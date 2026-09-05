@@ -84,6 +84,7 @@ Create a temporary config file for downloads (reusable across sources):
   setsid nohup gallery-dl ... > /tmp/dl.log 2>&1 < /dev/null &
   tail /tmp/dl.log   # poll periodically
   ```
+- **Killing a download with `pkill -f <pattern>` can kill your own shell.** The `bash -c` wrapper running `pkill` contains the pattern in its own command line, so `pkill -f` can match and kill the calling shell (symptom: the kill command hangs or "times out"). Use the PID instead — capture `$!` when launching the detached job and `kill <pid>` — or use the bracket trick so the literal pattern in your own command line doesn't match, e.g. `pkill -f "gallery-dl.*usernam[e]"`.
 - **Cookies may be needed.** Some sites (Instagram, private accounts) require authentication. Pass `--cookies .data/cookies.txt`.
 
 ## Supported Sites

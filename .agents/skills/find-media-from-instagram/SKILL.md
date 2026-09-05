@@ -222,6 +222,7 @@ curl -s -A "Mozilla/5.0 (Windows NT 10.0; Win64; x64) ..." \
 
 - **Handle may not match display name.** Content creators use different names/handles on Instagram vs. display names shown on aggregator sites. Search for aliases found on other platforms. Try variations with underscores, periods, and different capitalizations.
 - **Rate limits are aggressive.** Do not reduce `sleep-request`. Instagram will 429 or soft-ban IPs making rapid requests.
+- **Immediate repeated 429s mean the session/IP is already throttled.** If every request 429s right after start (0 files persisted) despite conservative sleeps, the cookie/IP is likely in an active throttle window — e.g. from other concurrent/recent Instagram downloads sharing the same cookie or IP, or from bursts of diagnostic `web_profile_info` calls. `sleep-429` is far too short to clear it. A cooldown of several minutes (5–10+) is often needed. With a strict time budget, prefer waiting before a retry over burning all allowed attempts within minutes on guaranteed-429 requests.
 - **Do not scrape HTML.** Instagram changes their frontend constantly. `gallery-dl` uses internal API and is actively maintained.
 - **Stories are ephemeral.** Only fetchable while active (24h). Must be authenticated to view them.
 - **Private accounts** require the session cookie to belong to an account that follows the target profile.
