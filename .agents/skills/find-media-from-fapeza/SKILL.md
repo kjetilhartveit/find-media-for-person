@@ -22,7 +22,7 @@ Download images from Fapeza (https://fapeza.com), an aggregator site of leaked/n
 - Profile: `https://fapeza.com/{slug}/` (e.g., `fapeza.com/emily-ratajkowski/`)
 - Media items follow sequential ID pattern
 - Page title may contain alternate names: `Linda Lan / foodsandnood.s / lindarainbow Nude Leaks OnlyFans - Fapeza` or `Jenaveve / Jenaveve Joli / Jenaveve Jolie / Jeneveve Jolie / Jenevieve / Jolie / Olivia / https: / jenaveve.jolie.official / jenavevejolie69 Nude Leaks OnlyFans - Fapeza`. Try alternate names as additional slugs to check for more content.
- - **Site search:** Search is a **POST** to `https://fapeza.com/search/` with form field `q` (GET with `?query=` or `?q=` returns the page but NO results). Search results HTML contains display name + alias list + **post count** (`Posts N`) per match — useful to verify completeness of your collection and to disambiguate similarly-named people.
+ - **Site search:** Search is a **POST** to `https://fapeza.com/search/` with form field `q` (GET with `?query=` or `?q=` returns the page but NO results). Search results HTML contains display name + alias list + **post count** per match (plus avatar, followers, likes) — useful to verify completeness of your collection and to disambiguate similarly-named people. Note: the count is split across tags (`<label>Posts</label>` … `<div class="stat-number">N</div>`), so a flat `Posts\s*\d+` regex will NOT match it.
 - **Note:** Some models never appear on Fapeza (e.g., Joon Mali — profile returned 404 on all slugs tried, site search returned 0 results in August 2026). Always verify by searching the site first before assuming a profile exists.
 - **Cloudflare:** `curl`/plain HTTP clients get **403**. Use `cloudscraper` (e.g. `create_scraper(browser={'browser':'chrome','platform':'windows','desktop':True})`).
 - Multiple profile slugs can exist for the same person under different aliases (e.g., "Megan" appeared as both `megan` and `megan-thee-stallion-1`).
@@ -50,7 +50,7 @@ Download images from Fapeza (https://fapeza.com), an aggregator site of leaked/n
 
 ## Quality
 
-- Images range from ~11KB (cover/thumbnail) to ~760KB per image; full-size typically ~500-1620px wide, 1080px tall (portrait or landscape).
+- Images range from ~11KB (cover/thumbnail) to ~760KB per image; full-size typically ~500-1620px wide, 1080px tall (portrait or landscape). The shared profile cover is typically a low-res square JPEG (~300×300px, 20-34KB) — when downloading by ID, any 300px-square result is the shared cover, not a unique photo (keep or skip per dedup policy).
 - All verified image downloads are JPEG format.
 - First few posts (low IDs) may have smaller image sizes; subsequent posts have full HQ images.
 - **Videos exist on some profiles** — post pages can reference `{slug}_{id}.mp4` alongside the `.jpg` thumbnail on the same media path. Check post pages (or page source for `.mp4` URLs) before assuming image-only.
