@@ -95,6 +95,7 @@ Create a temporary config file for downloads (reusable across sources):
   ```
 - **Killing a download with `pkill -f <pattern>` can kill your own shell.** The `bash -c` wrapper running `pkill` contains the pattern in its own command line, so `pkill -f` can match and kill the calling shell (symptom: the kill command hangs or "times out"). Use the PID instead — capture `$!` when launching the detached job and `kill <pid>` — or use the bracket trick so the literal pattern in your own command line doesn't match, e.g. `pkill -f "gallery-dl.*usernam[e]"`.
 - **Cookies may be needed.** Some sites (Instagram, private accounts) require authentication. Pass `--cookies .data/cookies.txt`.
+- **`pkill -f` can kill your own shell.** If the kill pattern also appears in the current command string (e.g. `pgrep -f "gallery-dl.*username" ...; pkill -f "gallery-dl.*username"`), `pkill -f` matches the invoking shell itself and terminates the session. Capture PIDs with `pgrep -o` into a variable (pattern-free kill) or match on a pattern that only appears in the gallery-dl process, not in your wrapper.
 
 ## Supported Sites
 

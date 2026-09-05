@@ -31,6 +31,10 @@ Download images and videos from X (Twitter) posts, user profiles, and timelines.
 
 `gallery-dl` is the **preferred** method — no API key or bearer token required. Extractors: `TwitterTweetExtractor`, `TwitterUserExtractor`, `TwitterMediaExtractor`, `TwitterTimelineExtractor`, `TwitterHashtagExtractor`, `TwitterSearchExtractor`, `TwitterListExtractor`, and more.
 
+**Cookies:** user timelines and search need X auth cookies. Pass `--cookies <file>` with a Netscape cookies file containing `auth_token`, `ct0`, and `twid`. Check that the cookies actually point at live auth (the global config may reference a cookie path that no longer exists).
+
+**Handle discovery via playersells.com.** A web search for `"{person name} twitter"` often returns a `playersells.com/best-x-accounts/{Handle}` stats page: correct handle capitalization, follower count, post count, account age, and a bio snippet — useful for picking the right account among name collisions.
+
 ## Fallback download method — X API v2 with bearer token
 
 Use this when `gallery-dl` fails or when tweet metadata is needed. API access tiers matter — free tier has very limited rate limits.
@@ -118,6 +122,8 @@ PornHub adult star profiles list their official X/Twitter handle in the profile 
 
 ## Pitfalls
 
+- **Timelines iterate oldest-first.** gallery-dl's twitter user media timeline (`x.com/{user}/media`) and search (`f=live`) iterate from the **oldest** posts first. `--range 1-N` therefore yields the oldest N media posts, not the newest. For recent media use `skip-first` (needs an estimate of total media posts) or fetch specific recent posts by URL (found via web search).
+- **Verify the iteration direction before bulk downloads** — run `--range 1-3 -g` first and eyeball the tweet IDs/timestamps.
 - **gallery-dl needs auth cookies for X/Twitter timelines.** Without configured browser cookies, `gallery-dl` will return `AuthRequired` error for user timelines and search results. Use aggregator sites or direct tweet URLs as fallback.
 - **Handle may not match display name.** Content creators use different names/handles on X/Twitter vs. display names shown on aggregator sites. Search for aliases found on other platforms. Try variations with underscores, periods, and different capitalizations.
 - **API access tiers matter.** Free tier has very limited rate limits. Media lookup counts against read quota. Check X developer docs for current limits.
