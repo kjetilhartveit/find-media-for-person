@@ -26,7 +26,7 @@ PornHub profile, gallery, album, and video page URLs.
 - **Album**: `pornhub.com/album/{id}`
 - **Photo gallery**: `pornhub.com/album/viewphotos?albumId={id}`
 - **Single video**: `pornhub.com/view_video.php?viewkey={phXXXXX}`
-- **Search**: `pornhub.com/video/search?searchterm={query}` (newer format; older `view_video.php?searchkey=` still works but may return unrelated results)
+- **Search**: `pornhub.com/video/search?search={query}`. Note: `?searchterm={query}` returns 404 (broken). Older `view_video.php?searchkey=` may return unrelated results.
 - **Playlists**: `pornhub.com/pornstar/{name}/videos?o=mr&page=N` - pagination for model pages
 - **Video search with most viewed**: `pornhub.com/video/search?search=melissa+stratton&o=mv` - most viewed first
 
@@ -183,6 +183,8 @@ yt-dlp --cookies cookies.txt \
 - **Video stream URLs** - HLS playlists (m3u8) and segmented MP4s require proper decryption tokens
 - **No gallery-dl for videos** - Only supports image galleries, not full videos
 - **Retired pornstar profiles return 410 Gone** - For retired models, `pornstar/{name}/videos` and `model/{name}/videos` return 410. The main profile page (`pornstar/{name}`) may still show thumbnails and links.
+- **Empty accounts: main page 200 but /videos 404** - Some pornstar names resolve to empty (abandoned) accounts: the main `pornstar/{name}` page returns 200 with title `"{Name} Porn Videos | Pornhub.com"` while `pornstar/{name}/videos` returns 404. The main page then only lists generic premium recommendations (all items carry `data-entrycode="VidPg-premVid"` or are unrelated performer names). No tagged content exists — treat as "no content on this site", don't waste time on more of this profile's URLs.
+- **Parsing search result pages** - The `<li class=videoListItem>` block pattern used for profile pages may not match on `/video/search` pages. Robust approach: iterate over `data-video-vkey="([0-9a-f]+)"` occurrences and grab the nearest following `title="..."` attribute (within ~4000 chars) plus duration from `>M:SS<`. Search pages show ~30-40 results mixing keyword matches and recommendations — always filter by exact name/alias in the title.
 - **YouTube-dlp may fail while curl works** - curl may return 200 on video pages where yt-dlp returns 410 (different UA/SNI behavior). Extract HLS URLs from HTML and pipe to yt-dlp directly.
 - **Albums survive profile removal** - Even when a pornstar's profile is gone, their photo albums remain accessible via `pornhub.com/album/{id}`
 - **gallery-dl doesn't support video search** - Only image galleries. Use `pornhub.com/video/search?searchterm={query}` with curl for video discovery.
