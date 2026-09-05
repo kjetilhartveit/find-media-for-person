@@ -21,6 +21,8 @@ Two related aggregator sites with different image hosting patterns.
 
 ### Fappeningbook (fappeningbook.com)
 - Profile: `https://fappeningbook.com/{slug}-nude/` — try person's name first (e.g. `caroline-nitter-nude/`), then their Instagram username if that 404s (e.g. `jessicah-o-nude/` for @jessicah_o), then try their OnlyFans/handle alias. The `us.fappeningbook.com` subdomain mirrors content.
+- A person can have MULTIPLE profiles (display name + each alias). Check every candidate slug and compare image ID ranges/quality to decide if sets are the same source.
+- Beware name collisions: a profile for one of the person's aliases may belong to a DIFFERENT person (e.g. a current OF creator with the same name — the profile title often carries the target's handle, which is the identity signal). Verify alias content against the target's biography before downloading.
 - Image URLs: `https://fappeningbook.com/photos/{l1}/{l2}/{slug}/1000/{id}t.jpg` (thumbnail) → remove `t` for full-size (e.g. `1t.jpg` → `1.jpg`). Resolution segment is `1000`.
 
 ### TheFappeningBlog (thefappeningblog.com)
@@ -54,10 +56,14 @@ There are FOUR image patterns to extract:
 - Format: `/cnt/m/e/{person-slug}/{YYYY-MM-DD-uuid}/{name}.jpg`
 - Gallery URLs contain `megan-renee316-nude-onlyfans-leaks-` — these are NOT actual celebrity content, they are OnlyFans creator content misattributed.
 
-**Gallery page structure:** Individual gallery pages show ONE full-size image per page. Gallery pages are numbered sequentially (1–N). The gallery listing page shows ALL galleries with thumbnails, numbered in reverse order (highest first). Gallery URLs may use different image formats (data directory vs. WordPress uploads).
+**Gallery page structure:** Individual gallery pages show ONE full-size image per page plus sidebar images of OTHER people (usually `/data/...` URLs with a different slug — filter to URLs containing the target's name). Gallery pages are numbered sequentially (1–N), but gaps occur. The gallery listing page shows galleries with thumbnails, numbered in reverse order (highest first). Gallery URLs may use different image formats (data directory vs. WordPress uploads).
+- **One person can have TWO gallery slugs:** the display name (`/gallery/{slug}/`) AND their social handle (e.g. `/gallery/andreaespadatv/`). The handle-slug gallery is often the adult-era/alias content (the title concatenates all known names: "Name / Alias1 / Alias2"). Check the handle slug too.
+- **Gallery listing pagination loops:** `/gallery/{slug}/page-N/` may repeat page-1 content or return small overlapping pages. Dedupe by gallery number and stop when no NEW galleries appear in a page.
+- **Galleries only cover PART of a collection:** for a "N Photos" article, individual galleries may exist for only some of the N photos. Always find the main article and extract its full image set (below).
 
 **Finding galleries/articles:** Use `https://thefappeningblog.com/gallery/{slug}/` first. If that fails (404), use web search `site:thefappeningblog.com "person name"` and scrape category pages: `https://thefappeningblog.com/category/{slug}-2/page/{N}/`. Check up to 6-7 pages.
 - Many porn stars/actresses have NO `/gallery/` page — their content lives in individual **articles** (e.g. `/{name}-nude-porn-collection-N-photos/`, `/{name}-{topic}-N-pics-video/`). Web search is the reliable way to find these.
+- The `/category/{slug}/` page reliably links the main article(s) for a person (often the "N Photos" collection). Fetch it and extract ALL image URLs from the article HTML in one pass (filter to the target's name) — usually yields the complete set, including photos missing from the individual galleries.
 - Tag pages exist (`/tag/{slug}-naked/`) and list some articles, but can be incomplete — always cross-check with web search, and scrape every article found for image URLs.
 
 ### Forum threads (TheFappeningBlog)
@@ -78,6 +84,7 @@ TheFappeningBlog has a **forum section** where users post image sets and linked 
 - Extract full-size URLs from `data-orig` attributes in `<a>` tags: `data-orig="https://fappeningbook.com/photos/{l1}/{l2}/{slug}/1000/{id}.jpg"` (no `t` suffix = full-size). Also extract thumbnails from `src` attributes: `/photos/{l1}/{l2}/{slug}/1000/{id}t.jpg`. Avoid broad `*.jpg` grep which matches avatars and site assets.
 - IDs are sequential per page. Thumbnails appear in reverse order in HTML (highest ID first). Page 1 typically has 50 images; additional pages follow. Image IDs are not always contiguous (some gaps).
 - Pagination: Page 2+ URLs include a `#photos` anchor: `https://fappeningbook.com/{slug}-nude/{page}/#photos`. Look for `class="pages-dv"` in the HTML to find pagination links (e.g., `Previous`, `Next`, `Page X of Y`).
+- **Many profiles have a single page:** the `pages-dv` div is EMPTY and page-2+ URLs just serve page-1 content again (HTTP 200). Stop immediately if page 2 yields 0 new image IDs — never auto-increment based on a bare "Next" string elsewhere in the HTML (causes infinite loops).
 - Rate limiting: sleep 0.3–0.5s between requests.
 - Validate downloaded files are > 10KB.
 
@@ -109,6 +116,7 @@ TheFappeningBlog has a **forum section** where users post image sets and linked 
 - **Web search is the best way to find TheFappeningBlog galleries:** Use `site:thefappeningblog.com "person name"` to discover relevant galleries.
 - **OnlyFans leak galleries misclassified:** Some galleries labeled as a celebrity's "OnlyFans leaks" are actually from different creators. Check if the gallery URL contains names like `renee316` — skip these unless you want OnlyFans creator content.
 - **No videos on fappeningbook.com profiles** — only static images. TheFappeningBlog may occasionally host videos.
+- **Cross-site "dupes" don't hash-match:** Fappeningbook photo IDs and TFB "N Photos" article numbers are often the same source series, but served as different files (crop/quality differ), so md5 dedupe across the two sites finds nothing. Keep both sets; name files by origin prefix + source ID.
 - **WordPress originals 404:** The no-suffix `/wp-content/uploads/` URL often returns 404 while its sized variants work — do not stop at one 404, fall back to the largest sized variant (see Pattern 3).
 - **Missing images are permanently gone:** When an image is removed, all its variants 404 on the main domain AND mirror subdomains (`us.`, `ca.`, `the.`) — no need to retry mirrors repeatedly.
 - **Forum threads may be empty of attachments:** A thread about a person can have 0 public attachments across all its pages — still worth checking, but don't expect results.
