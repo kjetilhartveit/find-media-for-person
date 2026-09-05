@@ -19,7 +19,8 @@ Download media from AZNude (https://www.aznude.com), a celebrity nude content si
 ## URL Patterns
 
 - Site: `https://www.aznude.com`
-- Celebrity page: `https://www.aznude.com/view/celeb/{initial}/{slug}.html` — first letter + lowercase slug
+- Celebrity page: `https://www.aznude.com/view/celeb/{initial}/{slug}.html` — first letter of the display name on the site + lowercase slug. The initial may not match your guess (e.g. a suggested `/c/andreaespada.html` can 404 while the page lives at `/a/andreaespada.html`).
+- Movie pages: `https://www.aznude.com/view/movie/{initial}/{slug}-{id}.html` (numeric suffix, e.g. `/view/movie/h/hparahombres-4031766.html`).
 - Story pages: `https://www.aznude.com/view/story/{initial}/{slug}{story-description}.html`
 - Images from CDN: `cdn2.aznude.com/{slug}/{category}/{filename}.jpg`
 - User uploads (full-size via user-uploads): `user-uploads.aznude.com/data/azncdn/{hash}/{name}.jpg`
@@ -30,7 +31,7 @@ Download media from AZNude (https://www.aznude.com), a celebrity nude content si
 ## Recommendations on how to download
 
 - **Slug variations** — try lowercase concatenated words (e.g., `megantheestallion`) and hyphenated (e.g., `megan-thee-stallion`). For Indian models whose display name is "X Bhabhi", try variations like `xname`, `x-name`, `xname-sarkar`, `x-name-sarkar`. For adult performers who go by stage names, also try their real name format (e.g., `layla-fenner` for "Layla Jenner").
-- **Page existence** — Not all celebs have a page on AZNude. Many popular performers (especially newer adult film actresses) may not have dedicated pages. If the celeb page 404s, search will also return 0 results. Not all celebrities are on AZNude.
+- **Page existence** — Not all celebs have a page on AZNude. Many popular performers (especially newer adult film actresses) may not have dedicated pages. If the celeb page 404s, search will also return 0 results. Not all celebrities are on AZNude. If coverage is expected but direct URLs 404, use Google `site:aznude.com "{name}"` — it reliably reveals whether the page exists and its exact URL, including the correct initial-letter directory.
 - **Search limitations** — The search results are rendered client-side via JavaScript. The search page shows skeleton loaders initially — actual content loads via JS. `curl`/`grep` only works for pages loaded server-side (celeb/story/movie pages directly). Search queries will return 0 results for performers not indexed by AZNude.
 - **Stories** — celeb pages have story links in the HTML. Extract story URLs with: `curl | grep -oE 'href="/view/story/[a-z]/[a-z0-9-]*\.html"'`. Then fetch each story URL to get its images from `user-uploads.aznude.com/data/azncdn/`.
 - **Story pages contain the full image set** — the celeb page only shows a subset of each story's images (e.g. 45 photos on the celeb page, but a single story page carried 120+ hash-based stills). To get maximum content, fetch and extract images from ALL story pages linked from the celeb page, then dedupe by URL.
@@ -62,4 +63,6 @@ Download media from AZNude (https://www.aznude.com), a celebrity nude content si
 - **Biopic images** on the page may include thumbnails for _other_ celebs (sidebar/related). Download only images whose URL path contains the target celeb's slug.
 - **Movies vs celeb pages** — movie pages use `-largeCelebPage-4.jpg` and `-gigantic-4.jpg` image patterns, not the `/slug/` path pattern. The grep for `largeCelebPage` images must exclude `boxpic/` (movie cover) and `vtt/` (subtitles) from the URL paths.
 - **Stories loaded via JS** — story links on the celeb page are rendered client-side. Use curl/grep to discover story URLs, then process each individually.
-- **Search is JS-rendered** — direct `curl` requests to `/search.html?q=...` won't return actual search results. A celeb page may not exist even for well-known performers; verify by trying direct URL access first.
+- **Search is JS-rendered** — direct `curl` requests to `/search.html?q=...` won't return actual search results. A celeb page may not exist even for well-known performers; verify by trying direct URL access first. If a direct URL 404s on the initial-letter directory, don't conclude the person is missing — re-check the initial (see URL Patterns) or use Google `site:aznude.com "{name}"`.
+- **Same-name pages for different people** — an alias or common name can have a page that belongs to a _different_ person (e.g. an "Andrea Rincon" page with Birthplace: Argentina and Argentine filmography is not the target Colombian with that adult alias). Verify identity via the celeb page's Birthplace, biography, and work filmography before downloading alias pages. Also sanity-check entry years against the person's birth year (e.g. a 1999 magazine issue cannot feature a person born in 1986 — that magazine page's entries belong to a namesake; magazine captions on such multi-model pages can be unreliable, so treat era-impossible matches as a different person).
+- **Magazine movie pages can be multi-MB** — movie page HTML can be 2–3MB+ (hundreds of models). Parse with a script, not eyeballing; per-model `lightbox` caption → nearest image URL pairing works well.
