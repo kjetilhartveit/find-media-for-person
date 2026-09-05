@@ -98,7 +98,9 @@ Since stk.st heavily protects itself with Cloudflare, web search is often the mo
 - **stk.st is blocked by Cloudflare for SOME adult actresses**: e.g., Amber Hardin tested with 8+ aliases (amber+hardin, veronica, veronika, alanova, amalia, kylie, polina, vasilisa, veronica+pink, kelly+carson) — all returned Cloudflare challenge. Google search for `site:stk.st "amber hardin"` also returns zero indexed pages. This is because stk.st matches keywords against its own database and may not have content about every person.
 - The Cloudflare challenge at stk.st uses a JavaScript computation (visible in the challenge page HTML), making it harder to bypass without full JS execution.
 
-### Bypassing Cloudflare (2026-09-04 update)
+### Bypassing Cloudflare (2026-09-04 update; rate-limiting note 2026-09-05)
+
+- **Cloudflare challenges can appear MID-SESSION**: the first few curl requests may return full pages (200, ~150KB), then all subsequent requests (even within a minute, same UA) return the 4815-byte challenge. Once challenged, curl never recovers — switch to Playwright and do ALL remaining fetches in one browser session (the CF clearance cookie persists per session).
 
 - **Headless Playwright works now** (verified 2026-09-04, Lela Star — all 20 pages fetched, none challenged after the first):
   ```python
@@ -125,7 +127,7 @@ Since stk.st heavily protects itself with Cloudflare, web search is often the mo
 - **pbs.twimg.com (X/Twitter) images**: stk.st stores them with a `:large` suffix in the path (e.g., `pbs.twimg.com/media/XXXX.jpg:large`) — KEEP the `:large` suffix when downloading to get the full-resolution original (strip it from filenames). Deleted or protected tweets return 403.
 - **X-video "get_image" source links** (`x-video.tube/get_image/.../sources/2000/NNNN/ID.jpg`) serve high-res (2000px) originals — prefer these over `preview.jpg` when both are present.
 - **`vip.*.pics` CDNs are dead from this environment**: `vip.sexhd.pics`, `vip.xxxporn.pics`, `vip.yespornpics.com`, `vip.pornstar.gallery` all fail (NXDOMAIN or HTML redirects) even though stk.st references them.
-- **topfapgirls.com images**: the CDN no longer works — direct `img.topfapgirls.com/...` returns 403 (2026-09-04; previously 301 to homepage), and i3.wp.com proxies return 400/HTML. Skip these sources.
+- **topfapgirls.com images**: the CDN no longer works — direct `img.topfapgirls.com/...` returns 403/522 (2026-09-04: 403 or 301 to homepage; 2026-09-05: HTTP 522 origin-connection failure), and i3.wp.com proxies return 400/HTML. Skip these sources.
 - **fapello.com images**: may expire or return 404 if content was removed from the source site
 - The search page includes advertisement posts at the top (check for `category-automotive` or other unrelated categories) — these are not actual search results
 - Image downloads may require checking HTTP status codes — 403 can appear, and some domains block automated requests
@@ -162,7 +164,7 @@ Since stk.st heavily protects itself with Cloudflare, web search is often the mo
 
 ### Image domain pitfalls
 
-- The i3.wp.com proxy sometimes returns 400/403 for certain domains — don't rely on it as a download method, use direct URLs instead.
+- The i3.wp.com proxy sometimes returns 400/403 for certain domains — don't rely on it as a primary download method, use direct URLs first. **However it is a useful FALLBACK**: it caches images and can serve them when the original domain fails — e.g. images that return 403 (tubefilter.com) or 404 (babepedia.com — content deleted upstream) straight, still download fine via `https://i3.wp.com/<origin>/<path>`. Try the proxy once per URL that fails direct download (strip `?ssl=1` and `?resize=...` query params).
 - **pictoa.com**: may return HTTP 403 Forbidden (tested on stk.st `/inna+nudes` — returned 17 bytes, not the image). Strip `&ssl=1` from URLs but direct download may still fail.
 - **titis.org**: Russian adult site — images may be low-quality or mislabeled regarding the person featured. Also `boomba.club` (VK-based) — similar concerns.
 - **i.redd.it (Reddit)**: images from Reddit may not be actually about the person the stk.st post title suggests. Verify by checking the Reddit post content.
@@ -174,6 +176,10 @@ Since stk.st heavily protects itself with Cloudflare, web search is often the mo
   - `mjazzmagonline.co.za` returns HTTP 404 (image may have been removed)
   - **trendceylon.com**: may return HTTP 403/404 for certain images (tested on rekha mona sarkar pages)
   - **desixflix.com**: may return empty responses or fail downloads
+  - `e0.pxfuel.com` returns HTTP 403 Forbidden (direct and via i3.wp.com proxy) — skip
+  - `image.thothub.vip` fails with SSL hostname mismatch; proxy returns 404 — skip
+  - `www.tubefilter.com` images return 403 direct but work fine via the i3.wp.com proxy
+  - `i.ytimg.com/vi/<id>/maxresdefault.jpg` returns 404 for videos without a custom/hd thumbnail (`hqdefault.jpg` may 404 too) — treat missing thumbs as skip, not block
 - Test accessibility with `curl -sI` before bulk downloading from a domain.
 - **Desi adult content sites** (desitales2.com, eroticmv.com, dropmms.net, etc.) generally work but check HTTP status — they may return different content than expected.
 
